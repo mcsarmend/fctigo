@@ -134,7 +134,7 @@ return [
     'usermenu_header_class' => 'bg-secondary',
     'usermenu_image' => false,
     'usermenu_desc' => true,
-    'usermenu_profile_url' => false,
+    'usermenu_profile_url' => true,
 
     /*
     |--------------------------------------------------------------------------
@@ -302,11 +302,11 @@ return [
         ],
 
         // Sidebar items:
-        [
-            'text' => 'Reglas de etiquetado',
-            'url' => 'admin/settings',
-            'icon' => 'fas fa-fw fa-pencil-ruler',
-        ],
+        // [
+        //     'text' => 'Reglas de etiquetado',
+        //     'url' => 'admin/settings',
+        //     'icon' => 'fas fa-fw fa-pencil-ruler',
+        // ],
         // ['header' => 'account_settings'],
         [
             'text' => 'Etiquetado',
@@ -316,10 +316,6 @@ return [
                     'text' => 'JUCAVI',
                     'url' => '#',
                     'submenu' =>[
-                        [
-                            'text' => 'Bursa',
-                            'url' => 'etiquetado/jucavi/bursa',
-                        ],
                         [
                             'text' => 'Promecap',
                             'url' => 'etiquetado/jucavi/promecap',
@@ -335,10 +331,6 @@ return [
                     'text' => 'MAMBU',
                     'url' => '#',
                     'submenu' =>[
-                        [
-                            'text' => 'Bursa',
-                            'url' => 'etiquetado/mambu/bursa',
-                        ],
                         [
                             'text' => 'Promecap',
                             'url' => 'etiquetado/mambu/promecap',
@@ -377,27 +369,27 @@ return [
 
             ]
         ],
-        ['header' => 'Estatus de creditos'],
-        [
-            'text' => 'Importantes',
-            'icon_color' => 'red',
-            'url' => 'estatus/importantes',
-        ],
-        [
-            'text' => 'Avisos',
-            'icon_color' => 'yellow',
-            'url' => 'estatus/avisos',
-        ],
-        [
-            'text' => 'Informacion',
-            'icon_color' => 'cyan',
-            'url' => 'estatus/informacion',
-        ],
-        [
-            'text' => 'Cliente:',
-            'url' => '#',
-            'topnav' => true,
-        ]
+        // ['header' => 'Estatus de creditos'],
+        // [
+        //     'text' => 'Importantes',
+        //     'icon_color' => 'red',
+        //     'url' => 'estatus/importantes',
+        // ],
+        // [
+        //     'text' => 'Avisos',
+        //     'icon_color' => 'yellow',
+        //     'url' => 'estatus/avisos',
+        // ],
+        // [
+        //     'text' => 'Informacion',
+        //     'icon_color' => 'cyan',
+        //     'url' => 'estatus/informacion',
+        // ],
+        // [
+        //     'text' => 'Cliente:',
+        //     'url' => '#',
+        //     'topnav' => true,
+        // ]
     ],
 
     /*
@@ -436,21 +428,21 @@ return [
 
     'plugins' => [
         'Datatables' => [
-            'active' => false,
+            'active' => true,
             'files' => [
                 [
                     'type' => 'js',
-                    'asset' => false,
+                    'asset' => true,
                     'location' => '//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js',
                 ],
                 [
                     'type' => 'js',
-                    'asset' => false,
+                    'asset' => true,
                     'location' => '//cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js',
                 ],
                 [
                     'type' => 'css',
-                    'asset' => false,
+                    'asset' => true,
                     'location' => '//cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css',
                 ],
             ],
@@ -481,12 +473,12 @@ return [
             ],
         ],
         'Sweetalert2' => [
-            'active' => false,
+            'active' => true,
             'files' => [
                 [
                     'type' => 'js',
-                    'asset' => false,
-                    'location' => '//cdn.jsdelivr.net/npm/sweetalert2@8',
+                    'asset' => true,
+                    'location' => 'https://cdn.jsdelivr.net/npm/sweetalert2@11',
                 ],
             ],
         ],
