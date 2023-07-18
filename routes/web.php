@@ -46,6 +46,7 @@ Route::get('etiquetado/jucavi/bursa', [labelledController::class, 'jucavibursa']
 Route::get('etiquetado/jucavi/promecap', [labelledController::class, 'jucavipromecap'])->middleware('auth');
 Route::get('etiquetado/jucavi/blao', [labelledController::class, 'jucaviblao'])->middleware('auth');
 Route::get('etiquetado/mambu/bursa', [labelledController::class, 'mambubursa'])->middleware('auth');
+
 Route::get('etiquetado/mambu/promecap', [labelledController::class, 'mambupromecap'])->middleware('auth');
 
 // Etiquetado blao jucavi
@@ -71,6 +72,10 @@ Route::post('etiquetado/mambu/etiquetadoblaomambu', [labelledController::class, 
 Route::get('etiquetado/mambu/mintos_preetiquetado', [labelledController::class, 'mintos_preetiquetado'])->middleware('auth');
 Route::post('etiquetado/mambu/etiquetadomintos', [labelledController::class, 'etiquetadomintos'])->name('etiquetadomintos');
 
+//Etiquetado Promecap Jucavi
+Route::get('etiquetado/jucavi/promecap_preetiequetado_jucavi', [labelledController::class, 'promecap_preetiequetado_jucavi'])->middleware('auth');
+Route::post('etiquetado/jucavi/bajapromecapjucavi', [labelledController::class, 'bajapromecapjucavi'])->name('bajapromecapjucavi');
+Route::post('etiquetado/jucavi/etiquetadopromecapjucavi', [labelledController::class, 'etiquetadopromecapjucavi'])->name('etiquetadopromecapjucavi');
 
 
 Route::get('etiquetado/mambu/blao', [labelledController::class, 'mambublao'])->middleware('auth');
