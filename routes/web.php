@@ -41,34 +41,46 @@ Route::get('/dashboard', function () {
 // Configuraciones
 Route::get('admin/settings',[adminsettingsController::class, 'index'])->middleware(['auth']);
 
-//Etiquetado
+//Etiquetado RUTAS
 Route::get('etiquetado/jucavi/bursa', [labelledController::class, 'jucavibursa'])->middleware('auth');
 Route::get('etiquetado/jucavi/promecap', [labelledController::class, 'jucavipromecap'])->middleware('auth');
 Route::get('etiquetado/jucavi/blao', [labelledController::class, 'jucaviblao'])->middleware('auth');
 Route::get('etiquetado/mambu/bursa', [labelledController::class, 'mambubursa'])->middleware('auth');
 
 Route::get('etiquetado/mambu/promecap', [labelledController::class, 'mambupromecap'])->middleware('auth');
+Route::get('etiquetado/mambu/blao', [labelledController::class, 'mambublao'])->middleware('auth');
+Route::get('etiquetado/mambu/mintos', [labelledController::class, 'mambumintos'])->middleware('auth');
 
-// Etiquetado blao jucavi
+
+Route::get('estatus/importantes', [statusController::class, 'importantes'])->middleware('auth');
+Route::get('estatus/avisos', [statusController::class, 'avisos'])->middleware('auth');
+Route::get('estatus/informacion', [statusController::class, 'informacion'])->middleware('auth');
+
+
+
+// Etiquetado blao JUCAVI
 Route::get('etiquetado/jucavi/preeliminarjucaviblao', [labelledController::class, 'preeliminarjucaviblao'])->middleware('auth');
 Route::post('etiquetado/jucavi/preetiquetadoblaojucavi', [labelledController::class, 'preetiquetadoblaojucavi'])->name('preetiquetadoblaojucavi');
 Route::post('etiquetado/jucavi/bajablaojucavi', [labelledController::class, 'bajablaojucavi'])->name('bajablaojucavi');
 
+//Etiquetado Promecap JUCAVI
+Route::get('etiquetado/jucavi/promecap_preetiequetado_jucavi', [labelledController::class, 'promecap_preetiequetado_jucavi'])->middleware('auth');
+Route::post('etiquetado/jucavi/bajapromecapjucavi', [labelledController::class, 'bajapromecapjucavi'])->name('bajapromecapjucavi');
+Route::post('etiquetado/jucavi/etiquetadopromecapjucavi', [labelledController::class, 'etiquetadopromecapjucavi'])->name('etiquetadopromecapjucavi');
 
-// Etiquetado promecap
+
+// Etiquetado promecap MAMBU
 Route::get('etiquetado/mambu/promecap_preetiequetado_mambu', [labelledController::class, 'promecap_preetiequetado_mambu'])->middleware('auth');
 Route::post('etiquetado/mambu/bajapromecapmambu', [labelledController::class, 'bajapromecapmambu'])->name('bajapromecapmambu');
 Route::post('etiquetado/mambu/etiquetadopromecapmambu', [labelledController::class, 'etiquetadopromecapmambu'])->name('etiquetadopromecapmambu');
 
-// etiquetado blao
+// etiquetado blao MAMBU
 Route::get('etiquetado/mambu/blao_preetiequetado_mambu', [labelledController::class, 'blao_preetiequetado_mambu'])->middleware('auth');
 Route::post('etiquetado/mambu/bajablaomambu', [labelledController::class, 'bajablaomambu'])->name('bajablaomambu');
 Route::post('etiquetado/mambu/etiquetadoblaomambu', [labelledController::class, 'etiquetadoblaomambu'])->name('etiquetadoblaomambu');
 
 
-
-
-// etiquetado MINTOS
+// etiquetado MINTOS MAMBU
 Route::get('etiquetado/mambu/mintos_preetiquetado', [labelledController::class, 'mintos_preetiquetado'])->middleware('auth');
 Route::post('etiquetado/mambu/etiquetadomintos', [labelledController::class, 'etiquetadomintos'])->name('etiquetadomintos');
 
@@ -77,9 +89,6 @@ Route::get('etiquetado/jucavi/promecap_preetiequetado_jucavi', [labelledControll
 Route::post('etiquetado/jucavi/bajapromecapjucavi', [labelledController::class, 'bajapromecapjucavi'])->name('bajapromecapjucavi');
 Route::post('etiquetado/jucavi/etiquetadopromecapjucavi', [labelledController::class, 'etiquetadopromecapjucavi'])->name('etiquetadopromecapjucavi');
 
-
-Route::get('etiquetado/mambu/blao', [labelledController::class, 'mambublao'])->middleware('auth');
-Route::get('etiquetado/mambu/mintos', [labelledController::class, 'mambumintos'])->middleware('auth');
 
 //Reportes
 Route::get('reportes/recuperacioncartera', [reportController::class, 'recuperacioncartera'])->middleware('auth');
@@ -90,10 +99,6 @@ Route::get('reportes/reportesesioncartera', [reportController::class, 'reportese
 Route::get('reportes/reporterecuperacioncartera', [reportController::class, 'reporterecuperacioncartera']);
 
 
-//Estatus
-Route::get('estatus/importantes', [statusController::class, 'importantes'])->middleware('auth');
-Route::get('estatus/avisos', [statusController::class, 'avisos'])->middleware('auth');
-Route::get('estatus/informacion', [statusController::class, 'informacion'])->middleware('auth');
 
 //Tablero
 Route::get('testsoh', [dashboardController::class, 'testsoh'])->middleware('auth');
