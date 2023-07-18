@@ -626,6 +626,148 @@ class labelledController extends Controller
 
     }
 
+
+    public function promecap_preetiequetado_jucavi()
+    {
+        // PHP code
+        try {
+            // Reporte previo
+            $lista = [];
+            $fechaActual = date("Y-m-d");
+            $fechaMenosUnDia = date("Y-m-d", strtotime("-1 day", strtotime($fechaActual))); // Resta un día a la fecha actual
+            $lista = $this->GetLitaAltaPromecapJ($fechaMenosUnDia); //
+            return $lista;
+
+        } catch (\Throwable $th) {
+            echo $th;
+        }
+
+    }
+    public function GetLitaAltaPromecapJ($fechaMenosUnDia)
+    {
+
+        // Conexion a ODS
+        $host = 'fcods.trafficmanager.net';
+        $dbName = 'clientes_ods';
+        $user = 'hmonroy';
+        $password = 'Monroy2011@';
+        $port = 3306;
+
+        try {
+            // Conexión a la base de datos
+            $pdo = new PDO("mysql:host=$host;port=$port;dbname=$dbName", $user, $password);
+
+            // Preparar la consulta SQL
+            ini_set('max_execution_time', 300);
+            $query = "call clientes_ods.SP_ListaPrevioPromecapNuevo('" . $fechaMenosUnDia . "');";
+            $statement = $pdo->prepare($query);
+
+            // Ejecutar la consulta
+            $statement->execute();
+
+            // Obtener los resultados
+            $posts = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+            return $posts;
+
+            foreach ($posts as $post) {
+                $nestedData["NoCredito"] = $post["NoCredito"];
+                $nestedData["NoGrupo"] = $post["NoGrupo"];
+                $nestedData["NoCiclo"] = $post["NoCiclo"];
+                $nestedData["Monto"] = $post["Monto"];
+                $nestedData["SaldoInsoluto"] = $post["SaldoInsoluto"];
+                $nestedData["DiasMora"] = $post["DiasMora"];
+                $nestedData["NoPlazos"] = $post["NoPlazos"];
+                $nestedData["IVA"] = $post["IVA"];
+                $nestedData["Estado"] = $post["Estado"];
+                $nestedData["NoIntegrantes"] = $post["NoIntegrantes"];
+                $nestedData["AddIntegrantes"] = $post["AddIntegrantes"];
+                $dataList = $nestedData;
+            }
+
+            return $dataList;
+        } catch (PDOException $e) {
+            // Manejo de errores
+            echo "Error: " . $e->getMessage();
+        }
+
+    }
+    public function bajapromecapjucavi(Request $request)
+    {
+        $curl = curl_init();
+        try {
+
+            // Conexion a ODS
+            $host = 'fcods.trafficmanager.net';
+            $dbName = 'clientes_ods';
+            $user = 'hmonroy';
+            $password = 'Monroy2011@';
+            $port = 3306;
+
+            $lstcreditos = $request->jucavi;
+            $fechaActual = date("Y-m-d");
+
+            // Conexión a la base de datos
+            $pdo = new PDO("mysql:host=$host;port=$port;dbname=$dbName", $user, $password);
+
+            // Preparar la consulta SQL
+            ini_set('max_execution_time', 300);
+
+            $queryValidaDia = "SELECT pa_valor FROM clientes_ods.c_parametros WHERE pa_cve_param = 'FECHA_CIERRE';";
+            $statementValidaDia = $pdo->query($queryValidaDia);
+            $resultValidaDia = $statementValidaDia->fetchAll(PDO::FETCH_ASSOC);
+
+            if ($resultValidaDia[0]["pa_valor"] == "") {
+                return response()->json(['error' => "Hoy no es un día para realizar la baja."], 400);
+            }else{
+                $strFechaCierre = date("Y-m-d", strtotime("-1 day", strtotime($resultValidaDia[0]["pa_valor"])));
+
+                $strValidaCierre = $this->validaBaja($strFechaCierre,1, 10);
+
+                if ($strValidaCierre[0]["strResult"] == "Continua.") {
+
+                    $sqlStatementJucaviPromecap = "use cartera_ods; INSERT INTO d_etiquetado_previopromecap_baja (ep_num_credito, ep_fecha_etiquetado,ep_fechamov) VALUES  \n";
+
+                    $formattedFechaMov = date("Y-m-d", strtotime($fechaActual . "-1 day"));
+
+                    foreach ($lstcreditos as $id) {
+                        $sqlStatementJucaviPromecap .= '("' . $id . '", "' . $formattedFechaMov . '", "' . $fechaActual . '"),';
+                    }
+
+                    $sqlStatementJucaviPromecap = rtrim($sqlStatementJucaviPromecap, ',');
+                    $sqlStatementJucaviPromecap .= ';';
+
+                    $statement = $pdo->query($sqlStatementJucaviPromecap);
+                    $result = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+                    curl_setopt_array($curl, array(
+                        CURLOPT_URL => 'https://fcetiquetado.azurewebsites.net/ProcesoBursa/api/EtiquetadoPromecapJ/BajaPromecapJV/69',
+                        CURLOPT_RETURNTRANSFER => true,
+                        CURLOPT_ENCODING => '',
+                        CURLOPT_MAXREDIRS => 10,
+                        CURLOPT_TIMEOUT => 0,
+                        CURLOPT_FOLLOWLOCATION => true,
+                        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                        CURLOPT_CUSTOMREQUEST => 'GET',
+                        CURLOPT_HTTPHEADER => array(
+                            'Cookie: ARRAffinity=f338cc84dcd26ef0541e10991beb3f601c2d1a0e9ced27dcfbc2140d4a6a8e25',
+                        ),
+                    ));
+
+                    $response = curl_exec($curl);
+
+                    return response()->json(['success' => "Baja realizada correctamente correctamente"], 200);
+
+                }else{
+                    return response()->json(['error' => 'El archivo con los créditos autorizados por ACFIN ya fueron enviados y etiquetados.'], 400);
+                }
+            }
+
+        } catch (\Throwable $th) {
+            return response()->json(['error' => $th], 400);
+        }
+
+    }
     public function getListaAltaBlaoJ($fecha)
     {
 
@@ -672,7 +814,6 @@ class labelledController extends Controller
         }
 
     }
-
     public function verificaEtiquetado($fecha, $fondeador)
     {
 
@@ -700,31 +841,31 @@ class labelledController extends Controller
         }
 
     }
-
     public function validaBaja($fecha,$intFondeador,$intfondeadoranterior){
-         // Conexion a ODS
-         $host = 'fcods.trafficmanager.net';
-         $dbName = 'clientes_ods';
-         $user = 'hmonroy';
-         $password = 'Monroy2011@';
-         $port = 3306;
+        // Conexion a ODS
+        $host = 'fcods.trafficmanager.net';
+        $dbName = 'clientes_ods';
+        $user = 'hmonroy';
+        $password = 'Monroy2011@';
+        $port = 3306;
 
-         try {
-             // Conexión a la base de datos
-             $pdo = new PDO("mysql:host=$host;port=$port;dbname=$dbName", $user, $password);
+        try {
+            // Conexión a la base de datos
+            $pdo = new PDO("mysql:host=$host;port=$port;dbname=$dbName", $user, $password);
 
-             // Preparar la consulta SQL
-             $query = "call clientes_ods.SP_ValidaBaja('" . $fecha . "',.$intFondeador.','.$intfondeadoranterior);";
-             $statement = $pdo->query($query);
-             $result = $statement->fetchAll(PDO::FETCH_ASSOC);
+            // Preparar la consulta SQL
+            $query = "call clientes_ods.SP_ValidaBaja('" . $fecha . "'," . $intFondeador . "," . $intfondeadoranterior . ");";
+
+            $statement = $pdo->query($query);
+            $result = $statement->fetchAll(PDO::FETCH_ASSOC);
 
 
-             return $result;
-         } catch (PDOException $e) {
-             // Manejo de errores
-             echo "Error: " . $e->getMessage();
-         }
+            return $result;
+        } catch (PDOException $e) {
+            // Manejo de errores
+            echo "Error: " . $e->getMessage();
+        }
 
-    }
+   }
 
 }
