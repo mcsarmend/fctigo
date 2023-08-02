@@ -58,3 +58,8 @@ jobs:
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_8C548F359DAA47BBBB90A71B0248EA73 }}
           package: .
+      - name: Remove old artifacts
+        run: |
+          # Asegurarse de cambiar "nombre-artifacto" por el nombre real del artefacto que deseas eliminar
+          rm -rf nombre-artifacto
+        if: always()
