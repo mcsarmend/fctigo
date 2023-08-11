@@ -97,6 +97,15 @@
         <!-- Agrega esto en el encabezado o antes de cerrar el cuerpo -->
         <script src="https://cdn.jsdelivr.net/npm/xlsx@0.17.0/dist/xlsx.full.min.js"></script>
         <script>
+            $(document).ready(function() {
+                var type = @json($type);
+                if (type == '3') {
+                    $('a:contains("Cuentas")').hide();
+                    console.log('Se oculta');
+                }
+
+            });
+
             // Preeliminar
 
             $('#preeliminarjucaviblao').click(function() {

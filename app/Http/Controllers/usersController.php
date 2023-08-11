@@ -4,16 +4,17 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Validator;
-
 
 class usersController extends Controller
 {
 
     public function usuarios()
     {
-        return view('usuarios.usuarios');
+
+        $usuarios = User::select('id', 'name')->get();
+        return view('usuarios.usuarios', ['usuarios' => $usuarios]);
     }
 
     public function guardar(Request $request)
@@ -21,7 +22,6 @@ class usersController extends Controller
 
         try {
             // Validar los datos del formulario
-
 
             $request->validate([
                 'usuario' => 'required',
@@ -37,7 +37,6 @@ class usersController extends Controller
             $usuario->type = $request->tipo;
             $usuario->email = $request->email;
 
-
             // Guardar el usuario en la base de datos
             $usuario->save();
             // Devolver una respuesta de éxito
@@ -46,6 +45,29 @@ class usersController extends Controller
             // Devolver una respuesta de error
             return response()->json(['message' => 'Error al crear el usuario'], 500);
         }
+    }
+
+    public function actualizar(Request $request)
+    {
+
+        try {
+            // Encuentra el usuario por su ID
+            $usuarioEncriptado = $request->id;
+            $usuarioIdDesencriptado = Crypt::decrypt($usuarioEncriptado);
+            $usuario = User::findOrFail($usuarioIdDesencriptado);
+            // Actualiza los datos del usuario
+            $usuario->password = Hash::make($request->contrasena);
+            $usuario->type = $request->tipo;
+            // Otros campos que quieras actualizar
+
+            $usuario->save();
+
+            return response()->json(['message' => 'Usuario actualizado correctamente'], 200);
+        } catch (Exception $e) {
+            // Devolver una respuesta de error
+            return response()->json(['message' => 'Error al actualizar el usuario'], 500);
+        }
+
     }
 
 }

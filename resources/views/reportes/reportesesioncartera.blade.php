@@ -12,8 +12,29 @@
             <h1 class="card-title">Proceso que generar reporte de Sesion de cartera.</h1>
         </div>
         <div class="card-body">
-            <label for="start-date">Fecha de consulta:</label>
-            <input type="date" id="start-date" name="start-date">
+            <div class="row">
+                <div class="col">
+                    <label for="start-date">Fecha de consulta:</label>
+                </div>
+                <div class="col">
+                    <input type="date" id="start-date" name="start-date">
+                </div>
+                <div class="col">
+                    <label>Fecha máxima con información:</label>
+                </div>
+                <div class="col">
+                    <p id="max-date">Fecha máxima con información:</p>
+                </div>
+                <div class="col">
+                    <label>Fecha mínima con información:</label>
+                </div>
+                <div class="col">
+                    <p id="min-date">Fecha mínima con información:</p>
+                </div>
+
+            </div>
+
+
             <br>
             <button class="btn btn-primary" id="reportesesioncartera"> Generar Reporte</button>
             <br>
@@ -52,7 +73,20 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.5.0/jszip.min.js"></script>
     <script src="https://cdn.datatables.net/plug-ins/1.10.25/dataRender/datetime.js"></script>
     <script>
-        var rest = true;
+        $(document).ready(function() {
+            var type = @json($type);
+            fechamin = @json($fechamin);
+            fechamax = @json($fechamax);
+            text = type +fechamin+fechamax;
+
+            $('#min-date').text(fechamin[0].min.substr(0, 10))
+            $('#max-date').text(fechamax[0].max.substr(0, 10))
+            if (type == '3') {
+                $('a:contains("Cuentas")').hide();
+            }
+            // establecerFechaMaxima();
+
+        });
 
         $('#reportesesioncartera').click(function() {
             // Bloquea la pantalla
@@ -60,127 +94,159 @@
                 message: 'Cargando...'
             });
             dateVal = $('#start-date').val().toString();
-            // Realiza la petición AJAX
-            $.ajax({
-                url: "reportesesioncartera",
-                method: "GET",
-                dataType: "JSON",
-                data: {
-                    date: dateVal
-                },
+            if (dateVal == '') {
+                Swal.fire({
+                    title: '¡Fecha no indicada!',
+                    text: "No se seleccionó una fecha para realizar la consulta",
+                    icon: 'warning',
+                    confirmButtonText: 'OK'
+                });
+                $.unblockUI();
+            } else {
+                var validate = Date.parse(dateVal)
+                var today = new Date();
+                var newDate = new Date();
+                newDate.setMonth(today.getMonth() - 13);
 
-                success: function(data) {
-                    console.log(data);
-                    if (data.length > 0) {
-                        // Procesa los datos de la respuesta...
-                        $('#tablasesioncartera').show();
-                        // Inicializa la tabla DataTables con los datos
-                        $('#tablasesioncartera').DataTable({
-                            buttons: [{
-                                    extend: 'copy',
-                                    className: 'btn btn-secondary'
-                                },
-                                {
-                                    extend: 'excel',
-                                    className: 'btn btn-secondary',
-                                    title: 'Reporte de Pre Etiquetado Sesion de cartera Excel'
-                                },
-                                {
-                                    extend: 'pdf',
-                                    className: 'btn btn-secondary',
-                                    title: 'Reporte de Pre Etiquetado Sesion de cartera PDF'
-                                },
-                                {
-                                    extend: 'print',
-                                    className: 'btn btn-secondary'
-                                }
-                            ],
-                            dom: 'Bfrtip', // Mostrar los botones en la parte superior de la tabla
-                            lengthMenu: [
-                                [10, 25, 50, -1],
-                                [10, 25, 50, 'All']
-                            ], // Personalizar el menú de longitud de visualización
+                var formattedDate = newDate.toLocaleDateString();
 
-                            // Configurar las opciones de exportación
-                            // Para PDF
-                            pdf: {
-                                orientation: 'landscape', // Orientación del PDF (landscape o portrait)
-                                pageSize: 'A4', // Tamaño del papel del PDF
-                                exportOptions: {
-                                    columns: ':visible' // Exportar solo las columnas visibles
-                                }
-                            },
-                            // Para Excel
-                            excel: {
-                                exportOptions: {
-                                    columns: ':visible' // Exportar solo las columnas visibles
-                                }
-                            },
-                            data: data,
-                            columns: [{
-                                title: "Fecha_Alta"
-                            }, {
-                                title: "Acuerdo",
-                            }, {
-                                title: "NoTitularCuenta",
-                            }, {
-                                title: "NombreTitulaCuenta",
-                            }, {
-                                title: "Ciclo",
-                            }, {
-                                title: "Sucursal",
-                            }, {
-                                title: "Estado",
-                            }, {
-                                title: "Fondeador",
-                            }, {
-                                title: "Saldo_Capital",
-                            }]
-                        });
+                if (validate < newDate) {
+                    Swal.fire({
+                        title: '¡Fecha no válida!',
+                        text: "Ingresa una fecha mayor a trece meses hacia atrás",
+                        icon: 'warning',
+                        confirmButtonText: 'OK'
+                    });
+                    $.unblockUI();
+                }
 
+                $("#result").text("Fecha de hoy menos 13 meses: " + formattedDate);
+
+
+                $.ajax({
+                    url: "reportesesioncartera",
+                    method: "GET",
+                    dataType: "JSON",
+                    data: {
+                        date: dateVal
+                    },
+
+                    success: function(data) {
+                        console.log(data);
+                        if (data.length > 0) {
+                            // Procesa los datos de la respuesta...
+                            $('#tablasesioncartera').show();
+                            // Inicializa la tabla DataTables con los datos
+                            $('#tablasesioncartera').DataTable({
+                                destroy: true,
+                                scrollX: true,
+                                scrollCollapse: true,
+                                language: {
+                                    "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json",
+                                    "lengthMenu": "Mostrar los _MENU_ registros",
+                                    "zeroRecords": "No existe ese registro",
+                                    "info": "Mostrar página _PAGE_ de _PAGES_",
+                                    "infoEmpty": "No encontrado",
+                                    "infoFiltered": "(filtrado de _MAX_ registros en total)",
+                                    "sSearch": "Buscar:",
+                                    "sEmptyTable": "No se encontraron registros",
+                                    "sLoadingRecords": "Cargando...",
+                                    "oPaginate": {
+                                        "sFirst": "Primero",
+                                        "sLast": "Último",
+                                        "sNext": "Siguiente",
+                                        "sPrevious": "Anterior"
+                                    }
+                                },
+                                dom: 'Blfrtip',
+                                buttons: [
+                                    'excel'
+                                ],
+                                destroy: true,
+                                processing: true,
+                                sort: true,
+                                paging: true,
+                                lengthMenu: [
+                                    [10, 25, 50, -1],
+                                    [10, 25, 50, 'All']
+                                ], // Personalizar el menú de longitud de visualización
+
+                                // Configurar las opciones de exportación
+                                // Para PDF
+                                pdf: {
+                                    orientation: 'landscape', // Orientación del PDF (landscape o portrait)
+                                    pageSize: 'A4', // Tamaño del papel del PDF
+                                    exportOptions: {
+                                        columns: ':visible' // Exportar solo las columnas visibles
+                                    }
+                                },
+                                // Para Excel
+                                excel: {
+                                    exportOptions: {
+                                        columns: ':visible' // Exportar solo las columnas visibles
+                                    }
+                                },
+                                data: data,
+                                columns: [{
+                                    title: "Fecha_Alta"
+                                }, {
+                                    title: "Acuerdo",
+                                }, {
+                                    title: "NoTitularCuenta",
+                                }, {
+                                    title: "NombreTitulaCuenta",
+                                }, {
+                                    title: "Ciclo",
+                                }, {
+                                    title: "Sucursal",
+                                }, {
+                                    title: "Estado",
+                                }, {
+                                    title: "Fondeador",
+                                }, {
+                                    title: "Saldo_Capital",
+                                }]
+                            });
+
+
+                            // Desbloquea la pantalla después de que se complete la petición
+                            $.unblockUI();
+
+                            // Muestra un mensaje de éxito
+                            Swal.fire({
+                                title: 'Todo bien!',
+                                text: '¡El reporte se generó correctamente!',
+                                icon: 'success',
+                                confirmButtonText: 'OK'
+                            });
+
+                        } else {
+                            Swal.fire({
+                                title: '¡Sin información!',
+                                text: "No se encontraron registros en la fecha indicada",
+                                icon: 'warning',
+                                confirmButtonText: 'OK'
+                            });
+                            // Desbloquea la pantalla después de que se complete la petición
+                            $.unblockUI();
+                        }
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        // Maneja los errores de la petición AJAX...
 
                         // Desbloquea la pantalla después de que se complete la petición
                         $.unblockUI();
 
-                        // Muestra un mensaje de éxito
+                        // Muestra un mensaje de error
                         Swal.fire({
-                            title: 'Todo bien!',
-                            text: '¡El reporte se generó correctamente!',
-                            icon: 'success',
+                            title: 'Error',
+                            text: 'Algo salió mal. Vuelve a intentarlo.' + errorThrown,
+                            icon: 'error',
                             confirmButtonText: 'OK'
                         });
-
-                    } else {
-                        Swal.fire({
-                            title: '¡Sin información!',
-                            text: "No se encontraron registros en la fecha indicada",
-                            icon: 'warning',
-                            confirmButtonText: 'OK'
-                        });
-                                            // Desbloquea la pantalla después de que se complete la petición
-                    $.unblockUI();
-                    }
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    // Maneja los errores de la petición AJAX...
-
-                    // Desbloquea la pantalla después de que se complete la petición
-                    $.unblockUI();
-
-                    // Muestra un mensaje de error
-                    Swal.fire({
-                        title: 'Error',
-                        text: 'Algo salió mal. Vuelve a intentarlo.' + errorThrown,
-                        icon: 'error',
-                        confirmButtonText: 'OK'
-                    });
-                },
-            });
-        });
-
-
-        $(document).ready(function() {
-            establecerFechaMaxima();
+                    },
+                });
+            }
 
         });
 

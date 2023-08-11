@@ -11,12 +11,15 @@
         <div class="card-header">
             <h1 class="card-title">Proceso que genera reporte de Pre etiquetado.</h1>
         </div>
+        <div>
+            El valor de la variable es: {{ $type }}
+        </div>
         <div class="card-body">
             <button class="btn btn-success" id="reporteFondeadores">Generar Reporte</button>
             <br>
             <br>
             <div class="table-responsive">
-                <table id="tablaFondeadores" class="display" style = "display:none;">
+                <table id="tablaFondeadores" class="display" style="display:none;">
                     <thead>
                         <tr>
                             <th>ID</th>
@@ -60,6 +63,11 @@
 
     <script>
         $(document).ready(function() {
+            var type = @json($type);
+            if (type == '3') {
+                $('a:contains("Cuentas")').hide();
+                console.log('Se oculta');
+            }
 
         });
 
@@ -80,7 +88,8 @@
                     // Procesa los datos de la respuesta...
                     $('#tablaFondeadores').show();
                     // Inicializa la tabla DataTables con los datos
-                    $('#tablaFondeadores').DataTable({destroy: true,
+                    $('#tablaFondeadores').DataTable({
+                        destroy: true,
                         scrollX: true,
                         scrollCollapse: true,
                         language: {
@@ -91,7 +100,7 @@
                             "infoEmpty": "No encontrado",
                             "infoFiltered": "(filtrado de _MAX_ registros en total)",
                             "sSearch": "Buscar:",
-                            "sEmptyTable": "No se encontraron alertas por reportar",
+                            "sEmptyTable": "No se encontraron registros",
                             "sLoadingRecords": "Cargando...",
                             "oPaginate": {
                                 "sFirst": "Primero",
@@ -102,24 +111,44 @@
                         },
                         dom: 'Blfrtip',
                         buttons: [
-                            'copy', 'csv', 'excel', 'pdf'
+                            'excel'
                         ],
                         destroy: true,
                         processing: true,
                         sort: true,
                         paging: true,
                         data: data,
-                        columns: [
-                            {title: "ID"},
-                            {title: "Encoded Key", width: "35px"},
-                            {title: "Cliente"},
-                            {title: "Otro Campo"},
-                            {title: "Preetiquetado"},
-                            {title: "Fecha Preetiquetado"},
-                            {title: "ID Fondeador"},
-                            {title: "Fecha Etiquetado"},
-                            {title: "Status Etiquetado"},
-                            {title: "Motivo Rechazo"}
+                        columns: [{
+                                title: "ID"
+                            },
+                            {
+                                title: "Encoded Key",
+                                width: "35px"
+                            },
+                            {
+                                title: "Cliente"
+                            },
+                            {
+                                title: "Otro Campo"
+                            },
+                            {
+                                title: "Preetiquetado"
+                            },
+                            {
+                                title: "Fecha Preetiquetado"
+                            },
+                            {
+                                title: "ID Fondeador"
+                            },
+                            {
+                                title: "Fecha Etiquetado"
+                            },
+                            {
+                                title: "Status Etiquetado"
+                            },
+                            {
+                                title: "Motivo Rechazo"
+                            }
                         ]
                     });
 

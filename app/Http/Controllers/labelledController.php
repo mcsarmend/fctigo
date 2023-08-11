@@ -4,36 +4,44 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use PDO;
+use Illuminate\Support\Facades\Auth;
 
 class labelledController extends Controller
 {
     public function jucavibursa()
     {
-        return view('etiquetado.jucavi.bursa');
+        $type = $this->getusertype();
+        return view('etiquetado.jucavi.bursa', compact('type'));
     }
     public function jucavipromecap()
     {
-        return view('etiquetado.jucavi.promecap');
+        $type = $this->getusertype();
+        return view('etiquetado.jucavi.promecap', compact('type'));
     }
     public function jucaviblao()
     {
-        return view('etiquetado.jucavi.blao');
+        $type = $this->getusertype();
+        return view('etiquetado.jucavi.blao', compact('type'));
     }
     public function mambubursa()
     {
-        return view('etiquetado.mambu.bursa');
+        $type = $this->getusertype();
+        return view('etiquetado.mambu.bursa', compact('type'));
     }
     public function mambupromecap()
     {
-        return view('etiquetado.mambu.promecap');
+        $type = $this->getusertype();
+        return view('etiquetado.mambu.promecap', compact('type'));
     }
     public function mambublao()
     {
-        return view('etiquetado.mambu.blao');
+        $type = $this->getusertype();
+        return view('etiquetado.mambu.blao', compact('type'));
     }
     public function mambumintos()
     {
-        return view('etiquetado.mambu.mintos');
+        $type = $this->getusertype();
+        return view('etiquetado.mambu.mintos', compact('type'));
     }
     public function promecap_preetiequetado_mambu()
     {
@@ -164,9 +172,8 @@ class labelledController extends Controller
             $userODS = 'hmonroy';
             $passwordODS = 'Monroy2011@';
             $portODS = 3306;
-             // Conexión a la base de datos
+            // Conexión a la base de datos
             $pdoODS = new PDO("mysql:host=$hostODS;port=$portODS;dbname=$dbNameODS", $userODS, $passwordODS);
-
 
             $fechaActual = date("Y-m-d");
             $sqlStatementJucavi = "use cartera_ods; INSERT INTO d_etiquetado_previopromecap (ep_num_credito, ep_fecha_etiquetado,ep_fechamov) VALUES \n";
@@ -534,9 +541,8 @@ class labelledController extends Controller
             $user = 'hmonroy';
             $password = 'Monroy2011@';
             $port = 3306;
-             // Conexión a la base de datos
+            // Conexión a la base de datos
             $pdo = new PDO("mysql:host=$host;port=$port;dbname=$dbName", $user, $password);
-
 
             $lstcreditos = $request->lstcreditos;
             return $lstcreditos;
@@ -576,8 +582,6 @@ class labelledController extends Controller
             return response()->json(['error' => $th], 400);
         }
 
-
-
     }
 
     public function bajablaojucavi(Request $request)
@@ -591,8 +595,8 @@ class labelledController extends Controller
             $resultValidaDia = $statementValidaDia->fetchAll(PDO::FETCH_ASSOC);
             if ($resultValidaDia[0]["strresult"] == "NO PROCEDE") {
                 return response()->json(['error' => "Hoy no es un día para realizar la baja."], 400);
-            }else{
-                $strValidaCierre = $this->validaBaja($fechaActual,1, 17);
+            } else {
+                $strValidaCierre = $this->validaBaja($fechaActual, 1, 17);
                 if ($strValidaCierre == "Continua.") {
 
                     $sqlStatementJucaviBlao = "use cartera_ods; INSERT INTO d_etiquetado_previoblao_baja (ep_num_credito, ep_fecha_etiquetado,ep_fechamov) VALUES  \n";
@@ -609,14 +613,11 @@ class labelledController extends Controller
                     $statement = $pdo->query($sqlStatementJucaviBlao);
                     $result = $statement->fetchAll(PDO::FETCH_ASSOC);
 
-
-
                     return response()->json(['success' => "Baja realizada correctamente correctamente"], 200);
 
-                }else{
+                } else {
                     return response()->json(['error' => 'El archivo con los créditos autorizados por ACFIN ya fueron enviados y etiquetados.'], 400);
                 }
-
 
             }
 
@@ -625,7 +626,6 @@ class labelledController extends Controller
         }
 
     }
-
 
     public function promecap_preetiequetado_jucavi()
     {
@@ -719,10 +719,10 @@ class labelledController extends Controller
 
             if ($resultValidaDia[0]["pa_valor"] == "") {
                 return response()->json(['error' => "Hoy no es un día para realizar la baja."], 400);
-            }else{
+            } else {
                 $strFechaCierre = date("Y-m-d", strtotime("-1 day", strtotime($resultValidaDia[0]["pa_valor"])));
 
-                $strValidaCierre = $this->validaBaja($strFechaCierre,1, 10);
+                $strValidaCierre = $this->validaBaja($strFechaCierre, 1, 10);
 
                 if ($strValidaCierre[0]["strResult"] == "Continua.") {
 
@@ -758,7 +758,7 @@ class labelledController extends Controller
 
                     return response()->json(['success' => "Baja realizada correctamente correctamente"], 200);
 
-                }else{
+                } else {
                     return response()->json(['error' => 'El archivo con los créditos autorizados por ACFIN ya fueron enviados y etiquetados.'], 400);
                 }
             }
@@ -833,7 +833,6 @@ class labelledController extends Controller
             $statement = $pdo->query($query);
             $result = $statement->fetchAll(PDO::FETCH_ASSOC);
 
-
             return $result;
         } catch (PDOException $e) {
             // Manejo de errores
@@ -841,7 +840,8 @@ class labelledController extends Controller
         }
 
     }
-    public function validaBaja($fecha,$intFondeador,$intfondeadoranterior){
+    public function validaBaja($fecha, $intFondeador, $intfondeadoranterior)
+    {
         // Conexion a ODS
         $host = 'fcods.trafficmanager.net';
         $dbName = 'clientes_ods';
@@ -859,13 +859,20 @@ class labelledController extends Controller
             $statement = $pdo->query($query);
             $result = $statement->fetchAll(PDO::FETCH_ASSOC);
 
-
             return $result;
         } catch (PDOException $e) {
             // Manejo de errores
             echo "Error: " . $e->getMessage();
         }
 
-   }
-
+    }
+    public function getusertype()
+    {
+        if (Auth::check()) {
+            $type = Auth::user()->type;
+            return $type;
+        } else {
+            return "Usuario no autenticado.";
+        }
+    }
 }

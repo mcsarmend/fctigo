@@ -131,6 +131,15 @@
 
 
     <script>
+        $(document).ready(function() {
+            var type = @json($type);
+            if (type == '3') {
+                $('a:contains("Cuentas")').hide();
+                console.log('Se oculta');
+            }
+
+        });
+
         $('#descargarrecuperacioncartera').click(function() {
             startDate = $('#start-date').val();
             endDate = $('#end-date').val();
@@ -212,6 +221,8 @@
             startDate = $('#start-date').val();
             endDate = $('#end-date').val();
 
+
+
             if (startDate == "") {
                 Swal.fire({
                     title: '¡Ingresa fecha de inicio!',
@@ -222,12 +233,31 @@
             }
             if (endDate == "") {
                 Swal.fire({
-                    title: '¡Ingresa fecha de inicio!',
+                    title: '¡Ingresa fecha fin!',
                     icon: 'warning',
                     confirmButtonText: 'OK'
                 });
                 return;
             }
+
+
+            var startDateVal = new Date(startDate);
+            var endDateVal = new Date(endDate);
+
+            var timeDifference = endDateVal - startDateVal; // Diferencia en milisegundos
+
+            var twoWeeksInMilliseconds = 14 * 24 * 60 * 60 * 1000; // 2 semanas en milisegundos
+
+            if (timeDifference > twoWeeksInMilliseconds) {
+                Swal.fire({
+                    title: '¡Rango muy amplio!',
+                    icon: 'warning',
+                    confirmButtonText: 'OK',
+                    text: 'Por favor elige un rango más pequeño para realizar la consulta'
+                });
+                return;
+            }
+
             $.blockUI({
                 message: 'Cargando...'
             });
@@ -249,47 +279,30 @@
                         dataDeposito = data.dataDeposito;
 
                         $('#tablePrestamo').DataTable({
-                            buttons: [{
-                                    extend: 'copy',
-                                    className: 'btn btn-primary'
-                                },
-                                {
-                                    extend: 'excel',
-                                    className: 'btn btn-primary',
-                                    title: 'Reporte de SOH'
-                                },
-                                {
-                                    extend: 'pdf',
-                                    className: 'btn btn-primary',
-                                    title: 'Reporte de SOH PDF'
-                                },
-                                {
-                                    extend: 'print',
-                                    className: 'btn btn-primary'
-                                }
-                            ],
-                            dom: 'Bfrtip', // Mostrar los botones en la parte superior de la tabla
-                            lengthMenu: [
-                                [10, 25, 50, -1],
-                                [10, 25, 50, 'All']
-                            ], // Personalizar el menú de longitud de visualización
-
-                            // Configurar las opciones de exportación
-                            // Para PDF
-                            pdf: {
-                                orientation: 'landscape', // Orientación del PDF (landscape o portrait)
-                                pageSize: 'A4', // Tamaño del papel del PDF
-                                exportOptions: {
-                                    columns: ':visible' // Exportar solo las columnas visibles
+                            destroy: true,
+                            scrollX: true,
+                            scrollCollapse: true,
+                            language: {
+                                "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json",
+                                "lengthMenu": "Mostrar los _MENU_ registros",
+                                "zeroRecords": "No existe ese registro",
+                                "info": "Mostrar página _PAGE_ de _PAGES_",
+                                "infoEmpty": "No encontrado",
+                                "infoFiltered": "(filtrado de _MAX_ registros en total)",
+                                "sSearch": "Buscar:",
+                                "sEmptyTable": "No se encontraron registros",
+                                "sLoadingRecords": "Cargando...",
+                                "oPaginate": {
+                                    "sFirst": "Primero",
+                                    "sLast": "Último",
+                                    "sNext": "Siguiente",
+                                    "sPrevious": "Anterior"
                                 }
                             },
-                            // Para Excel
-                            excel: {
-                                exportOptions: {
-                                    columns: ':visible' // Exportar solo las columnas visibles
-                                }
-                            },
-
+                            destroy: true,
+                            processing: true,
+                            sort: true,
+                            paging: true,
                             data: dataPrestamo,
                             columns: [{
                                     title: "Fecha",
@@ -387,47 +400,30 @@
                             ]
                         });
                         $('#tableDeposito').DataTable({
-                            buttons: [{
-                                    extend: 'copy',
-                                    className: 'btn btn-primary'
-                                },
-                                {
-                                    extend: 'excel',
-                                    className: 'btn btn-primary',
-                                    title: 'Reporte de SOH'
-                                },
-                                {
-                                    extend: 'pdf',
-                                    className: 'btn btn-primary',
-                                    title: 'Reporte de SOH PDF'
-                                },
-                                {
-                                    extend: 'print',
-                                    className: 'btn btn-primary'
-                                }
-                            ],
-                            dom: 'Bfrtip', // Mostrar los botones en la parte superior de la tabla
-                            lengthMenu: [
-                                [10, 25, 50, -1],
-                                [10, 25, 50, 'All']
-                            ], // Personalizar el menú de longitud de visualización
-
-                            // Configurar las opciones de exportación
-                            // Para PDF
-                            pdf: {
-                                orientation: 'landscape', // Orientación del PDF (landscape o portrait)
-                                pageSize: 'A4', // Tamaño del papel del PDF
-                                exportOptions: {
-                                    columns: ':visible' // Exportar solo las columnas visibles
+                            destroy: true,
+                            scrollX: true,
+                            scrollCollapse: true,
+                            language: {
+                                "url": "//cdn.datatables.net/plug-ins/1.10.15/i18n/Spanish.json",
+                                "lengthMenu": "Mostrar los _MENU_ registros",
+                                "zeroRecords": "No existe ese registro",
+                                "info": "Mostrar página _PAGE_ de _PAGES_",
+                                "infoEmpty": "No encontrado",
+                                "infoFiltered": "(filtrado de _MAX_ registros en total)",
+                                "sSearch": "Buscar:",
+                                "sEmptyTable": "No se encontraron registros",
+                                "sLoadingRecords": "Cargando...",
+                                "oPaginate": {
+                                    "sFirst": "Primero",
+                                    "sLast": "Último",
+                                    "sNext": "Siguiente",
+                                    "sPrevious": "Anterior"
                                 }
                             },
-                            // Para Excel
-                            excel: {
-                                exportOptions: {
-                                    columns: ':visible' // Exportar solo las columnas visibles
-                                }
-                            },
-
+                            destroy: true,
+                            processing: true,
+                            sort: true,
+                            paging: true,
                             data: dataDeposito,
                             columns: [{
                                     title: "Fecha",
@@ -564,7 +560,5 @@
             document.getElementById('end-date').setAttribute('max', fechaMaxima);
             document.getElementById('end-date').setAttribute('max', fechaMaxima);
         }
-
-
     </script>
 @stop
