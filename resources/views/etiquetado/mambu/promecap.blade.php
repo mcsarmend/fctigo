@@ -15,8 +15,8 @@
             <div class="container py-4">
                 <div class="row section">
                     <div class="col-md-8 col-sm-6 mb-3">
-                        <button class="btn btn-outline-primary w-100"
-                            id="preetiquetadopromecapmambu">Preetiquetado mambu</button>
+                        <button class="btn btn-outline-primary w-100" id="preetiquetadopromecapmambu">Preetiquetado
+                            mambu</button>
                     </div>
                 </div>
                 <div class="row section">
@@ -95,6 +95,14 @@
         <script src="https://cdn.jsdelivr.net/npm/xlsx@0.17.0/dist/xlsx.full.min.js"></script>
 
         <script>
+            $(document).ready(function() {
+                var type = @json($type);
+                if (type == '3') {
+                    $('a:contains("Cuentas")').hide();
+                    console.log('Se oculta');
+                }
+
+            });
             /* preetiquetadopromecapmambu*/
             $('#preetiquetadopromecapmambu').click(function() {
                 // Bloquea la pantalla
@@ -189,10 +197,10 @@
                     reader.readAsArrayBuffer(file);
                 } else {
                     Swal.fire({
-                    icon: 'error',
-                    title: 'No se ha seleccionado ningun archivo',
+                        icon: 'error',
+                        title: 'No se ha seleccionado ningun archivo',
 
-                });
+                    });
                 }
             });
 
@@ -221,7 +229,7 @@
                 name = fileInput_etiquetado.files[0]?.name;
                 if (name.substring(name.length - 3, name.length != 'xls') || name.substring(name.length - 4, name
                         .length != 'xlsx')) {
-                            fileInput_etiquetado.value = "";
+                    fileInput_etiquetado.value = "";
                     Swal.fire({
                         icon: 'error',
                         title: 'El archivo no es un excel',
@@ -314,12 +322,11 @@
                     reader.readAsArrayBuffer(file);
                 } else {
                     Swal.fire({
-                    icon: 'error',
-                    title: 'No se ha seleccionado ningun archivo',
+                        icon: 'error',
+                        title: 'No se ha seleccionado ningun archivo',
 
-                });
+                    });
                 }
             });
-
         </script>
     @stop

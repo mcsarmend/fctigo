@@ -81,6 +81,64 @@
     <!-- Agrega esto en el encabezado o antes de cerrar el cuerpo -->
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.17.0/dist/xlsx.full.min.js"></script>
     <script>
+        $(document).ready(function() {
+            var type = @json($type);
+            if (type == '3') {
+                $('a:contains("Cuentas")').hide();
+                console.log('Se oculta');
+            }
+
+
+
+
+            async function patchClients() {
+                console.log("Enviando créditos");
+
+                try {
+                    let rengarr = [];
+                    let keys = [];
+                    await wb.xlsx.readFile(filePath);
+
+                    var sh = wb.getWorksheet("Hoja1");
+
+                    for (n = 1; n <= sh.rowCount; n++) {
+                        rengarr.push([
+                            sh.getRow(n).getCell(1).value.toString(),
+                            sh.getRow(n).getCell(2).value.toString()
+                        ]);
+                        keys.push([sh.getRow(n).getCell(1).value]);
+                    };
+
+                    let indx = 0;
+                    for (m = 1; m < keys.length; m++) {
+                        await sleep(100);
+                        indx = m;
+                        let Clientpached = await patchClient(rengarr[indx]);
+
+                        /*if(Clientpached)
+                        {
+                                console.log(`Cuenta ${rengarr[indx][1]} enviada`);
+                        }*/
+                        if (!Clientpached) {
+                            console.error(
+                                `ErrorA01 enviando la cuenta: ${rengarr[indx][1]}`
+                            );
+                        }
+                        if (m % 10 == 0) {
+                            console.log(`Cuenta ${m} de ${keys.length}`);
+                        }
+
+                    };
+
+
+                    console.log("Pagos enviados");
+                } catch (e) {
+                    console.log(e);
+                }
+            }
+
+
+        });
         // PREETIQUETADO
         $('#preetiquetadoMintos').click(function() {
             // Bloquea la pantalla
@@ -141,142 +199,76 @@
         });
 
         form_etiquetado.addEventListener('submit', (e) => {
-                    e.preventDefault();
+            e.preventDefault();
 
-                    const file = fileInput_etiquetado.files[0];
-                    if (file) {
-                        const reader = new FileReader();
-                        reader.onload = function(e) {
-                            const data = new Uint8Array(e.target.result);
-                            const workbook = XLSX.read(data, {
-                                type: 'array'
-                            });
-                            const worksheet = workbook.Sheets[workbook.SheetNames[0]];
-                            const jsonData = XLSX.utils.sheet_to_json(worksheet, {
-                                header: 1,
-                                defval: ''
-                            });
+            const file = fileInput_etiquetado.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const data = new Uint8Array(e.target.result);
+                    const workbook = XLSX.read(data, {
+                        type: 'array'
+                    });
+                    const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+                    const jsonData = XLSX.utils.sheet_to_json(worksheet, {
+                        header: 1,
+                        defval: ''
+                    });
 
-                            var array = [];
-                            const column1 = jsonData.map(function(row) {
-                                return row[0];
-                            });
-                            const column2 = jsonData.map(function(row) {
-                                return row[1];
-                            });
+                    var array = [];
+                    const column1 = jsonData.map(function(row) {
+                        return row[0];
+                    });
+                    const column2 = jsonData.map(function(row) {
+                        return row[1];
+                    });
 
+                    Swal.fire({
+                        title: '¡Se etiquetará la siguiente cantidad de creditos!',
+                        html: 'Mambu: <b>' + column1.length + '</b>, ',
+                        showDenyButton: true,
+                        showCancelButton: true,
+                        confirmButtonText: 'Etiquetar',
+                        denyButtonText: `No etiquetar`,
+                    }).then((result) => {
+                        // Inicia proceso etiquetado
+                        if (result.isConfirmed) {
+                            const baseUrl = "http://52.168.179.158/api/RecepcionPago/" //Prod
 
-
-
-
-                            Swal.fire({
-                                title: '¡Se etiquetará la siguiente cantidad de creditos!',
-                                html: 'Mambu: <b>' + column1.length + '</b>, ',
-                                showDenyButton: true,
-                                showCancelButton: true,
-                                confirmButtonText: 'Etiquetar',
-                                denyButtonText: `No etiquetar`,
-
-                            }).then((result) => {
-                                    // Inicia proceso etiquetado
-                                    if (result.isConfirmed) {
-
-                                        const baseUrl = "http://52.168.179.158/api/RecepcionPago/" //Prod
-
-                                        for (m = 1; m < column1.length; m++) {
-                                            await sleep(100);
-                                            try {
-                                                url = baseUrl + 'RecepcionPago/enviar-cuentas-grupal-mintos/' +
-                                                    column1[m] + '/' + column2[m];
-                                                var settings = {
-                                                    "url": url,
-                                                    "method": "GET",
-                                                    "timeout": 0,
-                                                };
-
-                                                $.ajax(settings).done(function(response) {
-                                                    console.log(response);
-                                                });
-
-                                            } catch (error) {
-                                                Swal.fire({
-                                                    icon: 'error',
-                                                    title: error.toString(),
-
-                                                });
-                                            }
-                                        };
-
-
-
-
+                            for (m = 1; m < column1.length; m++) {
+                                sleep(100);
+                                try {
+                                    url = baseUrl + 'RecepcionPago/enviar-cuentas-grupal-mintos/' +
+                                        column1[m] + '/' + column2[m];
+                                    var settings = {
+                                        "url": url,
+                                        "method": "GET",
+                                        "timeout": 0,
                                     };
 
-                                    reader.readAsArrayBuffer(file);
-                                } else {
+                                    $.ajax(settings).done(function(response) {
+                                        console.log(response);
+                                    });
+
+                                } catch (error) {
                                     Swal.fire({
                                         icon: 'error',
-                                        title: 'No se ha seleccionado ningun archivo',
-
+                                        title: error.toString(),
                                     });
                                 }
-
-
-                                async function patchClients() {
-                                    console.log("Enviando crÃ©ditos");
-
-                                    try {
-                                        let rengarr = [];
-                                        let keys = [];
-                                        await wb.xlsx.readFile(filePath);
-
-                                        var sh = wb.getWorksheet("Hoja1");
-
-                                        for (n = 1; n <= sh.rowCount; n++) {
-                                            rengarr.push([
-                                                sh.getRow(n).getCell(1).value.toString(),
-                                                sh.getRow(n).getCell(2).value.toString()
-                                            ]);
-                                            keys.push([sh.getRow(n).getCell(1).value]);
-                                        };
-
-                                        let indx = 0;
-                                        for (m = 1; m < keys.length; m++) {
-                                            await sleep(100);
-                                            indx = m;
-                                            let Clientpached = await patchClient(rengarr[indx]);
-
-                                            /*if(Clientpached)
-                                            {
-                                                    console.log(`Cuenta ${rengarr[indx][1]} enviada`);
-                                            }*/
-                                            if (!Clientpached) {
-                                                console.error(
-                                                    `ErrorA01 enviando la cuenta: ${rengarr[indx][1]}`
-                                                );
-                                            }
-                                            if (m % 10 == 0) {
-                                                console.log(`Cuenta ${m} de ${keys.length}`);
-                                            }
-
-                                        };
-
-
-                                        console.log("Pagos enviados");
-                                    } catch (e) {
-                                        console.log(e);
-                                    }
-                                }
-
-
-
-
-
                             }
-                            else if (result.isDenied) {
-                                Swal.fire('No se realiza etiquetado', '', 'info')
-                            }
-
-                        });
+                        } else if (result.isDenied) {
+                            Swal.fire('No se realiza etiquetado', '', 'info');
+                        }
+                    });
+                };
+                reader.readAsArrayBuffer(file);
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'No se ha seleccionado ningun archivo',
+                });
+            }
+        });
     </script>
 @stop

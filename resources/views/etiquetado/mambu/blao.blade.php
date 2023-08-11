@@ -90,6 +90,14 @@
         <script src="https://cdn.jsdelivr.net/npm/xlsx@0.17.0/dist/xlsx.full.min.js"></script>
 
         <script>
+            $(document).ready(function() {
+                var type = @json($type);
+                if (type == '3') {
+                    $('a:contains("Cuentas")').hide();
+                    console.log('Se oculta');
+                }
+
+            });
             /* preetiquetadoBlaomambu*/
             $('#preetiquetadoBlaomambu').click(function() {
                 // Bloquea la pantalla
@@ -173,7 +181,7 @@
                 name = fileInput_etiquetado.files[0]?.name;
                 if (name.substring(name.length - 3, name.length != 'xls') || name.substring(name.length - 4, name
                         .length != 'xlsx')) {
-                            fileInput_etiquetado.value = "";
+                    fileInput_etiquetado.value = "";
                     Swal.fire({
                         icon: 'error',
                         title: 'El archivo no es un excel',

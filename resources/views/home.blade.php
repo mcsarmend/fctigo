@@ -9,33 +9,48 @@
 @section('content')
     <div class="card">
         <div class="card-header">
-            <h1 class="card-title">SOH Conjunto</h1>
+            {{-- <h1 class="card-title">SOH Conjunto</h1> --}}
         </div>
         <div class="card-body">
-            <br>
-            <br>
             <div class="section">
-                <div class="row">
-                    <div class="col" id="totalcreditosJucavi">
-                        Total de créditos Jucavi:
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col" id="totalcreditosMambu">
-                        Total de créditos Mambu:
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col" id="totalcreditos">
-                        Total de créditos Mambu:
-                    </div>
-                </div>
+                <h3>Aforos</h3>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Aforo</th>
+                            <th>Actual Jucavi</th>
+                            <th>Actual Mambu</th>
+                            <th>Actual Suma</th>
+                            <th>Diferencia</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th>Promecap</th>
+                            <td id="valoraforopromecap"> $376,805,000.05</td>
+                            <td id="valoractualjucavipromecap">Valor Actual jucavi promecap</td>
+                            <td id="valoractualmambupromecap">Valor Actual mambu promecap</td>
+                            <td id="valoractualsumapromecap">Valor Actual suma promecap</td>
+                            <td id="valordiferenciapromecap">Valor Diferencia Promecap</td>
+                        </tr>
+                        <tr>
+                            <th>Blao</th>
+                            <td id ="valoraforoblao" >$153,173,700.00</td>
+                            <td id="valoractualjucaviblao">Valor Actual jucavi blao</td>
+                            <td id="valoractualmambublao">Valor Actual mambu blao</td>
+                            <td id="valoractualsumablao">Valor Actual suma blao</td>
+                            <td id="valordiferenciablao">Valor Diferencia blao</td>
+                        </tr>
+                    </tbody>
+                </table>
+
 
             </div>
-            <br>
 
+            <br>
             <div class="section">
-                <h2> Graficas de ambos</h2>
+                <h2> Gráficas</h2>
                 <br>
                 <figure class="highcharts-figure">
                     <div id="container-jucavi"></div>
@@ -53,7 +68,9 @@
             </div>
             <br>
             <br>
-            <div class="section">
+
+
+            {{-- <div class="section">
                 <h2> Tablas de ambos de ambos</h2>
                 <br>
                 <div class="table-responsive">
@@ -230,7 +247,7 @@
                         </tbody>
                     </table>
                 </div>
-            </div>
+            </div> --}}
 
 
 
@@ -314,7 +331,17 @@
 
 
     <script>
+        var jsonjucavi = [];
+        var jsonmambu = [];
         $(document).ready(function() {
+
+            var type = @json($type);
+            if (type == '3') {
+                $('a:contains("Cuentas")').hide();
+                console.log('Se oculta');
+            }
+
+
             //    generarGraficasJucaviour();
             montoaseguradomambu = 0;
 
@@ -324,32 +351,137 @@
                 message: 'Cargando...'
             });
 
-            generarGraficasJucavi();
-            generarGraficasMambu();
+            // generarGraficasJucavi();
+            // generarGraficasMambu();
 
-            datosgenerales();
+
+            $.ajax({
+                url: "sohmambu",
+                method: "GET",
+                dataType: "JSON",
+                data: {
+                    /* date: dateVal */
+                },
+                success: function(fondeadoresmambu) {
+                    jsonmambu = fondeadoresmambu;
+                    tmpfondeadoresmambu = [];
+                    total = 0;
+                    fondeadoresmambu.forEach(element => {
+                        var numero = parseFloat(element.monto);
+                        total += numero;
+                    });
+                    totalFormateado = total.toLocaleString();
+                    fondeadoresmambu.forEach(element => {
+                        porcentaje = (element.monto * 100) / total;
+                        porcentajeFormateado = parseFloat(porcentaje.toFixed(2));
+                        cantidadFormateado = parseFloat(element.cantidadregistros);
+                        montoFormateado = parseFloat(element.monto);
+                        montoFormateado = montoFormateado.toLocaleString();
+
+                        tmpfondeadoresmambu.push({
+                            name: element.nombrefondeador,
+                            y: porcentajeFormateado,
+                            cantidad: cantidadFormateado,
+                            monto: montoFormateado
+                        });
+
+                    });
+                    series = [];
+                    series.push({
+                        name: 'Fondeador',
+                        colorByPoint: true,
+                        data: tmpfondeadoresmambu
+                    });
+                    graficaPastel(series, 'container-mambu');
+
+                }
+            });
+
+
+            $.ajax({
+                url: "testsohrep",
+                method: "GET",
+                dataType: "JSON",
+                data: {
+                    /* date: dateVal */
+                },
+
+                success: function(fondeadoresjucavi) {
+                    jsonjucavi = fondeadoresjucavi;
+                    tmpfondeadoresjucavi = [];
+                    total = 0;
+                    fondeadoresjucavi.forEach(element => {
+                        var numero = parseFloat(element.monto);
+                        total += numero;
+                    });
+                    totalFormateado = total.toLocaleString();
+                    fondeadoresjucavi.forEach(element => {
+                        porcentaje = (element.monto * 100) / total;
+                        porcentajeFormateado = parseFloat(porcentaje.toFixed(2));
+                        cantidadFormateado = parseFloat(element.cantidadregistros);
+                        montoFormateado = parseFloat(element.monto);
+                        montoFormateado = montoFormateado.toLocaleString();
+
+                        tmpfondeadoresjucavi.push({
+                            name: element.nombrefondeador,
+                            y: porcentajeFormateado,
+                            cantidad: cantidadFormateado,
+                            monto: montoFormateado
+                        });
+
+                    });
+                    series = [];
+                    series.push({
+                        name: 'Fondeador',
+                        colorByPoint: true,
+                        data: tmpfondeadoresjucavi
+                    });
+                    graficaPastel(series, 'container-jucavi');
+                    $.unblockUI();
+                    datosgenerales();
+                }
+            });
+
+
+
 
         });
 
         function datosgenerales() {
+            actualsumapromecap=0;
+            actualsumablao=0;
+            jsonjucavi.forEach(element => {
+                switch (element.nombrefondeador) {
+                    case "Promecap":
+                        $('#valoractualjucavipromecap').text("$"+parseFloat(element.monto).toLocaleString());
+                        actualsumapromecap+=parseFloat(element.monto);
+                        break;
+                    case "BLAO":
+                        $('#valoractualjucaviblao').text("$"+parseFloat(element.monto).toLocaleString());
+                        actualsumablao+=parseFloat(element.monto);
+                        break;
+                }
+            });
+            jsonmambu.forEach(element => {
+                switch (element.nombrefondeador) {
+                    case "PROMECAP":
+                        $('#valoractualmambupromecap').text("$"+parseFloat(element.monto).toLocaleString());
+                        actualsumapromecap+=parseFloat(element.monto);
+                        break;
+                    case "BLAO":
+                        $('#valoractualmambublao').text("$"+parseFloat(element.monto).toLocaleString());
+                        actualsumablao+=parseFloat(element.monto);
+                        break;
+                }
+            });
 
-            creditosJucavi = document.getElementById('totalcreditosJucavi');
-            valorElement = creditosJucavi.parentNode.children[1];
-            valorjucavi = valorElement.textContent;
+            $('#valoractualsumapromecap').text("$"+parseFloat(actualsumapromecap).toLocaleString());
+            $('#valoractualsumablao').text("$"+parseFloat(actualsumablao).toLocaleString());
+            vdb = 153173700.00 - actualsumablao;
+            vdp = 376805000.05 - actualsumapromecap;
+            $('#valordiferenciapromecap').text("$"+parseFloat(vdp).toLocaleString());
+            $('#valordiferenciablao').text("$"+parseFloat(vdb).toLocaleString());
 
-            creditosMambu = document.getElementById('totalcreditosMambu');
-            valorElement = creditosMambu.parentNode.children[1];
-            valormambu = valorElement.textContent;
-
-            int1 = parseInt(valorjucavi);
-            int2 = parseInt(valormambu);
-
-            total = int1 + int2;
-
-            $('#totalcreditos').after('<div class="col">' + total + '</div>');
-
-
-            $.unblockUI();
         }
 
         function graficaPastel(series, idcontainer) {
@@ -363,7 +495,7 @@
                     type: 'pie'
                 },
                 title: {
-                    text: 'Creditos por fondeador del dia en curso',
+                    text: 'Creditos por fondeador del día anterior',
                     align: 'left'
                 },
                 tooltip: {
@@ -379,7 +511,7 @@
                         borderRadius: 5,
                         dataLabels: {
                             enabled: true,
-                            format: '{point.name}: {point.y:.1f}%'
+                            format: '{point.name}: {point.y:.1f}%, Monto: {point.monto:.1f}'
                         }
                     }
                 },
@@ -479,7 +611,7 @@
                                 "infoEmpty": "No encontrado",
                                 "infoFiltered": "(filtrado de _MAX_ registros en total)",
                                 "sSearch": "Buscar:",
-                                "sEmptyTable": "No se encontraron alertas por reportar",
+                                "sEmptyTable": "No se encontraron registros",
                                 "sLoadingRecords": "Cargando...",
                                 "oPaginate": {
                                     "sFirst": "Primero",
@@ -1003,7 +1135,7 @@
                             "infoEmpty": "No encontrado",
                             "infoFiltered": "(filtrado de _MAX_ registros en total)",
                             "sSearch": "Buscar:",
-                            "sEmptyTable": "No se encontraron alertas por reportar",
+                            "sEmptyTable": "No se encontraron registros",
                             "sLoadingRecords": "Cargando...",
                             "oPaginate": {
                                 "sFirst": "Primero",
@@ -1082,7 +1214,7 @@
                     });
 
 
-
+                    datosgenerales();
 
                     Swal.fire({
                         title: 'Gracias por esperar',

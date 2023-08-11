@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
@@ -74,7 +74,15 @@
                 </div>
             </div>
         </nav>
-
+        <script>
+            $(document).ready(function() {
+                var type = @json($type);
+                if (type == '3') {
+                    $('a:contains("Cuentas")').hide();
+                    console.log('Se oculta');
+                }
+            });
+        </script>
         <main class="py-4">
             @yield('content')
         </main>

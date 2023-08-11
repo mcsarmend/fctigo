@@ -107,6 +107,7 @@ Route::get('sohmambu', [dashboardController::class, 'sohmambu']);
 
 Route::get('profile/username', [usersController::class, 'usuarios']);
 Route::post('guardar-usuario', [usersController::class, 'guardar']);
+Route::post('actualizar-usuario', [usersController::class, 'actualizar']);
 
 
 Auth::routes();
