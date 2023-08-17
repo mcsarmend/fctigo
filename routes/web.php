@@ -40,6 +40,7 @@ Route::get('/dashboard', function () {
 
 // Configuraciones
 Route::get('admin/settings',[adminsettingsController::class, 'index'])->middleware(['auth']);
+Route::get('recuperarcontrasena',[dashboardController::class, 'recuperarcontrasena']);
 
 //Etiquetado RUTAS
 Route::get('etiquetado/jucavi/bursa', [labelledController::class, 'jucavibursa'])->middleware('auth');
@@ -108,6 +109,7 @@ Route::get('sohmambu', [dashboardController::class, 'sohmambu']);
 Route::get('profile/username', [usersController::class, 'usuarios']);
 Route::post('guardar-usuario', [usersController::class, 'guardar']);
 Route::post('actualizar-usuario', [usersController::class, 'actualizar']);
+Route::post('actualizarext', [usersController::class, 'actualizarext']);
 
 
 Auth::routes();

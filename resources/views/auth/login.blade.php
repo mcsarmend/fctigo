@@ -32,7 +32,7 @@
             passimage[0].classList.add('fa-eye');
 
             pass = document.getElementsByName('password')
-
+            $('.icheck-primary').addClass('d-none');
 
             $(document).on('click', '#passimage', function() {
                 passwordInput = document.getElementsByName('password');
