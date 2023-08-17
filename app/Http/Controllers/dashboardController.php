@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use PDO;
 use PDOException;
-
+use App\Models\User;
 class dashboardController extends Controller
 {
 
@@ -75,6 +75,13 @@ class dashboardController extends Controller
             return response()->json(['error' => $th], 400);
 
         }
+
+    }
+
+    public function recuperarcontrasena()
+    {
+        $usuarios = User::select('id', 'name')->get();
+        return view('recuperarcontrasena', ['usuarios' => $usuarios]);
 
     }
 }

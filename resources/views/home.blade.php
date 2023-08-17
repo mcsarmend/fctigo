@@ -53,6 +53,7 @@
                 <h2> Gráficas</h2>
                 <br>
                 <figure class="highcharts-figure">
+                    <h2>JUCAVI</h2>
                     <div id="container-jucavi"></div>
                     <p class="highcharts-description">
                         En esta gráfica se encuentra la cantidad de elementos de un fondeador jucavi
@@ -60,6 +61,7 @@
                 </figure>
                 <br>
                 <figure class="highcharts-figure">
+                    <h2>MAMBU</h2>
                     <div id="container-mambu"></div>
                     <p class="highcharts-description">
                         En esta gráfica se encuentra la cantidad de elementos de un fondeador mambu

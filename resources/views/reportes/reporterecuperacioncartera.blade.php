@@ -160,6 +160,18 @@
                 });
                 return;
             }
+            var startDateVal = new Date(startDate);
+            var endDateVal = new Date(endDate);
+
+            if (startDateVal > endDateVal) {
+                Swal.fire({
+                    title: '¡Ingresa parámetros correctos!',
+                    icon: 'warning',
+                    confirmButtonText: 'OK',
+                    text: "La fecha inicial debe ser menor a la fecha final"
+                });
+                return;
+            }
 
 
             $.blockUI({
@@ -239,7 +251,18 @@
                 });
                 return;
             }
+            var startDateVal = new Date(startDate);
+            var endDateVal = new Date(endDate);
 
+            if (startDateVal > endDateVal) {
+                Swal.fire({
+                    title: '¡Ingresa parámetros correctos!',
+                    icon: 'warning',
+                    confirmButtonText: 'OK',
+                    text: "La fecha inicial debe ser menor a la fecha final"
+                });
+                return;
+            }
 
             var startDateVal = new Date(startDate);
             var endDateVal = new Date(endDate);

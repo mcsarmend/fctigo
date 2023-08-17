@@ -69,5 +69,25 @@ class usersController extends Controller
         }
 
     }
+    public function actualizarext(Request $request)
+    {
+
+        try {
+            // Encuentra el usuario por su ID
+            $usuarioEncriptado = $request->id;
+            $usuarioIdDesencriptado = Crypt::decrypt($usuarioEncriptado);
+            $usuario = User::findOrFail($usuarioIdDesencriptado);
+            // Actualiza los datos del usuario
+            $usuario->password = Hash::make($request->contrasena);
+            $usuario->save();
+            $mess = 'Usuario actualizado correctamente';
+
+            return response()->json(['message' => $mess], 200);
+        } catch (Exception $e) {
+            // Devolver una respuesta de error
+            return response()->json(['message' => 'Error al actualizar el usuario'], 500);
+        }
+
+    }
 
 }

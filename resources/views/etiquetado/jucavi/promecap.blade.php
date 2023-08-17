@@ -155,16 +155,16 @@
             // Actualizar la etiqueta del archivo seleccionado
             fileInput_baja.addEventListener('change', () => {
                 name = fileInput_baja.files[0]?.name;
-                if (name.substring(name.length - 3, name.length != 'xls') || name.substring(name.length - 4, name
-                        .length != 'xlsx')) {
+                if (name.substring(name.length - 3, name.length) == 'xls' || name.substring(name.length - 4, name
+                        .length) == 'xlsx') {
+                        fileInputLabel_baja.textContent = fileInput_baja.files[0]?.name || 'Seleccionar archivo';
+                } else {
                     fileInput_baja.value = "";
                     Swal.fire({
                         icon: 'error',
                         title: 'El archivo no es un excel',
                     });
-                } else {
 
-                    fileInputLabel_baja.textContent = fileInput_baja.files[0]?.name || 'Seleccionar archivo';
                 }
             });
 

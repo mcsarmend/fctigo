@@ -142,7 +142,20 @@
             const form_baja = document.getElementById('bajapromecap');
             const fileInput_baja = document.getElementById('excelBaja');
             const fileInputLabel_baja = document.querySelector('.custom-file-label-baja');
+            fileInput_baja.addEventListener('change', () => {
+                name = fileInput_baja.files[0]?.name;
+                if (name.substring(name.length - 3, name.length) == 'xls' || name.substring(name.length - 4, name
+                        .length) == 'xlsx') {
+                    fileInputLabel_baja.textContent = fileInput_baja.files[0]?.name || 'Seleccionar archivo';
+                } else {
+                    fileInput_baja.value = "";
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'El archivo no es un excel',
+                    });
 
+                }
+            });
             form_baja.addEventListener('submit', (e) => {
                 e.preventDefault();
 
@@ -205,19 +218,7 @@
             });
 
             // Actualizar la etiqueta del archivo seleccionado
-            fileInput_baja.addEventListener('change', () => {
-                name = fileInput_baja.files[0]?.name;
-                if (name.substring(name.length - 3, name.length != 'xls') || name.substring(name.length - 4, name
-                        .length != 'xlsx')) {
-                    fileInput_baja.value = "";
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'El archivo no es un excel',
-                    });
-                } else {
-                    fileInputLabel_baja.textContent = fileInput_baja.files[0]?.name || 'Seleccionar archivo';
-                }
-            });
+
 
             /* Etiquetado*/
 
@@ -227,16 +228,17 @@
             // Actualizar la etiqueta del archivo seleccionado
             fileInput_etiquetado.addEventListener('change', () => {
                 name = fileInput_etiquetado.files[0]?.name;
-                if (name.substring(name.length - 3, name.length != 'xls') || name.substring(name.length - 4, name
-                        .length != 'xlsx')) {
+                if (name.substring(name.length - 3, name.length) == 'xls' || name.substring(name.length - 4, name
+                        .length) == 'xlsx') {
+                    fileInputLabel_etiquetado.textContent = fileInput_etiquetado.files[0]?.name ||
+                        'Seleccionar archivo';
+                } else {
                     fileInput_etiquetado.value = "";
                     Swal.fire({
                         icon: 'error',
                         title: 'El archivo no es un excel',
                     });
-                } else {
 
-                    fileInputLabel_baja.textContent = fileInput_etiquetado.files[0]?.name || 'Seleccionar archivo';
                 }
             });
 

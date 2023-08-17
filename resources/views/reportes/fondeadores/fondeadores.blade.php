@@ -11,9 +11,6 @@
         <div class="card-header">
             <h1 class="card-title">Proceso que genera reporte de Pre etiquetado.</h1>
         </div>
-        <div>
-            El valor de la variable es: {{ $type }}
-        </div>
         <div class="card-body">
             <button class="btn btn-success" id="reporteFondeadores">Generar Reporte</button>
             <br>
