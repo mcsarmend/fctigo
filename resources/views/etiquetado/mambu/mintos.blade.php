@@ -89,8 +89,6 @@
             }
 
 
-
-
             async function patchClients() {
                 console.log("Enviando créditos");
 
@@ -143,7 +141,16 @@
         $('#preetiquetadoMintos').click(function() {
             // Bloquea la pantalla
             $.blockUI({
-                message: 'Cargando...'
+                message: 'Cargando...',
+                css: {
+                    border: 'none',
+                    padding: '15px',
+                    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                    color: '#fff',
+                    'border-radius': '5px',
+                    fontSize: '18px',
+                    fontWeight: 'bold',
+                }
             });
 
             // Realiza la petición AJAX
@@ -153,7 +160,7 @@
                 dataType: "JSON",
                 data: {},
                 success: function(data) {
-                    console.log(data);
+                    $.unblockUI();
                     if ('success' in data) {
                         Swal.fire(
                             '¡Gracias por esperar!',
@@ -163,6 +170,7 @@
                     }
                 },
                 error: function(data) {
+                    $.unblockUI();
                     Swal.fire({
                         icon: 'error',
                         title: 'Encontramos un error...',
@@ -170,8 +178,7 @@
                     });
                 }
             });
-            // Desbloquea la pantalla después de que se complete la petición
-            $.unblockUI();
+
         });
 
 
@@ -187,7 +194,8 @@
             name = fileInput_etiquetado.files[0]?.name;
             if (name.substring(name.length - 3, name.length) == 'xls' || name.substring(name.length - 4, name
                     .length) == 'xlsx') {
-                        fileInputLabel_etiquetado.textContent = fileInput_etiquetado.files[0]?.name || 'Seleccionar archivo';
+                fileInputLabel_etiquetado.textContent = fileInput_etiquetado.files[0]?.name ||
+                    'Seleccionar archivo';
             } else {
                 fileInput_etiquetado.value = "";
                 Swal.fire({
@@ -232,6 +240,18 @@
                         denyButtonText: `No etiquetar`,
                     }).then((result) => {
                         // Inicia proceso etiquetado
+                        $.blockUI({
+                            message: 'Cargando...',
+                            css: {
+                                border: 'none',
+                                padding: '15px',
+                                backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                                color: '#fff',
+                                'border-radius': '5px',
+                                fontSize: '18px',
+                                fontWeight: 'bold',
+                            }
+                        });
                         if (result.isConfirmed) {
                             const baseUrl = "http://52.168.179.158/api/RecepcionPago/" //Prod
 
@@ -247,10 +267,16 @@
                                     };
 
                                     $.ajax(settings).done(function(response) {
-                                        console.log(response);
+                                        $.unblockUI();
+                                        Swal.fire(
+                                            '¡Gracias por esperar!',
+                                            'Etiquetado realizado correctamente',
+                                            'success'
+                                        )
                                     });
 
                                 } catch (error) {
+                                    $.unblockUI();
                                     Swal.fire({
                                         icon: 'error',
                                         title: error.toString(),

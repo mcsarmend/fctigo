@@ -77,7 +77,7 @@
             var type = @json($type);
             fechamin = @json($fechamin);
             fechamax = @json($fechamax);
-            text = type +fechamin+fechamax;
+            text = type + fechamin + fechamax;
 
             $('#min-date').text(fechamin[0].min.substr(0, 10))
             $('#max-date').text(fechamax[0].max.substr(0, 10))
@@ -91,7 +91,16 @@
         $('#reportesesioncartera').click(function() {
             // Bloquea la pantalla
             $.blockUI({
-                message: 'Cargando...'
+                message: 'Cargando...',
+                css: {
+                    border: 'none',
+                    padding: '15px',
+                    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                    color: '#fff',
+                    'border-radius': '5px',
+                    fontSize: '18px',
+                    fontWeight: 'bold',
+                }
             });
             dateVal = $('#start-date').val().toString();
             if (dateVal == '') {
