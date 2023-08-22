@@ -102,7 +102,16 @@
             $('#preetiquetadoBlaomambu').click(function() {
                 // Bloquea la pantalla
                 $.blockUI({
-                    message: 'Cargando...'
+                    message: 'Cargando...',
+                    css: {
+                        border: 'none',
+                        padding: '15px',
+                        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                        color: '#fff',
+                        'border-radius': '5px',
+                        fontSize: '18px',
+                        fontWeight: 'bold',
+                    }
                 });
 
                 // Realiza la petición AJAX
@@ -112,7 +121,7 @@
                     dataType: "JSON",
                     data: {},
                     success: function(data) {
-                        console.log(data);
+                        $.unblockUI();
                         if ('success' in data) {
                             Swal.fire(
                                 '¡Gracias por esperar!',
@@ -122,6 +131,7 @@
                         }
                     },
                     error: function(data) {
+                        $.unblockUI();
                         Swal.fire({
                             icon: 'error',
                             title: 'Encontramos un error...',
@@ -139,7 +149,18 @@
 
             form_baja.addEventListener('submit', (e) => {
                 e.preventDefault();
-
+                $.blockUI({
+                    message: 'Cargando...',
+                    css: {
+                        border: 'none',
+                        padding: '15px',
+                        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                        color: '#fff',
+                        'border-radius': '5px',
+                        fontSize: '18px',
+                        fontWeight: 'bold',
+                    }
+                });
 
                 $.ajax({
                     url: "bajablaomambu",
@@ -150,7 +171,7 @@
                     },
                     data: {},
                     success: function(data) {
-                        console.log(data);
+                        $.unblockUI();
                         if ('success' in data) {
                             Swal.fire(
                                 '¡Gracias por esperar!',
@@ -160,6 +181,7 @@
                         }
                     },
                     error: function(data) {
+                        $.unblockUI();
                         Swal.fire({
                             icon: 'error',
                             title: 'Encontramos un error...',
@@ -182,7 +204,7 @@
                 if (name.substring(name.length - 3, name.length) == 'xls' || name.substring(name.length - 4, name
                         .length) == 'xlsx') {
                     fileInputLabel_etiquetado.textContent = fileInput_etiquetado.files[0]?.name ||
-                    'Seleccionar archivo';
+                        'Seleccionar archivo';
                 } else {
                     fileInput_etiquetado.value = "";
                     Swal.fire({
@@ -195,6 +217,7 @@
 
             form_etiquetado.addEventListener('submit', (e) => {
                 e.preventDefault();
+
 
                 const file = fileInput_etiquetado.files[0];
                 if (file) {
@@ -226,7 +249,18 @@
                         }).then((result) => {
                             /* Read more about isConfirmed, isDenied below */
                             if (result.isConfirmed) {
-
+                                $.blockUI({
+                                    message: 'Cargando...',
+                                    css: {
+                                        border: 'none',
+                                        padding: '15px',
+                                        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                                        color: '#fff',
+                                        'border-radius': '5px',
+                                        fontSize: '18px',
+                                        fontWeight: 'bold',
+                                    }
+                                });
                                 $.ajax({
                                     url: "etiquetadoBlaomambu",
                                     method: "POST",
@@ -239,7 +273,7 @@
                                         "jucavi": jucaviColumn
                                     },
                                     success: function(data) {
-                                        console.log(data);
+                                        $.unblockUI();
                                         if ('success' in data) {
                                             Swal.fire(
                                                 '¡Gracias por esperar!',
@@ -249,6 +283,7 @@
                                         }
                                     },
                                     error: function(data) {
+                                        $.unblockUI();
                                         Swal.fire({
                                             icon: 'error',
                                             title: 'Encontramos un error...',

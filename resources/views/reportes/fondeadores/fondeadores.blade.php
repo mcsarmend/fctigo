@@ -72,7 +72,16 @@
         $('#reporteFondeadores').click(function() {
             // Bloquea la pantalla
             $.blockUI({
-                message: 'Cargando...'
+                message: 'Cargando...',
+                css: {
+                    border: 'none',
+                    padding: '15px',
+                    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                    color: '#fff',
+                    'border-radius': '5px',
+                    fontSize: '18px',
+                    fontWeight: 'bold',
+                }
             });
 
             // Realiza la petición AJAX

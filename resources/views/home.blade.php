@@ -23,6 +23,10 @@
                             <th>Actual Mambu</th>
                             <th>Actual Suma</th>
                             <th>Diferencia</th>
+                            <th>Cantidad Jucavi</th>
+                            <th>Cantidad Mambu</th>
+                            <th>Suma cantidad</th>
+
                         </tr>
                     </thead>
                     <tbody>
@@ -33,14 +37,31 @@
                             <td id="valoractualmambupromecap">Valor Actual mambu promecap</td>
                             <td id="valoractualsumapromecap">Valor Actual suma promecap</td>
                             <td id="valordiferenciapromecap">Valor Diferencia Promecap</td>
+                            <td id="cantidadactualjucavipromecap">Cantidad actual jucavi Promecap</td>
+                            <td id="cantidadactualmambupromecap">Cantidad actual mambu Promecap</td>
+                            <td id="sumacantidadactualpromecap">Suma cantidad Promecap</td>
                         </tr>
                         <tr>
                             <th>Blao</th>
-                            <td id ="valoraforoblao" >$153,173,700.00</td>
+                            <td id="valoraforoblao">$153,173,700.00</td>
                             <td id="valoractualjucaviblao">Valor Actual jucavi blao</td>
                             <td id="valoractualmambublao">Valor Actual mambu blao</td>
                             <td id="valoractualsumablao">Valor Actual suma blao</td>
                             <td id="valordiferenciablao">Valor Diferencia blao</td>
+                            <td id="cantidadactualjucaviblao">Cantidad actual jucavi blao</td>
+                            <td id="cantidadactualmambublao">Cantidad actual mambu blao</td>
+                            <td id="sumacantidadactualblao">Suma cantidad blao</td>
+                        </tr>
+                        <tr>
+                            <th>Mintos</th>
+                            <td id="valoraforomintos">-</td>
+                            <td id="valoractualjucavimintos">-</td>
+                            <td id="valoractualmambumintos">Valor Actual mambu mintos</td>
+                            <td id="valoractualsumamintos">Valor Actual suma mintos</td>
+                            <td id="valordiferenciamintos">-</td>
+                            <td id="cantidadactualjucavimintos">-</td>
+                            <td id="cantidadactualmambumintos">Cantidad actual mambu mintos</td>
+                            <td id="sumacantidadactualmintos">Suma cantidad mintos</td>
                         </tr>
                     </tbody>
                 </table>
@@ -350,7 +371,16 @@
             montoaseguradojucavi = 0;
 
             $.blockUI({
-                message: 'Cargando...'
+                message: 'Cargando...',
+                css: {
+                    border: 'none',
+                    padding: '15px',
+                    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                    color: '#fff',
+                    'border-radius': '5px',
+                    fontSize: '18px',
+                    fontWeight: 'bold',
+                }
             });
 
             // generarGraficasJucavi();
@@ -450,39 +480,87 @@
         });
 
         function datosgenerales() {
-            actualsumapromecap=0;
-            actualsumablao=0;
+            // Actuales
+            actualjucavipromecap = 0;
+            actualjucaviblao = 0;
+
+
+            actualmambupromecap = 0;
+            actualmambublao = 0;
+            actualmambumintos = 0;
+
+            // Cantidades
+            cantidadjucavipromecap = 0;
+            cantidadjucaviblao = 0;
+
+            cantidadmambupromecap = 0;
+            cantidadmambublao = 0;
+            cantidadmambumintos = 0;
+
             jsonjucavi.forEach(element => {
                 switch (element.nombrefondeador) {
                     case "Promecap":
-                        $('#valoractualjucavipromecap').text("$"+parseFloat(element.monto).toLocaleString());
-                        actualsumapromecap+=parseFloat(element.monto);
+                        $('#valoractualjucavipromecap').text("$" + parseFloat(element.monto).toLocaleString());
+                        actualjucavipromecap += parseFloat(element.monto);
+                        $('#cantidadactualjucavipromecap').text(parseFloat(element.cantidadregistros)
+                            .toLocaleString());
+                        cantidadjucavipromecap = element.cantidadregistros;
                         break;
                     case "BLAO":
-                        $('#valoractualjucaviblao').text("$"+parseFloat(element.monto).toLocaleString());
-                        actualsumablao+=parseFloat(element.monto);
+                        $('#valoractualjucaviblao').text("$" + parseFloat(element.monto).toLocaleString());
+                        actualjucaviblao += parseFloat(element.monto);
+                        $('#cantidadactualjucaviblao').text(parseFloat(element.cantidadregistros).toLocaleString());
+                        cantidadjucaviblao = element.cantidadregistros;
                         break;
                 }
             });
             jsonmambu.forEach(element => {
                 switch (element.nombrefondeador) {
                     case "PROMECAP":
-                        $('#valoractualmambupromecap').text("$"+parseFloat(element.monto).toLocaleString());
-                        actualsumapromecap+=parseFloat(element.monto);
+                        $('#valoractualmambupromecap').text("$" + parseFloat(element.monto).toLocaleString());
+                        actualmambupromecap += parseFloat(element.monto);
+                        $('#cantidadactualmambupromecap').text(parseFloat(element.cantidadregistros)
+                        .toLocaleString());
+                        cantidadmambupromecap = element.cantidadregistros;
                         break;
                     case "BLAO":
-                        $('#valoractualmambublao').text("$"+parseFloat(element.monto).toLocaleString());
-                        actualsumablao+=parseFloat(element.monto);
+                        $('#valoractualmambublao').text("$" + parseFloat(element.monto).toLocaleString());
+                        actualmambublao += parseFloat(element.monto);
+                        $('#cantidadactualmambublao').text(parseFloat(element.cantidadregistros).toLocaleString());
+                        cantidadmambublao = element.cantidadregistros;
+                        break;
+                    case "MINTOS":
+                        $('#valoractualmambumintos').text("$" + parseFloat(element.monto).toLocaleString());
+                        actualmambumintos += parseFloat(element.monto);
+                        $('#cantidadactualmambumintos').text(parseFloat(element.cantidadregistros)
+                    .toLocaleString());
+                        cantidadmambumintos = element.cantidadregistros;
+                        $('#sumacantidadactualmintos').text(parseFloat(element.cantidadregistros).toLocaleString());
+
                         break;
                 }
             });
 
-            $('#valoractualsumapromecap').text("$"+parseFloat(actualsumapromecap).toLocaleString());
-            $('#valoractualsumablao').text("$"+parseFloat(actualsumablao).toLocaleString());
-            vdb = 153173700.00 - actualsumablao;
-            vdp = 376805000.05 - actualsumapromecap;
-            $('#valordiferenciapromecap').text("$"+parseFloat(vdp).toLocaleString());
-            $('#valordiferenciablao').text("$"+parseFloat(vdb).toLocaleString());
+            sumavalorpromecap = actualjucavipromecap + actualmambupromecap;
+            sumavalorblao = actualjucaviblao + actualmambublao;
+
+            sumacantidadpromecap = cantidadjucavipromecap + cantidadmambupromecap;
+            sumacantidadblao = cantidadjucaviblao + cantidadmambublao;
+
+
+
+            $('#valoractualsumapromecap').text("$" + parseFloat(sumavalorpromecap).toLocaleString());
+            $('#valoractualsumablao').text("$" + parseFloat(sumavalorblao).toLocaleString());
+            $('#valoractualsumamintos').text("$" + parseFloat(actualmambumintos).toLocaleString());
+
+            $('#sumacantidadactualpromecap').text(parseFloat(sumacantidadpromecap).toLocaleString());
+            $('#sumacantidadactualblao').text(parseFloat(sumacantidadblao).toLocaleString());
+
+
+            vdb = 153173700.00 - sumavalorblao;
+            vdp = 376805000.05 - sumavalorpromecap;
+            $('#valordiferenciapromecap').text("$" + parseFloat(vdp).toLocaleString());
+            $('#valordiferenciablao').text("$" + parseFloat(vdb).toLocaleString());
 
         }
 

@@ -111,7 +111,16 @@
             $('#preeliminarjucaviblao').click(function() {
                 // Bloquea la pantalla
                 $.blockUI({
-                    message: 'Cargando...'
+                    message: 'Cargando...',
+                    css: {
+                        border: 'none',
+                        padding: '15px',
+                        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                        color: '#fff',
+                        'border-radius': '5px',
+                        fontSize: '18px',
+                        fontWeight: 'bold',
+                    }
                 });
 
                 // Realiza la petición AJAX
@@ -197,9 +206,7 @@
 
             form_preetiquetado.addEventListener('submit', (e) => {
                 e.preventDefault();
-                $.blockUI({
-                    message: 'Cargando...'
-                });
+
                 const file = fileInput_preetiquetado.files[0];
                 if (file) {
                     fileInput_preetiquetado.addEventListener('change', () => {
@@ -224,7 +231,18 @@
                                 confirmButtonText: 'Etiquetar',
                                 denyButtonText: `No etiquetar`,
                             }).then((result) => {
-                                /* Read more about isConfirmed, isDenied below */
+                                $.blockUI({
+                                    message: 'Cargando...',
+                                    css: {
+                                        border: 'none',
+                                        padding: '15px',
+                                        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                                        color: '#fff',
+                                        'border-radius': '5px',
+                                        fontSize: '18px',
+                                        fontWeight: 'bold',
+                                    }
+                                });
                                 if (result.isConfirmed) {
                                     $.ajax({
                                         url: "preetiquetadoblaojucavi",

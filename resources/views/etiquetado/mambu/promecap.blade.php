@@ -13,13 +13,15 @@
         </div>
         <div class="card-body">
             <div class="container py-4">
-                <div class="row section">
+                <div class="row section" style="display: flex; flex-direction: column-reverse;">
                     <div class="col-md-8 col-sm-6 mb-3">
                         <button class="btn btn-outline-primary w-100" id="preetiquetadopromecapmambu">Preetiquetado
                             mambu</button>
                     </div>
+                    <h2>PREETIQUETADO</h2>
                 </div>
-                <div class="row section">
+
+                <div class="row section" style="display: flex; flex-direction: column-reverse;">
                     <div class="col-md-8 col-sm-6 mb-3 center-form">
                         <!-- Agregado: "center-form" -->
                         <form id="bajapromecap">
@@ -34,8 +36,10 @@
                             </div>
                         </form>
                     </div>
+                    <h2>BAJA</h2>
                 </div>
-                <div class="row section">
+
+                <div class="row section" style="display: flex; flex-direction: column-reverse;">
                     <div class="col-md-8 col-sm-6 mb-3 center-form">
                         <!-- Agregado: "center-form" -->
                         <form id="etiquetadoPromecap">
@@ -53,10 +57,12 @@
                             </div>
                         </form>
                         <div>
-                            <p>En el archivo, la primer columna es para mambu y la segunda columna es para jucavi</p>
+                            <p>El archivo deberá contener una sola columna sin encabezados</p>
                         </div>
                     </div>
+                    <h2>ETIQUETADO</h2>
                 </div>
+
             </div>
         </div>
     @stop
@@ -107,7 +113,16 @@
             $('#preetiquetadopromecapmambu').click(function() {
                 // Bloquea la pantalla
                 $.blockUI({
-                    message: 'Cargando...'
+                    message: 'Cargando...',
+                    css: {
+                        border: 'none',
+                        padding: '15px',
+                        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                        color: '#fff',
+                        'border-radius': '5px',
+                        fontSize: '18px',
+                        fontWeight: 'bold',
+                    }
                 });
 
                 // Realiza la petición AJAX
@@ -127,6 +142,7 @@
                         }
                     },
                     error: function(data) {
+                        $.unblockUI();
                         Swal.fire({
                             icon: 'error',
                             title: 'Encontramos un error...',
@@ -158,7 +174,18 @@
             });
             form_baja.addEventListener('submit', (e) => {
                 e.preventDefault();
-
+                $.blockUI({
+                    message: 'Cargando...',
+                    css: {
+                        border: 'none',
+                        padding: '15px',
+                        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                        color: '#fff',
+                        'border-radius': '5px',
+                        fontSize: '18px',
+                        fontWeight: 'bold',
+                    }
+                });
                 const file = fileInput_baja.files[0];
                 if (file) {
                     const reader = new FileReader();
@@ -189,6 +216,7 @@
                             },
                             success: function(data) {
                                 console.log(data);
+                                $.unblockUI();
                                 if ('success' in data) {
                                     Swal.fire(
                                         '¡Gracias por esperar!',
@@ -198,6 +226,7 @@
                                 }
                             },
                             error: function(data) {
+                                $.unblockUI();
                                 Swal.fire({
                                     icon: 'error',
                                     title: 'Encontramos un error...',
@@ -243,6 +272,19 @@
             });
 
             form_etiquetado.addEventListener('submit', (e) => {
+
+                $.blockUI({
+                    message: 'Cargando...',
+                    css: {
+                        border: 'none',
+                        padding: '15px',
+                        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                        color: '#fff',
+                        'border-radius': '5px',
+                        fontSize: '18px',
+                        fontWeight: 'bold',
+                    }
+                });
                 e.preventDefault();
 
                 const file = fileInput_etiquetado.files[0];
@@ -262,15 +304,10 @@
                         const mambuColumn = jsonData.map(function(row) {
                             return row[0];
                         });
-                        const jucaviColumn = jsonData.map(function(row) {
-                            return row[1];
-                        });
-
 
                         Swal.fire({
                             title: '¡Se etiquetará la siguiente cantidad de creditos!',
-                            html: 'Mambu: <b>' + mambuColumn.length + '</b>, ' +
-                                'jucavi: <b>' + jucaviColumn.length + '</b>, ',
+                            html: 'Mambu: <b>' + mambuColumn.length + '</b>, ',
                             showDenyButton: true,
                             confirmButtonText: 'Etiquetar',
                             denyButtonText: `No etiquetar`,
@@ -287,11 +324,10 @@
                                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                                     },
                                     data: {
-                                        "mambu": mambuColumn,
-                                        "jucavi": jucaviColumn
+                                        "mambu": mambuColumn
                                     },
                                     success: function(data) {
-                                        console.log(data);
+                                        $.unblockUI();
                                         if ('success' in data) {
                                             Swal.fire(
                                                 '¡Gracias por esperar!',
@@ -301,11 +337,13 @@
                                         }
                                     },
                                     error: function(data) {
+                                        $.unblockUI();
                                         Swal.fire({
                                             icon: 'error',
                                             title: 'Encontramos un error...',
                                             text: data["responseJSON"]["error"],
                                         });
+
                                     }
                                 });
 

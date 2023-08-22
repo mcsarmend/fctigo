@@ -3,11 +3,36 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use PDO;
 use Illuminate\Support\Facades\Auth;
+use PDO;
 
 class labelledController extends Controller
 {
+
+    private $fechaActual;
+    private $fechaMenosUnDia;
+
+    public function __construct()
+    {
+        // Obtiene la fecha y hora actual
+        $fechaActual = date("Y-m-d H:i:s");
+
+        // Resta 6 horas a la fecha actual
+        $fechaMenos6Horas = date("Y-m-d H:i:s", strtotime($fechaActual . " -6 hours"));
+
+        // Resta 1 día y 6 horas a la fecha actual
+        $fechaMenosUnDia6Horas = date("Y-m-d H:i:s", strtotime($fechaActual . " -1 day -6 hours"));
+
+        $fechaMenos6HorasFormateada = substr($fechaMenos6Horas, 0, 10);
+        $fechaMenosUnDia6HorasFormateada = substr($fechaMenosUnDia6Horas, 0, 10);
+
+        // Calcular la fecha y hora actual
+        $this->fechaActual = $fechaMenos6HorasFormateada;
+
+        // Calcular la fecha actual menos 1 día y 6 horas
+        $this->fechaMenosUnDia = $fechaMenosUnDia6HorasFormateada;
+    }
+
     public function jucavibursa()
     {
         $type = $this->getusertype();
@@ -85,7 +110,11 @@ class labelledController extends Controller
     }
     public function bajapromecapmambu(Request $request)
     {
-        $fechaActual = date("Y-m-d");
+
+        /*Fechas*/
+        $fechaActual = $this->fechaActual;
+        $fechaMenosUnDia = $this->fechaMenosUnDia;
+
         $lstCreditos = $request->baja;
         try {
             $host = 'fcontigo-rs-cluster-01.cdxtyqbdsp7d.us-east-1.redshift.amazonaws.com';
@@ -123,8 +152,8 @@ class labelledController extends Controller
     }
     public function etiquetadopromecapmambu(Request $request)
     {
+
         $mambu = $request->mambu;
-        $jucavi = $request->jucavi;
         $curl = curl_init();
         try {
             // ------------------------------EMPIEZA ETIQUETADO MAMBU----------------------------------
@@ -138,12 +167,11 @@ class labelledController extends Controller
             $pdo = new PDO($dsn, $user, $password);
             $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-            $sqlStatement = "delete from mambu_prod.mambu_prod.creditos_excel_promecap;\n";
+            $sqlStatement = "delete from mambu_prod.creditos_excel_promecap;\n";
 
             foreach ($mambu as $item) {
-                $sqlStatement .= "insert into mambu_prod.mambu_prod.creditos_excel_promecap (id_acuerdocredito) values ('" . $item . "');\n";
+                $sqlStatement .= "insert into mambu_prod.creditos_excel_promecap (id_acuerdocredito) values ('" . $item . "');\n";
             }
-
             $statement = $pdo->query($sqlStatement);
             $result = $statement->fetchAll(PDO::FETCH_ASSOC);
 
@@ -165,6 +193,22 @@ class labelledController extends Controller
 
             // ------------------------------TERMINA ETIQUETADO MAMBU----------------------------------
 
+            return response()->json(['success' => "Etiquetado realizado correctamente"], 200);
+
+        } catch (\Throwable $th) {
+            return response()->json(['error' => $th], 401);
+        }
+    }
+    public function etiquetadopromecapjucavi(Request $request)
+    {
+
+        $jucavi = $request->jucavi;
+        /*Fechas*/
+        $fechaActual = $this->fechaActual; // Accede a la propiedad correcta
+        $fechaMenosUnDia = $this->fechaMenosUnDia; // Accede a la propiedad correcta
+
+        try {
+
             // ------------------------------EMPIEZA ETIQUETADO JUCAVI----------------------------------
 
             $hostODS = 'fcods.trafficmanager.net';
@@ -175,13 +219,10 @@ class labelledController extends Controller
             // Conexión a la base de datos
             $pdoODS = new PDO("mysql:host=$hostODS;port=$portODS;dbname=$dbNameODS", $userODS, $passwordODS);
 
-            $fechaActual = date("Y-m-d");
             $sqlStatementJucavi = "use cartera_ods; INSERT INTO d_etiquetado_previopromecap (ep_num_credito, ep_fecha_etiquetado,ep_fechamov) VALUES \n";
 
-            $formattedFechaMov = date("Y-m-d", strtotime($fechaActual . "-1 day"));
-
             foreach ($jucavi as $id) {
-                $sqlStatementJucavi .= '("' . $id . '", "' . $fechaActual . '", "' . $formattedFechaMov . '"),';
+                $sqlStatementJucavi .= '("' . $id . '", "' . $fechaActual . '", "' . $fechaMenosUnDia . '"),';
             }
 
             $sqlStatementJucavi = rtrim($sqlStatementJucavi, ',');
@@ -206,15 +247,12 @@ class labelledController extends Controller
 
             $response2 = curl_exec($curl);
 
-            // ------------------------------TERMINA ETIQUETADO JUCAVI----------------------------------
-
             return response()->json(['success' => "Etiquetado realizado correctamente"], 200);
 
+            // ------------------------------TERMINA ETIQUETADO JUCAVI----------------------------------
         } catch (\Throwable $th) {
-            return response()->json(["error" => $th]);
+            return response()->json(['error' => $th], 401);
         }
-
-        return $request;
     }
     public function blao_preetiequetado_mambu()
     {
@@ -245,7 +283,7 @@ class labelledController extends Controller
                 $response = curl_exec($curl);
 
                 if (strpos($v[0], "Error") !== false) {
-                    return response()->json(['error' => $v[0]], 400);
+                    return response()->json(['error' => $v[0]], 401);
 
                 } else {
                     return response()->json(['success' => $v[0]], 200);
@@ -253,14 +291,16 @@ class labelledController extends Controller
             }
 
         } catch (\Throwable $th) {
-            echo $th;
+            return response()->json(['error' => $th], 401);
         }
 
     }
     public function bajablaomambu(Request $request)
     {
 
-        $fechaActual = date("Y-m-d");
+        /*Fechas*/
+        $fechaActual = $this->fechaActual;
+        $fechaMenosUnDia = $this->fechaMenosUnDia;
         $lstCreditos = $request->baja;
         $strFondedor = "CREDITO REAL";
         $strFondeadorAnterior = "BLAO";
@@ -333,7 +373,7 @@ class labelledController extends Controller
             }
 
         } catch (\Throwable $th) {
-            return response()->json(['error' => $th], 400);
+            return response()->json(['error' => $th], 401);
 
         }
 
@@ -382,50 +422,11 @@ class labelledController extends Controller
 
             // ------------------------------TERMINA ETIQUETADO MAMBU----------------------------------
 
-            // ------------------------------EMPIEZA ETIQUETADO JUCAVI----------------------------------
-
-            // $fechaActual = date("Y-m-d");
-            // $sqlStatementJucavi = "use cartera_ods; INSERT INTO d_etiquetado_previopromecap (ep_num_credito, ep_fecha_etiquetado,ep_fechamov) VALUES \n";
-
-            // $formattedFechaMov = date("Y-m-d", strtotime($fechaActual . "-1 day"));
-
-            // foreach ($jucavi as $id) {
-            //     $sqlStatementJucavi .= '("' . $id . '", "' . $fechaActual . '", "' . $formattedFechaMov . '"),';
-            // }
-
-            // $sqlStatementJucavi = rtrim($sqlStatementJucavi, ',');
-            // $sqlStatementJucavi .= ';';
-
-            // return $sqlStatementJucavi;
-
-            // $statement = $pdo->query($query);
-            // $result = $statement->fetchAll(PDO::FETCH_ASSOC);
-
-            // curl_setopt_array($curl, array(
-            //     CURLOPT_URL => 'https://fcetiquetado.azurewebsites.net/ProcesoBursa/api/EtiquetadoPromecapJ/AltaPromecapJV/843',
-            //     CURLOPT_RETURNTRANSFER => true,
-            //     CURLOPT_ENCODING => '',
-            //     CURLOPT_MAXREDIRS => 10,
-            //     CURLOPT_TIMEOUT => 0,
-            //     CURLOPT_FOLLOWLOCATION => true,
-            //     CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            //     CURLOPT_CUSTOMREQUEST => 'GET',
-            //     CURLOPT_HTTPHEADER => array(
-            //         'Cookie: ARRAffinity=f338cc84dcd26ef0541e10991beb3f601c2d1a0e9ced27dcfbc2140d4a6a8e25',
-            //     ),
-            // ));
-
-            // $response2 = curl_exec($curl);
-
-            // ------------------------------TERMINA ETIQUETADO JUCAVI----------------------------------
-
             return response()->json(['success' => "Etiquetado realizado correctamente"], 200);
 
         } catch (\Throwable $th) {
-            return response()->json(["error" => $th]);
+            return response()->json(['error' => $th], 401);
         }
-
-        return $request;
     }
 
     public function etiquetadomintos(Request $request)
@@ -479,7 +480,9 @@ class labelledController extends Controller
             $posts = $statementLista->fetchAll(PDO::FETCH_ASSOC);
 
             // Inicia preetiquetado
-            $fechaActual = date("Y-m-d");
+            /*Fechas*/
+            $fechaActual = $this->fechaActual;
+            $fechaMenosUnDia = $this->fechaMenosUnDia;
             $postfields = '{
             "customInformation": [
                 {
@@ -545,9 +548,10 @@ class labelledController extends Controller
             $pdo = new PDO("mysql:host=$host;port=$port;dbname=$dbName", $user, $password);
 
             $lstcreditos = $request->lstcreditos;
-            return $lstcreditos;
             $dayOfWeek = date('N');
-            $fechaActual = date("Y-m-d");
+            /*Fechas*/
+            $fechaActual = $this->fechaActual;
+            $fechaMenosUnDia = $this->fechaMenosUnDia;
             if ($dayOfWeek >= 6) {
                 // Es fin de semana (sábado o domingo)
                 return response()->json(['error' => 'No se realiza etiquetado con corte de fin de semana.'], 400);
@@ -557,10 +561,8 @@ class labelledController extends Controller
 
                     $sqlStatementJucaviBlao = "use cartera_ods; INSERT INTO d_etiquetado_previoblao (ep_num_credito, ep_fecha_etiquetado,ep_fechamov) VALUES  \n";
 
-                    $formattedFechaMov = date("Y-m-d", strtotime($fechaActual . "-1 day"));
-
                     foreach ($lstcreditos as $id) {
-                        $sqlStatementJucaviBlao .= '("' . $id . '", "' . $formattedFechaMov . '", "' . $fechaActual . '"),';
+                        $sqlStatementJucaviBlao .= '("' . $id . '", "' . $fechaMenosUnDia . '", "' . $fechaActual . '"),';
                     }
 
                     $sqlStatementJucaviBlao = rtrim($sqlStatementJucaviBlao, ',');
@@ -579,7 +581,7 @@ class labelledController extends Controller
             }
 
         } catch (\Throwable $th) {
-            return response()->json(['error' => $th], 400);
+            return response()->json(['error' => $th], 401);
         }
 
     }
@@ -587,9 +589,11 @@ class labelledController extends Controller
     public function bajablaojucavi(Request $request)
     {
         try {
+            /*Fechas*/
+            $fechaActual = $this->fechaActual;
+            $fechaMenosUnDia = $this->fechaMenosUnDia;
 
             $lstcreditos = $request->lstcreditos;
-            $fechaActual = date("Y-m-d");
             $queryValidaDia = "call bursa.sp_validafechaejecucion(5, 'B','" . $fechaActual . "');";
             $statementValidaDia = $pdo->query($queryValidaDia);
             $resultValidaDia = $statementValidaDia->fetchAll(PDO::FETCH_ASSOC);
@@ -601,10 +605,8 @@ class labelledController extends Controller
 
                     $sqlStatementJucaviBlao = "use cartera_ods; INSERT INTO d_etiquetado_previoblao_baja (ep_num_credito, ep_fecha_etiquetado,ep_fechamov) VALUES  \n";
 
-                    $formattedFechaMov = date("Y-m-d", strtotime($fechaActual . "-1 day"));
-
                     foreach ($lstcreditos as $id) {
-                        $sqlStatementJucaviBlao .= '("' . $id . '", "' . $formattedFechaMov . '", "' . $fechaActual . '"),';
+                        $sqlStatementJucaviBlao .= '("' . $id . '", "' . $fechaMenosUnDia . '", "' . $fechaActual . '"),';
                     }
 
                     $sqlStatementJucaviBlao = rtrim($sqlStatementJucaviBlao, ',');
@@ -622,7 +624,7 @@ class labelledController extends Controller
             }
 
         } catch (\Throwable $th) {
-            return response()->json(['error' => $th], 400);
+            return response()->json(['error' => $th], 401);
         }
 
     }
@@ -632,14 +634,16 @@ class labelledController extends Controller
         // PHP code
         try {
             // Reporte previo
+            /*Fechas*/
+            $fechaActual = $this->fechaActual;
+            $fechaMenosUnDia = $this->fechaMenosUnDia;
             $lista = [];
-            $fechaActual = date("Y-m-d");
-            $fechaMenosUnDia = date("Y-m-d", strtotime("-1 day", strtotime($fechaActual))); // Resta un día a la fecha actual
+
             $lista = $this->GetLitaAltaPromecapJ($fechaMenosUnDia); //
             return $lista;
 
         } catch (\Throwable $th) {
-            echo $th;
+            return response()->json(['error' => $th], 401);
         }
 
     }
@@ -705,7 +709,9 @@ class labelledController extends Controller
             $port = 3306;
 
             $lstcreditos = $request->jucavi;
-            $fechaActual = date("Y-m-d");
+            /*Fechas*/
+            $fechaActual = $this->fechaActual;
+            $fechaMenosUnDia = $this->fechaMenosUnDia;
 
             // Conexión a la base de datos
             $pdo = new PDO("mysql:host=$host;port=$port;dbname=$dbName", $user, $password);
@@ -728,10 +734,8 @@ class labelledController extends Controller
 
                     $sqlStatementJucaviPromecap = "use cartera_ods; INSERT INTO d_etiquetado_previopromecap_baja (ep_num_credito, ep_fecha_etiquetado,ep_fechamov) VALUES  \n";
 
-                    $formattedFechaMov = date("Y-m-d", strtotime($fechaActual . "-1 day"));
-
                     foreach ($lstcreditos as $id) {
-                        $sqlStatementJucaviPromecap .= '("' . $id . '", "' . $formattedFechaMov . '", "' . $fechaActual . '"),';
+                        $sqlStatementJucaviPromecap .= '("' . $id . '", "' . $fechaMenosUnDia . '", "' . $fechaActual . '"),';
                     }
 
                     $sqlStatementJucaviPromecap = rtrim($sqlStatementJucaviPromecap, ',');
@@ -764,7 +768,7 @@ class labelledController extends Controller
             }
 
         } catch (\Throwable $th) {
-            return response()->json(['error' => $th], 400);
+            return response()->json(['error' => $th], 401);
         }
 
     }
