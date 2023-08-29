@@ -13,12 +13,13 @@
         </div>
         <div class="card-body">
             <div class="container py-4">
-                <div class="row section">
+                {{-- <div class="row section">
                     <div class="col-md-8 col-sm-6 mb-3">
                         <button class="btn btn-outline-primary w-100" id="preeliminarjucaviblao">Etiquetado preliminar
                         </button>
                     </div>
-                </div>
+                </div> --}}
+                <h1>Etiquedado</h1>
                 <div class="row section">
                     <div class="col-md-8 col-sm-6 mb-3 center-form">
                         <!-- Agregado: "center-form" -->
@@ -41,6 +42,7 @@
                     </div> --}}
                     </div>
                 </div>
+                <h1>Baja</h1>
                 <div class="row section">
                     <div class="col-md-8 col-sm-6 mb-3 center-form">
                         <!-- Agregado: "center-form" -->
