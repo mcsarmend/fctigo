@@ -7,6 +7,9 @@ use App\Http\Requests\Auth\LoginRequest;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Symfony\Component\HttpFoundation\Response;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AuthenticatedSessionController extends Controller
 {
@@ -34,7 +37,26 @@ class AuthenticatedSessionController extends Controller
 
         return redirect()->intended(RouteServiceProvider::HOME);
     }
+    public function loginToken (Request $request)
+    {
 
+        $credentials = $request->validate([
+            'email'=> ['required','email'],
+            'password' => ['required']
+        ]);
+
+        if(Auth::guard()->attempt($credentials))
+        {
+            $user = Auth::user();
+            $token = $user->createToken('token')->plainTextToken;
+            $cookie = cookie('cookie_token',$token, 60*24);
+            return response(["token"=>$token])->withoutCookie($cookie);
+        }
+        else
+        {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
+    }
     /**
      * Destroy an authenticated session.
      *

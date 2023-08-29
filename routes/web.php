@@ -8,6 +8,7 @@ use App\Http\Controllers\reportController;
 use App\Http\Controllers\statusController;
 use App\Http\Controllers\dashboardController;
 use App\Http\Controllers\usersController;
+use App\Http\Controllers\tokenController;
 
 /*
 /*
@@ -115,4 +116,6 @@ Route::post('actualizarext', [usersController::class, 'actualizarext']);
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+Route::get('/errortoken', [tokenController::class, 'errortoken'])->name('errortoken');
 

@@ -150,10 +150,12 @@ class labelledController extends Controller
         }
 
     }
+
     public function etiquetadopromecapmambu(Request $request)
     {
 
         $mambu = $request->mambu;
+
         $curl = curl_init();
         try {
             // ------------------------------EMPIEZA ETIQUETADO MAMBU----------------------------------
@@ -169,11 +171,15 @@ class labelledController extends Controller
 
             $sqlStatement = "delete from mambu_prod.creditos_excel_promecap;\n";
 
-            foreach ($mambu as $item) {
-                $sqlStatement .= "insert into mambu_prod.creditos_excel_promecap (id_acuerdocredito) values ('" . $item . "');\n";
-            }
             $statement = $pdo->query($sqlStatement);
             $result = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+            foreach ($mambu as $item) {
+                $nsqlStatement = "insert into mambu_prod.creditos_excel_promecap (id_acuerdocredito) values ('" . $item . "');";
+
+                $statement = $pdo->query($nsqlStatement);
+                $result = $statement->fetchAll(PDO::FETCH_ASSOC);
+            }
 
             curl_setopt_array($curl, array(
                 CURLOPT_URL => 'https://fcetiquetado.azurewebsites.net/ProcesoBursa/api/EtiquetadoPromecapM/AltaPromecapMambu/843',
@@ -199,18 +205,19 @@ class labelledController extends Controller
             return response()->json(['error' => $th], 401);
         }
     }
+
     public function etiquetadopromecapjucavi(Request $request)
     {
-
-        $jucavi = $request->jucavi;
-        /*Fechas*/
-        $fechaActual = $this->fechaActual; // Accede a la propiedad correcta
-        $fechaMenosUnDia = $this->fechaMenosUnDia; // Accede a la propiedad correcta
-
         try {
 
             // ------------------------------EMPIEZA ETIQUETADO JUCAVI----------------------------------
 
+            $jucavi = $request->jucavi;
+            /*Fechas*/
+            $fechaActual = $this->fechaActual; // Accede a la propiedad correcta
+            $fechaMenosUnDia = $this->fechaMenosUnDia; // Accede a la propiedad correcta
+
+            $curl = curl_init();
             $hostODS = 'fcods.trafficmanager.net';
             $dbNameODS = 'clientes_ods';
             $userODS = 'hmonroy';
@@ -222,7 +229,7 @@ class labelledController extends Controller
             $sqlStatementJucavi = "use cartera_ods; INSERT INTO d_etiquetado_previopromecap (ep_num_credito, ep_fecha_etiquetado,ep_fechamov) VALUES \n";
 
             foreach ($jucavi as $id) {
-                $sqlStatementJucavi .= '("' . $id . '", "' . $fechaActual . '", "' . $fechaMenosUnDia . '"),';
+                $sqlStatementJucavi .= '("' . $id . '", "' . $fechaMenosUnDia . '", "' . $fechaActual . '"),';
             }
 
             $sqlStatementJucavi = rtrim($sqlStatementJucavi, ',');
@@ -254,6 +261,7 @@ class labelledController extends Controller
             return response()->json(['error' => $th], 401);
         }
     }
+
     public function blao_preetiequetado_mambu()
     {
         // PHP code
@@ -380,8 +388,8 @@ class labelledController extends Controller
     }
     public function etiquetadoblaomambu(Request $request)
     {
+
         $mambu = $request->mambu;
-        $jucavi = $request->jucavi;
         $curl = curl_init();
         try {
             // ------------------------------EMPIEZA ETIQUETADO MAMBU----------------------------------
@@ -395,17 +403,20 @@ class labelledController extends Controller
             $pdo = new PDO($dsn, $user, $password);
             $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-            $sqlStatement = "delete from mambu_prod.mambu_prod.creditos_excel_promecap;\n";
-
-            foreach ($mambu as $item) {
-                $sqlStatement .= "insert into mambu_prod.mambu_prod.creditos_excel_promecap (id_acuerdocredito) values ('" . $item . "');\n";
-            }
+            $sqlStatement = "delete from mambu_prod.creditos_excel_blao;\n";
 
             $statement = $pdo->query($sqlStatement);
             $result = $statement->fetchAll(PDO::FETCH_ASSOC);
 
+            foreach ($mambu as $item) {
+                $sqlStatement = "insert into mambu_prod.creditos_excel_blao (id_acuerdocredito) values ('" . $item . "');\n";
+                $statement = $pdo->query($sqlStatement);
+                $result = $statement->fetchAll(PDO::FETCH_ASSOC);
+            }
+
+
             curl_setopt_array($curl, array(
-                CURLOPT_URL => 'https://fcetiquetado.azurewebsites.net/ProcesoBursa/api/EtiquetadoPromecapM/AltaPromecapMambu/843',
+                CURLOPT_URL => 'https://fcetiquetado.azurewebsites.net/ProcesoBursa/api/EtiquetadoBlaoM/AltaBlaoMambu/843',
                 CURLOPT_RETURNTRANSFER => true,
                 CURLOPT_ENCODING => '',
                 CURLOPT_MAXREDIRS => 10,
@@ -421,13 +432,13 @@ class labelledController extends Controller
             $response = curl_exec($curl);
 
             // ------------------------------TERMINA ETIQUETADO MAMBU----------------------------------
-
-            return response()->json(['success' => "Etiquetado realizado correctamente"], 200);
+            return response()->json(['success' => "Etiquetado realizado correctamente".$response.$sqlStatement], 200);
 
         } catch (\Throwable $th) {
             return response()->json(['error' => $th], 401);
         }
     }
+
 
     public function etiquetadomintos(Request $request)
     {
