@@ -208,7 +208,18 @@ class labelledController extends Controller
 
     public function etiquetadopromecapjucavi(Request $request)
     {
+        $creditos =0;
         try {
+
+            // ------------------------------EMPIEZA ETIQUETADO JUCAVI----------------------------------
+
+            $jucavi = $request->jucavi;
+            $creditos =0;
+            $creditosXetiquetarSF = implode(', ', $jucavi);
+
+            // Formateamos la cadena resultante entre corchetes
+            $creditosXetiquetar = "[$creditosXetiquetarSF]";
+
 
             // ------------------------------EMPIEZA ETIQUETADO JUCAVI----------------------------------
 
@@ -219,46 +230,51 @@ class labelledController extends Controller
 
             $curl = curl_init();
             $hostODS = 'fcods.trafficmanager.net';
-            $dbNameODS = 'clientes_ods';
+            $dbNameODS = 'cartera_ods';
             $userODS = 'hmonroy';
             $passwordODS = 'Monroy2011@';
             $portODS = 3306;
             // Conexión a la base de datos
             $pdoODS = new PDO("mysql:host=$hostODS;port=$portODS;dbname=$dbNameODS", $userODS, $passwordODS);
 
-            $sqlStatementJucavi = "use cartera_ods; INSERT INTO d_etiquetado_previopromecap (ep_num_credito, ep_fecha_etiquetado,ep_fechamov) VALUES \n";
 
             foreach ($jucavi as $id) {
-                $sqlStatementJucavi .= '("' . $id . '", "' . $fechaMenosUnDia . '", "' . $fechaActual . '"),';
+                $sqlStatementJucavi = 'INSERT INTO d_etiquetado_previopromecap (ep_num_credito, ep_fecha_etiquetado,ep_fechamov) VALUES ("' . $id . '", "' . $fechaMenosUnDia . '", "' . $fechaActual . '");';
+
+                $statementJucavi = $pdoODS->query($sqlStatementJucavi);
+                $resultJucavi = $statementJucavi->fetchAll(PDO::FETCH_ASSOC);
             }
 
-            $sqlStatementJucavi = rtrim($sqlStatementJucavi, ',');
-            $sqlStatementJucavi .= ';';
 
-            $statementJucavi = $pdoODS->query($sqlStatementJucavi);
-            $resultJucavi = $statementJucavi->fetchAll(PDO::FETCH_ASSOC);
-
+            $curl = curl_init();
+            // https://fcetiquetado.azurewebsites.net/api/EtiquetadoPromecapJ/AltaPromecapJV/770
             curl_setopt_array($curl, array(
-                CURLOPT_URL => 'https://fcetiquetado.azurewebsites.net/ProcesoBursa/api/EtiquetadoPromecapJ/AltaPromecapJV/843',
-                CURLOPT_RETURNTRANSFER => true,
-                CURLOPT_ENCODING => '',
-                CURLOPT_MAXREDIRS => 10,
-                CURLOPT_TIMEOUT => 0,
-                CURLOPT_FOLLOWLOCATION => true,
-                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-                CURLOPT_CUSTOMREQUEST => 'GET',
-                CURLOPT_HTTPHEADER => array(
-                    'Cookie: ARRAffinity=f338cc84dcd26ef0541e10991beb3f601c2d1a0e9ced27dcfbc2140d4a6a8e25',
-                ),
+              CURLOPT_URL => 'https://fcetiquetado.azurewebsites.net/ProcesoBursa/api/EtiquetadoPromecapJ/AltaPromecapJV/770',
+              CURLOPT_RETURNTRANSFER => true,
+              CURLOPT_ENCODING => '',
+              CURLOPT_MAXREDIRS => 10,
+              CURLOPT_TIMEOUT => 0,
+              CURLOPT_FOLLOWLOCATION => true,
+              CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+              CURLOPT_CUSTOMREQUEST => 'GET',
             ));
 
-            $response2 = curl_exec($curl);
+            $response = curl_exec($curl);
 
-            return response()->json(['success' => "Etiquetado realizado correctamente"], 200);
 
+            $creditos = count($jucavi);
+            if($strResult == "ETIQUETADO OK"){
+                return response()->json(['success' => "Cantidad de creditos etiquetados:  " . $creditos], 200);
+            }else{
+                return response()->json(['error' => 'Se produjo un error inesperado' . $th->getMessage()], 401);
+            }
+
+
+            curl_close($curl);
             // ------------------------------TERMINA ETIQUETADO JUCAVI----------------------------------
         } catch (\Throwable $th) {
-            return response()->json(['error' => $th], 401);
+            error_log($th->getMessage()); // Obtener el mensaje de error de la excepción
+            return response()->json(['error' => 'Se produjo un error inesperado' . $th->getMessage()], 401);
         }
     }
 
@@ -414,7 +430,6 @@ class labelledController extends Controller
                 $result = $statement->fetchAll(PDO::FETCH_ASSOC);
             }
 
-
             curl_setopt_array($curl, array(
                 CURLOPT_URL => 'https://fcetiquetado.azurewebsites.net/ProcesoBursa/api/EtiquetadoBlaoM/AltaBlaoMambu/843',
                 CURLOPT_RETURNTRANSFER => true,
@@ -432,13 +447,12 @@ class labelledController extends Controller
             $response = curl_exec($curl);
 
             // ------------------------------TERMINA ETIQUETADO MAMBU----------------------------------
-            return response()->json(['success' => "Etiquetado realizado correctamente".$response.$sqlStatement], 200);
+            return response()->json(['success' => "Etiquetado realizado correctamente" . $response . $sqlStatement], 200);
 
         } catch (\Throwable $th) {
             return response()->json(['error' => $th], 401);
         }
     }
-
 
     public function etiquetadomintos(Request $request)
     {

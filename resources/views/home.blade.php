@@ -68,8 +68,55 @@
 
 
             </div>
-
             <br>
+            <div class="section">
+
+                <h2>Aforos Calculados</h2>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Aforo</th>
+                            <th>Anexo H</th>
+                            <th>Anexo M</th>
+                            <th>Anexo O </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th>Promecap</th>
+                            <th id="aforocalpromecap">AFORO CALCULADO PROMECAP</th>
+                            <th>
+                                <button type="button" class="btn btn-primary" data-toggle="modal"
+                                    data-target="#anexoHPromecapModal">Previo</button>
+                            </th>
+                            <th>
+                                <button type="button" class="btn btn-primary" data-toggle="modal"
+                                    data-target="#anexoMPromecapModal">Previo</button>
+                            </th>
+                            <th><button type="button" class="btn btn-primary" data-toggle="modal"
+                                    data-target="#anexoOPromecapModal">Previo</button>
+                            </th>
+                        </tr>
+                        <tr>
+                            <th>Blao</th>
+                            <th>AFORO CALCULADO BALO</th>
+                            <th>ANEXO H BALO</th>
+                            <th>ANEXO M BALO</th>
+                            <th>ANEXO O BALO</th>
+                        </tr>
+                        <tr>
+                            <th>Mintos</th>
+                            <th>AFORO CALCULADO MINTOS</th>
+                            <th>ANEXO H MINTOS</th>
+                            <th>ANEXO M MINTOS</th>
+                            <th>ANEXO O MINTOS</th>
+
+                        </tr>
+                    </tbody>
+                </table>
+
+            </div>
             <div class="section">
                 <h2> Gráficas</h2>
                 <br>
@@ -277,6 +324,426 @@
         </div>
 
     </div>
+    <!-- ANEXO H PROMECAP -->
+
+    <div class="modal fade" id="anexoHPromecapModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <!-- Cabecera del Modal -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Anexo H PROMECAP</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <!-- Contenido del Modal -->
+                <div class="modal-body">
+                    <p>¡Hola! Soy un contenido de ejemplo en el modal.</p>
+                </div>
+                <!-- Pie del Modal -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ANEXO M PROMECAP -->
+
+    <div class="modal fade" id="anexoMPromecapModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <!-- Cabecera del Modal -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Anexo M PROMECAP</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <!-- Contenido del Modal -->
+                <div class="modal-body">
+                    <p>¡Hola! Soy un contenido de ejemplo en el modal.</p>
+                </div>
+                <!-- Pie del Modal -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ANEXO O PROMECAP -->
+
+    <div class="modal fade" id="anexoOPromecapModal">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <!-- Cabecera del Modal -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Anexo O PROMECAP</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <!-- Contenido del Modal -->
+                <div class="modal-body modalAnexo">
+                    <div class="modalAnexo">
+                        <div class="cent" id="_389:69" style="top:69;left:389">
+                            <span id="_13.6"
+                                style="font-weight:bold; font-family:Arial; font-size:13.6px; color:#000000">
+                                <U>A</U>
+                                <U>n</U>
+                                <U>e</U>
+                                <U>x</U>
+                                <U>o</U>
+                                <U></U>
+                                <U>&#147;</U>
+                                <U>O</U>
+                                <U>&#148;</U>
+                            </span>
+                        </div>
+                        <div class="cent" id="_229:103" style="top:103;left:229">
+                            <span id="_13.6"
+                                style="font-weight:bold; font-family:Arial; font-size:13.6px; color:#000000">
+                                <U>F</U>
+                                <U>o</U>
+                                <U>r</U>
+                                <U>m</U>
+                                <U>a</U>
+                                <U>t</U>
+                                <U>o</U>
+                                <U></U>
+                                <U>d</U>
+                                <U>e</U>
+                                <U></U>
+                                <U>R</U>
+                                <U>e</U>
+                                <U>l</U>
+                                <U>a</U>
+                                <U>c</U>
+                                <U>i</U>
+                                <U>&#243;</U>
+                                <U>n</U>
+                                <U></U>
+                                <U>d</U>
+                                <U>e</U>
+                                <U></U>
+                                <U>C</U>
+                                <U>r</U>
+                                <U>&#233;</U>
+                                <U>d</U>
+                                <U>i</U>
+                                <U>t</U>
+                                <U>o</U>
+                                <U>s</U>
+                                <U></U>
+                                <U>a</U>
+                                <U></U>
+                                <U>C</U>
+                                <U>l</U>
+                                <U>i</U>
+                                <U>e</U>
+                                <U>n</U>
+                                <U>t</U>
+                                <U>e</U>
+                                <U>s</U>
+                                <U></U>
+                                <U>T</U>
+                                <U>r</U>
+                                <U>a</U>
+                                <U>n</U>
+                                <U>s</U>
+                                <U>f</U>
+                                <U>e</U>
+                                <U>r</U>
+                                <U>i</U>
+                                <U>d</U>
+                                <U>o</U>
+                                <U>s</U>
+                            </span>
+                        </div>
+                        <div class="derecha" id="_412:136" style="top:136;left:412">
+                            <span id="_13.6" style=" font-family:Arial; font-size:13.6px; color:#000000">
+                                Ciudad de M&#233;xico, M&#233;xico, a 07 de septiembre de 2023
+                            </span>
+                        </div>
+                        <div class="" id="_98:170" style="top:170;left:98">
+                            <span id="_13.6"
+                                style="font-weight:bold; font-family:Arial; font-size:13.6px; color:#000000">
+                                Administradora de Activos Financieros, S.A.,
+                            </span>
+                        </div>
+                        <div class="" id="_98:186" style="top:186;left:98">
+                            <span id="_13.6" style=" font-family:Arial; font-size:13.6px; color:#000000">
+                                Av Insurgentes Sur No. 1647, Oficina 420
+                            </span>
+                        </div>
+                        <div class="" id="_98:203" style="top:203;left:98">
+                            <span id="_13.6" style=" font-family:Arial; font-size:13.6px; color:#000000">
+                                Colonia San Jos&#233; Insurgentes,
+                            </span>
+                        </div>
+                        <div class="" id="_98:220" style="top:220;left:98">
+                            <span id="_13.2" style=" font-family:Arial; font-size:13.2px; color:#000000">
+                                C.P. 03900, Ciudad de M&#233;xico, M&#233;xico
+                            </span>
+                        </div>
+                        <div class="" id="_98:237" style="top:237;left:98">
+                            <span id="_13.2" style=" font-family:Arial; font-size:13.2px; color:#000000">
+                                Tel. (5255) 8000 8189
+                            </span>
+                        </div>
+                        <div class="" id="_98:253" style="top:253;left:98">
+                            <span id="_13.2" style=" font-family:Arial; font-size:13.2px; color:#000000">
+                                Correo electr&#243;nico: ucalvo@acfin.com
+                            </span>
+                        </div>
+                        <div class="" id="_98:270" style="top:270;left:98">
+                            <span id="_13.2" style=" font-family:Arial; font-size:13.2px; color:#000000">
+                                Atenci&#243;n: Ulises Calvo
+                            </span>
+                        </div>
+                        <div class="derecha" id="_420:304" style="top:304;left:420">
+                            <span id="_13.2"
+                                style="font-weight:bold; font-family:Arial; font-size:13.2px; color:#000000">
+                                <U>A</U>
+                                <U>s</U>
+                                <U>u</U>
+                                <U>n</U>
+                                <U>t</U>
+                                <U>o</U>
+                                <U>:</U>
+                                <span style="font-weight:normal">
+                                    <U></U>
+                                    <U>R</U>
+                                    <U>e</U>
+                                    <U>l</U>
+                                    <U>a</U>
+                                    <U>c</U>
+                                    <U>i</U>
+                                    <U>&#243;</U>
+                                    <U>n</U>
+                                    <U></U>
+                                    <U>d</U>
+                                    <U>e</U>
+                                    <U></U>
+                                    <U>C</U>
+                                    <U>r</U>
+                                    <U>&#233;</U>
+                                    <U>d</U>
+                                    <U>i</U>
+                                    <U>t</U>
+                                    <U>o</U>
+                                    <U>s</U>
+                                    <U></U>
+                                    <U>a</U>
+                                    <U></U>
+                                    <U>C</U>
+                                    <U>l</U>
+                                    <U>i</U>
+                                    <U>e</U>
+                                    <U>n</U>
+                                    <U>t</U>
+                                    <U>e</U>
+                                    <U>s</U>
+                                    <U></U>
+                                    <U>T</U>
+                                    <U>r</U>
+                                    <U>a</U>
+                                    <U>n</U>
+                                    <U>s</U>
+                                    <U>f</U>
+                                    <U>e</U>
+                                    <U>r</U>
+                                    <U>i</U>
+                                    <U>d</U>
+                                    <U>o</U>
+                                    <U>s</U>.
+                                </span>
+                            </span>
+                        </div>
+                        <div class="" id="_98:337" style="top:337;left:98">
+                            <span id="_13.2" style=" font-family:Arial; font-size:13.2px; color:#000000">
+                                Estimados se&#241;ores,
+                            </span>
+                        </div>
+
+                        <div class="justif" id="_147:371" style="top:371;left:147">
+                            <span id="_13.7" style=" font-family:Arial; font-size:13.7px; color:#000000">
+                                Hacemos referencia (i) al contrato de fideicomiso irrevocable de administraci&#243;n y
+                                fuente de pago
+                            </span>
+                        </div>
+                        <div class="justif" id="_98:388" style="top:388;left:98">
+                            <span id="_13.7" style=" font-family:Arial; font-size:13.7px; color:#000000">
+                                identificado con el n&#250;mero F/4870 de fecha 8 de abril de 2022, celebrado entre el
+                                Banco Invex, S.A.,
+                            </span>
+                        </div>
+                        <div class="justif" id="_98:404" style="top:404;left:98">
+                            <span id="_13.7" style=" font-family:Arial; font-size:13.7px; color:#000000">
+                                Instituci&#243;n de Banca M&#250;ltiple, Invex Grupo Financiero, en su car&#225;cter de
+                                fiduciario, CEGE Capital, S.A.P.I.
+                            </span>
+                        </div>
+                        <div class="justif" id="_98:421" style="top:421;left:98">
+                            <span id="_13.7" style=" font-family:Arial; font-size:13.7px; color:#000000">
+                                de C.V., SOFOM, E.N.R., como Fideicomitente B, Fideicomisario en Segundo Lugar, Custodio
+                                y
+                            </span>
+                        </div>
+                        <div class="justif" id="_98:438" style="top:438;left:98">
+                            <span id="_13.7" style=" font-family:Arial; font-size:13.7px; color:#000000">
+                                Administrador, Promecade, S.A.P.I. de C.V., SOFOM, E.N.R., como Fideicomitente A y
+                                Fideicomisario en
+                            </span>
+                        </div>
+                        <div class="justif" id="_98:455" style="top:455;left:98">
+                            <span id="_13.3" style=" font-family:Arial; font-size:13.3px; color:#000000">
+                                Primer Lugar, Administradora de Activos Financieros, S.A., como Administrador Maestro, y
+                                los se&#241;ores Allan
+                            </span>
+                        </div>
+                        <div class="justif" id="_98:471" style="top:471;left:98">
+                            <span id="_13.3" style=" font-family:Arial; font-size:13.3px; color:#000000">
+                                Cherem Mizrahi, Emilio Cherem Gamus y Rodrigo San Pedro Fern&#225;ndez, como
+                                Depositarios (el
+                            </span>
+                        </div>
+                        <div class="pos" id="_98:488" style="top:488;left:98">
+                            <span id="_13.3" style=" font-family:Arial; font-size:13.3px; color:#000000">
+                                &#147;
+                                <U>F</U>
+                                <U>i</U>
+                                <U>d</U>
+                                <U>e</U>
+                                <U>i</U>
+                                <U>c</U>
+                                <U>o</U>
+                                <U>m</U>
+                                <U>i</U>
+                                <U>s</U>
+                                <U>o</U>&#148;).
+                            </span>
+                        </div>
+                        <div class="justif" id="_147:522" style="top:522;left:147">
+                            <span id="_13.3" style=" font-family:Arial; font-size:13.3px; color:#000000">
+                                Los t&#233;rminos con may&#250;scula inicial que se utilicen y no se definan de otra
+                                manera en el presente,
+                            </span>
+                        </div>
+                        <div class="justif" id="_98:538" style="top:538;left:98">
+                            <span id="_13.3" style=" font-family:Arial; font-size:13.3px; color:#000000">
+                                tendr&#225;n el significado que se les atribuye en el Fideicomiso.
+                            </span>
+                        </div>
+                        <div class="justif" id="_147:572" style="top:572;left:147">
+                            <span id="_14.0" style=" font-family:Arial; font-size:14.0px; color:#000000">
+                                Por medio de la presente y en t&#233;rminos de lo dispuesto en el numeral (1) del
+                                apartado I de la
+                            </span>
+                        </div>
+                        <div class="justif" id="_98:589" style="top:589;left:98">
+                            <span id="_14.0" style=" font-family:Arial; font-size:14.0px; color:#000000">
+                                Cl&#225;usula Sexta del Fideicomiso, mediante correo electr&#243;nico a las cuentas
+                                se&#241;aladas en el Contrato de
+                            </span>
+                        </div>
+                        <div class="justif" id="_98:605" style="top:605;left:98">
+                            <span id="_13.4" style=" font-family:Arial; font-size:13.4px; color:#000000">
+                                Fideicomiso, se entrega la relaci&#243;n de Cr&#233;ditos a Clientes Transferidos,
+                                actualizada al 05 de septiembre de
+                            </span>
+                        </div>
+                        <div class="justif" id="_98:622" style="top:622;left:98">
+                            <span id="_13.4" style=" font-family:Arial; font-size:13.4px; color:#000000">
+                                2023.
+                            </span>
+                        </div>
+                        <div class="cent" id="_328:656" style="top:656;left:328">
+                            <span id="_13.4" style=" font-family:Arial; font-size:13.4px; color:#000000">
+                                Cr&#233;ditos a Clientes Transferidos
+                            </span>
+                        </div>
+                        <div class="justif" id="_98:706" style="top:706;left:98">
+                            <span id="_13.4" style=" font-family:Arial; font-size:13.4px; color:#000000">
+                                El presente Anexo A deber&#225; incluir adem&#225;s las siguientes columnas: (i) el
+                                saldo insoluto total de intereses
+                            </span>
+                        </div>
+                        <div class="justif" id="_98:723" style="top:723;left:98">
+                            <span id="_13.4" style=" font-family:Arial; font-size:13.4px; color:#000000">
+                                ordinarios por devengar de la l&#237;nea de cr&#233;dito a la fecha, (ii) el saldo total
+                                de Impuesto al Valor Agregado
+                            </span>
+                        </div>
+                        <div class="justif" id="_98:740" style="top:740;left:98">
+                            <span id="_13.4" style=" font-family:Arial; font-size:13.4px; color:#000000">
+                                sobre intereses ordinarios por devengar de la l&#237;nea de cr&#233;dito a la fecha,
+                                (iii) el n&#250;mero total de parcialidades
+                            </span>
+                        </div>
+                        <div class="justif" id="_98:756" style="top:756;left:98">
+                            <span id="_13.4" style=" font-family:Arial; font-size:13.4px; color:#000000">
+                                restantes de la l&#237;nea de cr&#233;dito a la fecha, (iv) la periodicidad de pago (en
+                                caso de no ser quincenal), (v) el
+                            </span>
+                        </div>
+                        <div class="justif" id="_98:773" style="top:773;left:98">
+                            <span id="_13.4" style=" font-family:Arial; font-size:13.4px; color:#000000">
+                                monto de cada parcialidad restante y (vi) la fecha de cada parcialidad restante.
+                            </span>
+                        </div>
+                        <br>
+                        <div class="cent" id="_383:823" style="top:823;left:383">
+                            <span id="_13.4" style=" font-family:Arial; font-size:13.4px; color:#000000">
+                                Atentamente,
+                            </span>
+                        </div>
+                        <div class="cent" id="_374:840" style="top:840;left:374">
+                            <span id="_13.4" style=" font-family:Arial; font-size:13.4px; color:#000000">
+                                Fideicomitente B
+                            </span>
+                        </div>
+                        <div class="cent" id="_283:857" style="top:857;left:283">
+                            <span id="_12.9" style=" font-family:Arial; font-size:12.9px; color:#000000">
+                                CEGE Capital, S.A.P.I. de C.V., SOFOM, E.N.R.
+                            </span>
+                        </div>
+                        <br>
+                        {{-- AJUSTE tabla --}}
+                        <div style=" font-family:Times New Roman; font-size:13.4px; color:#000000">
+                            <div class="row">
+                                <div class="col">
+                                    ___________________________________
+                                </div>
+                                <div class="col">
+                                    ___________________________________
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    Nombre: Ana Mar&#237;a del Pilar Aranda Camacho
+                                </div>
+                                <div class="col">
+                                    Nombre: Oscar Samuel Vargas Gonz&#225;lez
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    Cargo: Apoderado
+                                </div>
+                                <div class="col">
+                                    Cargo: Apoderado
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                    </div>
+                </div>
+                <!-- Pie del Modal -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" onclick="exportarAnexoOPromecap()">Exportar</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
 @stop
 
 @section('css')
@@ -333,6 +800,55 @@
         input[type="number"] {
             min-width: 50px;
         }
+
+        /* Estilos para el modal */
+        .modal {
+            display: none;
+            /* Por defecto, ocultar el modal */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            /* Fondo semi-transparente */
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+        }
+
+        /* Estilos para el botón de cerrar el modal */
+        .close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
+        }
+
+        .modalAnexo {
+            font-family: Arial;
+            font-size: 18.5px
+        }
+
+        .cent {
+            text-align: center;
+            z-index: 0;
+            left: 0px;
+            top: 0px
+        }
+
+        .derecha {
+            text-align: right;
+        }
+
+        .justif {
+            text-align-last: justify;
+        }
     </style>
 
 @stop
@@ -357,6 +873,14 @@
         var jsonjucavi = [];
         var jsonmambu = [];
         $(document).ready(function() {
+
+
+            // JavaScript para manejar el modal
+            $('#anexoHPromecapAbrir').on('shown.bs.modal', function() {
+                $('#anexoHPromecapModal').trigger('focus')
+            })
+
+
 
             var type = @json($type);
             if (type == '3') {
@@ -469,13 +993,26 @@
                         data: tmpfondeadoresjucavi
                     });
                     graficaPastel(series, 'container-jucavi');
-                    $.unblockUI();
                     datosgenerales();
                 }
             });
 
 
 
+            $.ajax({
+                url: "calculofondeadorpromecap",
+                method: "GET",
+                dataType: "JSON",
+                data: {
+                    /* date: dateVal */
+                },
+                success: function(aforocalcpromecap) {
+
+                    console.log(aforocalcpromecap);
+                    $('#aforocalpromecap').text("$" + parseFloat(aforocalcpromecap).toLocaleString());
+                    $.unblockUI();
+                }
+            });
 
         });
 
@@ -520,7 +1057,7 @@
                         $('#valoractualmambupromecap').text("$" + parseFloat(element.monto).toLocaleString());
                         actualmambupromecap += parseFloat(element.monto);
                         $('#cantidadactualmambupromecap').text(parseFloat(element.cantidadregistros)
-                        .toLocaleString());
+                            .toLocaleString());
                         cantidadmambupromecap = element.cantidadregistros;
                         break;
                     case "BLAO":
@@ -533,7 +1070,7 @@
                         $('#valoractualmambumintos').text("$" + parseFloat(element.monto).toLocaleString());
                         actualmambumintos += parseFloat(element.monto);
                         $('#cantidadactualmambumintos').text(parseFloat(element.cantidadregistros)
-                    .toLocaleString());
+                            .toLocaleString());
                         cantidadmambumintos = element.cantidadregistros;
                         $('#sumacantidadactualmintos').text(parseFloat(element.cantidadregistros).toLocaleString());
 
@@ -561,6 +1098,7 @@
             vdp = 376805000.05 - sumavalorpromecap;
             $('#valordiferenciapromecap').text("$" + parseFloat(vdp).toLocaleString());
             $('#valordiferenciablao').text("$" + parseFloat(vdb).toLocaleString());
+
 
         }
 
@@ -1327,6 +1865,11 @@
                 }
             }
             return obj; // Devolver el objeto actualizado
+        }
+
+
+        function exportarAnexoOPromecap() {
+            console.log("Aqui se imprime");
         }
     </script>
 @stop
