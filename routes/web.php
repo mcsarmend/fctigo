@@ -106,6 +106,9 @@ Route::get('reportes/reporterecuperacioncartera', [reportController::class, 'rep
 Route::get('testsoh', [dashboardController::class, 'testsoh'])->middleware('auth');
 Route::get('testsohrep', [dashboardController::class, 'testsohrep']);
 Route::get('sohmambu', [dashboardController::class, 'sohmambu']);
+Route::get('calculofondeadorpromecap', [dashboardController::class, 'calculofondeadorpromecap']);
+
+
 
 Route::get('profile/username', [usersController::class, 'usuarios']);
 Route::post('guardar-usuario', [usersController::class, 'guardar']);

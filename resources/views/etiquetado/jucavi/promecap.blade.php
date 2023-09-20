@@ -26,7 +26,7 @@
                         <!-- Agregado: "center-form" -->
                         <form id="bajaPromecapJucavi">
                             <div class="input-group mb-3">
-                                <div class="custom-file">
+                                <div class="custom-file" ">
                                     <input type="file" class="custom-file-input" id="excelBajaJucavi"
                                         accept=".xlsx, .xls">
                                     <label class="custom-file-label-baja" for="excelBajaJucavi">Seleccionar
