@@ -107,6 +107,7 @@ Route::get('testsoh', [dashboardController::class, 'testsoh'])->middleware('auth
 Route::get('testsohrep', [dashboardController::class, 'testsohrep']);
 Route::get('sohmambu', [dashboardController::class, 'sohmambu']);
 Route::get('calculofondeadorpromecap', [dashboardController::class, 'calculofondeadorpromecap']);
+Route::get('historicoaforopromecap', [dashboardController::class, 'historicoaforopromecap']);
 
 
 
