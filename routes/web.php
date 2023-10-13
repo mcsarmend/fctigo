@@ -108,6 +108,8 @@ Route::get('testsohrep', [dashboardController::class, 'testsohrep']);
 Route::get('sohmambu', [dashboardController::class, 'sohmambu']);
 Route::get('calculofondeadorpromecap', [dashboardController::class, 'calculofondeadorpromecap']);
 Route::get('historicoaforopromecap', [dashboardController::class, 'historicoaforopromecap']);
+Route::get('get_creditos_promecap_aforo', [dashboardController::class, 'get_creditos_promecap_aforo']);
+Route::get('preetiquetadopreviopromecapconjunto', [dashboardController::class, 'preetiquetadopreviopromecapconjunto']);
 
 
 
@@ -115,6 +117,7 @@ Route::get('profile/username', [usersController::class, 'usuarios']);
 Route::post('guardar-usuario', [usersController::class, 'guardar']);
 Route::post('actualizar-usuario', [usersController::class, 'actualizar']);
 Route::post('actualizarext', [usersController::class, 'actualizarext']);
+Route::post('eliminar', [usersController::class, 'eliminar']);
 
 
 Auth::routes();

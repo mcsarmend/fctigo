@@ -89,5 +89,24 @@ class usersController extends Controller
         }
 
     }
+    public function eliminar(Request $request)
+    {
+
+        try {
+            // Encuentra el usuario por su ID
+            $usuarioEncriptado = $request->id;
+            $usuarioIdDesencriptado = Crypt::decrypt($usuarioEncriptado);
+            User::findOrFail($usuarioIdDesencriptado)->delete();
+            // Eliminar usuario
+
+            $mess = 'Usuario actualizado correctamente';
+
+            return response()->json(['message' => $mess], 200);
+        } catch (Exception $e) {
+            // Devolver una respuesta de error
+            return response()->json(['message' => 'Error al actualizar el usuario'], 500);
+        }
+
+    }
 
 }

@@ -57,13 +57,14 @@
 
                 <div class="row">
                     <div class="col">
-                        <input type="submit" value="Crear" class="btn btn-primary">
+                        <input type="submit" value="Crear" class="btn btn-success">
                     </div>
                 </div>
 
 
             </form>
         </div>
+        <br>
         <div class="card">
             <div class="card-header">
                 <h1 class="card-title">Editar usuario</h1>
@@ -113,100 +114,181 @@
 
                 </form>
             </div>
-        @stop
+        </div>
+        <br>
+        <div class="card">
+            <div class="card-header">
+                <h1 class="card-title">Eliminar usuario</h1>
+            </div>
+            <div class="card-body">
+                <form id="eliminar">
+                    @csrf
+                    <div class="row">
+                        <div class="col">
+                            <label for="usuario">Usuario:</label>
+                        </div>
+                        <select name="id" id="id" class="form-control">
+                            @foreach ($usuarios as $usuario)
+                                <option value="{{ encrypt($usuario->id) }}">{{ $usuario->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col">
+                            <input type="submit" value="Eliminar" class="btn btn-danger">
+                        </div>
+                    </div>
 
-        @section('css')
 
-        @stop
+                </form>
+            </div>
+        </div>
+    </div>
+@stop
 
-        @section('js')
-            <script>
-                $(document).ready(function() {
-                    generarContrasena();
+@section('css')
+
+@stop
+
+@section('js')
+    <script>
+        $(document).ready(function() {
+            generarContrasena();
 
 
-                    $('#formulario').submit(function(e) {
-                        e.preventDefault(); // Evitar la recarga de la página
+            $('#formulario').submit(function(e) {
+                e.preventDefault(); // Evitar la recarga de la página
 
-                        // Obtener los datos del formulario
-                        var datosFormulario = $(this).serialize();
+                // Obtener los datos del formulario
+                var datosFormulario = $(this).serialize();
 
-                        // Realizar la solicitud AJAX con jQuery
-                        $.ajax({
-                            url: '/guardar-usuario', // Ruta al controlador de Laravel
-                            type: 'POST',
-                            data: datosFormulario, // Enviar los datos del formulario
-                            headers: {
-                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                            },
-                            success: function(response) {
-                                Swal.fire(
-                                    '¡Gracias por esperar!',
-                                    response.message,
-                                    'success'
-                                );
-                                generarContrasena();
-                            },
-                            error: function(xhr) {
-                                Swal.fire(
-                                    '¡Gracias por esperar!',
-                                    "Existe un error: " + xhr,
-                                    'error'
-                                )
-                            }
-                        });
-                    });
-                    $('#actualizar').submit(function(e) {
-                        e.preventDefault(); // Evitar la recarga de la página
-
-                        // Obtener los datos del formulario
-                        var datosFormulario = $(this).serialize();
-
-                        // Realizar la solicitud AJAX con jQuery
-                        $.ajax({
-                            url: '/actualizar-usuario', // Ruta al controlador de Laravel
-                            type: 'POST',
-                            data: datosFormulario, // Enviar los datos del formulario
-                            headers: {
-                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                            },
-                            success: function(response) {
-                                Swal.fire(
-                                    '¡Gracias por esperar!',
-                                    response.message,
-                                    'success'
-                                );
-                                generarContrasena();
-                            },
-                            error: function(xhr) {
-                                Swal.fire(
-                                    '¡Gracias por esperar!',
-                                    "Existe un error: " + xhr,
-                                    'error'
-                                )
-                            }
-                        });
-                    });
+                // Realizar la solicitud AJAX con jQuery
+                $.ajax({
+                    url: '/guardar-usuario', // Ruta al controlador de Laravel
+                    type: 'POST',
+                    data: datosFormulario, // Enviar los datos del formulario
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function(response) {
+                        Swal.fire(
+                            '¡Gracias por esperar!',
+                            response.message,
+                            'success'
+                        );
+                        generarContrasena();
+                    },
+                    error: function(xhr) {
+                        Swal.fire(
+                            '¡Gracias por esperar!',
+                            "Existe un error: " + xhr,
+                            'error'
+                        )
+                    }
                 });
+            });
+            $('#actualizar').submit(function(e) {
+                e.preventDefault(); // Evitar la recarga de la página
 
-                function generarContrasena() {
-                    var caracteres = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()';
-                    var contrasena = '';
-                    var contrasena2 = '';
+                // Obtener los datos del formulario
+                var datosFormulario = $(this).serialize();
 
-                    for (var i = 0; i < 8; i++) {
-                        var index = Math.floor(Math.random() * caracteres.length);
-                        contrasena += caracteres.charAt(index);
+                // Realizar la solicitud AJAX con jQuery
+                $.ajax({
+                    url: '/actualizar-usuario', // Ruta al controlador de Laravel
+                    type: 'POST',
+                    data: datosFormulario, // Enviar los datos del formulario
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function(response) {
+                        Swal.fire(
+                            '¡Gracias por esperar!',
+                            response.message,
+                            'success'
+                        );
+                        generarContrasena();
+                    },
+                    error: function(xhr) {
+                        Swal.fire(
+                            '¡Gracias por esperar!',
+                            "Existe un error: " + xhr,
+                            'error'
+                        )
                     }
+                });
+            });
+            $('#eliminar').submit(function(e) {
+                e.preventDefault(); // Evitar la recarga de la página
 
-                    for (var j = 0; j < 8; j++) { // Cambia 'i' a 'j' aquí
-                        var index = Math.floor(Math.random() * caracteres.length);
-                        contrasena2 += caracteres.charAt(index);
+                // Obtener los datos del formulario
+                var datosFormulario = $(this).serialize();
+
+                Swal.fire({
+                    title: '¿Estás seguro?',
+                    text: "¡Esta accion no puede ser revertida!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Si, elminar'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+
+                        $.ajax({
+                            url: '/eliminar', // Ruta al controlador de Laravel
+                            type: 'POST',
+                            data: datosFormulario, // Enviar los datos del formulario
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            },
+                            success: function(response) {
+                                Swal.fire(
+                                    '¡Gracias por esperar!',
+                                    response.message,
+                                    'success'
+                                );
+                            },
+                            error: function(xhr) {
+                                Swal.fire(
+                                    '¡Gracias por esperar!',
+                                    "Existe un error: " + xhr,
+                                    'error'
+                                )
+                            }
+                        });
+                    } else {
+
                     }
+                })
 
-                    document.getElementById('contrasena').value = contrasena;
-                    document.getElementById('contrasenaactualizar').value =
-                    contrasena2; // Cambia el nombre de la variable aquí también
-                }
-            </script>
-        @stop
+
+
+
+                // Realizar la solicitud AJAX con jQuery
+
+            });
+        });
+
+        function generarContrasena() {
+            var caracteres = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()';
+            var contrasena = '';
+            var contrasena2 = '';
+
+            for (var i = 0; i < 8; i++) {
+                var index = Math.floor(Math.random() * caracteres.length);
+                contrasena += caracteres.charAt(index);
+            }
+
+            for (var j = 0; j < 8; j++) { // Cambia 'i' a 'j' aquí
+                var index = Math.floor(Math.random() * caracteres.length);
+                contrasena2 += caracteres.charAt(index);
+            }
+
+            document.getElementById('contrasena').value = contrasena;
+            document.getElementById('contrasenaactualizar').value =
+                contrasena2; // Cambia el nombre de la variable aquí también
+        }
+    </script>
+@stop

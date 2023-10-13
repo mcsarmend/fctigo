@@ -11,7 +11,9 @@
         <div class="card-header">
             {{-- <h1 class="card-title">SOH Conjunto</h1> --}}
         </div>
-        <div class="card-body">
+        <div class="card-body" style="width: 1200px">
+
+
             <div class="section">
                 <h3>Aforos</h3>
                 <table class="table">
@@ -26,13 +28,15 @@
                             <th>Cantidad Jucavi</th>
                             <th>Cantidad Mambu</th>
                             <th>Suma cantidad</th>
+                            <th>Exportar Creditos</th>
+
 
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
                             <th>Promecap</th>
-                            <td id="valoraforopromecap"> $376,805,000.05</td>
+                            <th id="aforocalpromecap">AFORO CALCULADO PROMECAP</th>
                             <td id="valoractualjucavipromecap">Valor Actual jucavi promecap</td>
                             <td id="valoractualmambupromecap">Valor Actual mambu promecap</td>
                             <td id="valoractualsumapromecap">Valor Actual suma promecap</td>
@@ -40,6 +44,8 @@
                             <td id="cantidadactualjucavipromecap">Cantidad actual jucavi Promecap</td>
                             <td id="cantidadactualmambupromecap">Cantidad actual mambu Promecap</td>
                             <td id="sumacantidadactualpromecap">Suma cantidad Promecap</td>
+                            <th><button type="button" class="btn btn-primary"
+                                    id="exportarcreditospromecap">Exportar</button></th>
                         </tr>
                         <tr>
                             <th>Blao</th>
@@ -51,8 +57,9 @@
                             <td id="cantidadactualjucaviblao">Cantidad actual jucavi blao</td>
                             <td id="cantidadactualmambublao">Cantidad actual mambu blao</td>
                             <td id="sumacantidadactualblao">Suma cantidad blao</td>
+                            <th>EXPORTAR</th>
                         </tr>
-                        <tr>
+                        <tr >
                             <th>Mintos</th>
                             <td id="valoraforomintos">-</td>
                             <td id="valoractualjucavimintos">-</td>
@@ -62,6 +69,7 @@
                             <td id="cantidadactualjucavimintos">-</td>
                             <td id="cantidadactualmambumintos">Cantidad actual mambu mintos</td>
                             <td id="sumacantidadactualmintos">Suma cantidad mintos</td>
+                            <th>EXPORTAR</th>
                         </tr>
                     </tbody>
                 </table>
@@ -71,12 +79,11 @@
             <br>
             <div class="section">
 
-                <h2>Aforos Calculados</h2>
+                <h2>Anexos</h2>
                 <table class="table">
                     <thead>
                         <tr>
                             <th></th>
-                            <th>Aforo</th>
                             <th>Anexo H</th>
                             <th>Anexo M</th>
                             <th>Anexo O </th>
@@ -87,7 +94,6 @@
                     <tbody>
                         <tr>
                             <th>Promecap</th>
-                            <th id="aforocalpromecap">AFORO CALCULADO PROMECAP</th>
                             <th>
                                 <button type="button" class="btn btn-primary" data-toggle="modal"
                                     data-target="#anexoHPromecapModal">Previo</button>
@@ -105,15 +111,13 @@
                         </tr>
                         <tr>
                             <th>Blao</th>
-                            <th>AFORO CALCULADO BALO</th>
                             <th>ANEXO H BALO</th>
                             <th>ANEXO M BALO</th>
                             <th>ANEXO O BALO</th>
                             <th>Ver</th>
                         </tr>
-                        <tr>
+                        <tr style="display:none">
                             <th>Mintos</th>
-                            <th>AFORO CALCULADO MINTOS</th>
                             <th>ANEXO H MINTOS</th>
                             <th>ANEXO M MINTOS</th>
                             <th>ANEXO O MINTOS</th>
@@ -403,9 +407,9 @@
                                         saldo total de Impuesto al </span>
                                 </div>
                                 <!--<div class="pos" id="_421:1002" style="top:1002;left:421">
-                                                                                                                                <span id="_13.9" style=" font-family:Arial; font-size:13.9px; color:#000000">
-                                                                                                                                1</span>
-                                                                                                                            </div>-->
+                                                                                                                                            <span id="_13.9" style=" font-family:Arial; font-size:13.9px; color:#000000">
+                                                                                                                                            1</span>
+                                                                                                                                        </div>-->
                                 <div class="pos" id="_118:1019" style="top:1019;left:118">
                                     <span id="_11.1"
                                         style=" font-family:Times New Roman; font-size:11.1px; color:#4c4c4c">
@@ -678,9 +682,9 @@
                                         septiembre de 2023</span>
                                 </div>
                                 <!--<div class="pos" id="_421:2102" style="top:2102;left:421">
-                                                                                                                                <span id="_13.6" style=" font-family:Arial; font-size:13.6px; color:#000000">
-                                                                                                                                2</span>
-                                                                                                                            </div>-->
+                                                                                                                                            <span id="_13.6" style=" font-family:Arial; font-size:13.6px; color:#000000">
+                                                                                                                                            2</span>
+                                                                                                                                        </div>-->
                                 <div class="pos" id="_118:2119" style="top:2119;left:118">
                                     <span id="_10.9"
                                         style=" font-family:Times New Roman; font-size:10.9px; color:#4c4c4c">
@@ -869,9 +873,9 @@
                                     2. Instruir al Fiduciario para que: </span>
                             </div>
                             <!--<div class="pos" id="_165:756" style="top:756;left:165">
-                                                            <span id="_13.5" style=" font-family:Arial; font-size:13.5px; color:#000000">
-                                                            i.</span>
-                                                        </div>-->
+                                                                        <span id="_13.5" style=" font-family:Arial; font-size:13.5px; color:#000000">
+                                                                        i.</span>
+                                                                    </div>-->
                             <div class="pos" id="_197:756" style="top:756;left:297">
                                 <span id="_13.5" style=" font-family:Arial; font-size:13.5px; color:#000000">
                                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;i. Pague a CEGE Capital, S.A. de C.V., SOFOM, E.N.R., por
@@ -901,9 +905,9 @@
                                     impuesto al valor agregado correspondiente, que en su caso se cause.</span>
                             </div>
                             <!--<div class="" id="_162:873" style="top:873;left:162">
-                                                            <span id="_13.6" style=" font-family:Arial; font-size:13.6px; color:#000000">
-                                                            ii.</span>
-                                                        </div>-->
+                                                                        <span id="_13.6" style=" font-family:Arial; font-size:13.6px; color:#000000">
+                                                                        ii.</span>
+                                                                    </div>-->
                             <div class="" id="_197:873" style="top:873;left:197">
                                 <span id="_13.6" style=" font-family:Arial; font-size:13.6px; color:#000000">
                                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ii. Destine los recursos depositados en la [Cuenta del
@@ -921,9 +925,9 @@
                                     Transferidos.</span>
                             </div>
                             <!--<div class="pos" id="_158:940" style="top:940;left:158">
-                                                            <span id="_13.6" style=" font-family:Arial; font-size:13.6px; color:#000000">
-                                                            iii.</span>
-                                                        </div>-->
+                                                                        <span id="_13.6" style=" font-family:Arial; font-size:13.6px; color:#000000">
+                                                                        iii.</span>
+                                                                    </div>-->
                             <div class="pos" id="_197:940" style="top:940;left:197">
                                 <span id="_13.6" style=" font-family:Arial; font-size:13.6px; color:#000000">
                                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;iii. Firme la relaci&#243;n actualizada respectiva del
@@ -1046,9 +1050,9 @@
                                     CEGE Capital, S.A. de C.V., SOFOM, E.N.R.]</span>
                             </div>
                             <!--<div class="pos" id="_421:2102" style="top:2102;left:421">
-                                                            <span id="_13.6" style=" font-family:Arial; font-size:13.6px; color:#000000">
-                                                            2</span>
-                                                        </div>-->
+                                                                        <span id="_13.6" style=" font-family:Arial; font-size:13.6px; color:#000000">
+                                                                        2</span>
+                                                                    </div>-->
                             <div class="pos" id="_98:2119" style="top:2119;left:98">
                                 <span id="_10.9"
                                     style=" font-family:Times New Roman; font-size:10.9px; color:#4c4c4c">
@@ -1327,6 +1331,10 @@
             </div>
         </div>
     </div>
+
+
+
+
 @stop
 
 @section('css')
@@ -1432,6 +1440,10 @@
         .justif {
             text-align-last: justify;
         }
+
+        .container {
+            max-width: 1200px !important;
+        }
     </style>
 
 @stop
@@ -1452,13 +1464,18 @@
     <script src="https://code.highcharts.com/modules/accessibility.js"></script>
 
     {{-- LIBRERIAS PDF --}}
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.blockUI/2.70/jquery.blockUI.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.2/jspdf.debug.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.8.0/html2pdf.bundle.min.js"
         integrity="sha512-w3u9q/DeneCSwUDjhiMNibTRh/1i/gScBVp2imNVAMCt6cUHIw6xzhzcPFIaL3Q1EbI2l+nu17q2aLJJLo4ZYg=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"
         integrity="sha512-BNaRQnYJYiPSqHHDb58B0yaPfCu+Wgds8Gp/gU33kqBtgNS4tSPHuGibyoeqMV/TJlSKda6FXzoEyYGjTe+vXA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    {{-- LIBRERIA EXCEL --}}
+
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.17.0/dist/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.0/FileSaver.min.js"
+        integrity="sha512-csNcFYJniKjJxRWRV1R7fvnXrycHP6qDR21mgz1ZP55xY5d+aHLfo9/FcGDQLfn2IfngbAHd8LdfsagcCqgTcQ=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
     <script>
@@ -1499,13 +1516,87 @@
                 }
             });
 
+            calculofondeadorpromecap();
+
             calculosohmambu();
 
             calculosohjucavi();
 
-            calculofondeadorpromecap();
-
             historicoaforopromecap();
+
+
+
+            $('#exportarcreditospromecap').click(function() {
+                // Bloquea la pantalla
+                $.blockUI({
+                    message: 'Cargando...',
+                    css: {
+                        border: 'none',
+                        padding: '15px',
+                        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                        color: '#fff',
+                        'border-radius': '5px',
+                        fontSize: '18px',
+                        fontWeight: 'bold',
+                    }
+                });
+
+                // Realiza la petición AJAX
+                $.ajax({
+                    url: "get_creditos_promecap_aforo",
+                    method: "GET",
+                    dataType: "JSON",
+                    data: {},
+                    success: function(data) {
+                        console.log(data);
+                        //if ('success' in data) {
+
+                        var workbook = XLSX.utils.book_new();
+
+                        var fechaActual =
+                            getdateformatted(); // Crea un objeto Date con la fecha y hora actuales
+
+                        nameWorkbook = 'PROMECAP ' +
+                            fechaActual;
+
+                        // Convertir JSON1 a una hoja de cálculo
+                        var worksheet1 = XLSX.utils.json_to_sheet(
+                            data);
+                        XLSX.utils.book_append_sheet(workbook, worksheet1,
+                            nameWorkbook
+                        );
+                        // Generar el archivo Excel
+                        var excelBuffer = XLSX.write(workbook, {
+                            bookType: 'xlsx',
+                            type: 'array'
+                        });
+                        var blob = new Blob([excelBuffer], {
+                            type: 'application/octet-stream'
+                        });
+
+                        saveAs(blob, nameWorkbook + '.xlsx');
+
+                        // Desbloquea la pantalla después de que se complete la petición
+                        $.unblockUI();
+                        Swal.fire(
+                            '¡Gracias por esperar!',
+                            data["success"],
+                            'success'
+                        )
+                        //}
+                    },
+                    error: function(data) {
+                        // Desbloquea la pantalla después de que se complete la petición
+                        $.unblockUI();
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Encontramos un error...',
+                            text: data["responseJSON"]["error"],
+                        });
+                    }
+                });
+            });
+
 
         });
 
@@ -1526,13 +1617,13 @@
                         var numero = parseFloat(element.monto);
                         total += numero;
                     });
-                    totalFormateado = total.toLocaleString();
+                    totalFormateado = total.toLocaleString('en-US');
                     fondeadoresjucavi.forEach(element => {
                         porcentaje = (element.monto * 100) / total;
                         porcentajeFormateado = parseFloat(porcentaje.toFixed(2));
                         cantidadFormateado = parseFloat(element.cantidadregistros);
                         montoFormateado = parseFloat(element.monto);
-                        montoFormateado = montoFormateado.toLocaleString();
+                        montoFormateado = montoFormateado.toLocaleString('en-US');
 
                         tmpfondeadoresjucavi.push({
                             name: element.nombrefondeador,
@@ -1571,13 +1662,13 @@
                         var numero = parseFloat(element.monto);
                         total += numero;
                     });
-                    totalFormateado = total.toLocaleString();
+                    totalFormateado = total.toLocaleString('en-US');
                     fondeadoresmambu.forEach(element => {
                         porcentaje = (element.monto * 100) / total;
                         porcentajeFormateado = parseFloat(porcentaje.toFixed(2));
                         cantidadFormateado = parseFloat(element.cantidadregistros);
                         montoFormateado = parseFloat(element.monto);
-                        montoFormateado = montoFormateado.toLocaleString();
+                        montoFormateado = montoFormateado.toLocaleString('en-US');
 
                         tmpfondeadoresmambu.push({
                             name: element.nombrefondeador,
@@ -1622,16 +1713,16 @@
             jsonjucavi.forEach(element => {
                 switch (element.nombrefondeador) {
                     case "Promecap":
-                        $('#valoractualjucavipromecap').text("$" + parseFloat(element.monto).toLocaleString());
+                        $('#valoractualjucavipromecap').text("$" + parseFloat(element.monto).toLocaleString('en-US'));
                         actualjucavipromecap += parseFloat(element.monto);
                         $('#cantidadactualjucavipromecap').text(parseFloat(element.cantidadregistros)
-                            .toLocaleString());
+                            .toLocaleString('en-US'));
                         cantidadjucavipromecap = element.cantidadregistros;
                         break;
                     case "BLAO":
-                        $('#valoractualjucaviblao').text("$" + parseFloat(element.monto).toLocaleString());
+                        $('#valoractualjucaviblao').text("$" + parseFloat(element.monto).toLocaleString('en-US'));
                         actualjucaviblao += parseFloat(element.monto);
-                        $('#cantidadactualjucaviblao').text(parseFloat(element.cantidadregistros).toLocaleString());
+                        $('#cantidadactualjucaviblao').text(parseFloat(element.cantidadregistros).toLocaleString('en-US'));
                         cantidadjucaviblao = element.cantidadregistros;
                         break;
                 }
@@ -1639,25 +1730,25 @@
             jsonmambu.forEach(element => {
                 switch (element.nombrefondeador) {
                     case "PROMECAP":
-                        $('#valoractualmambupromecap').text("$" + parseFloat(element.monto).toLocaleString());
+                        $('#valoractualmambupromecap').text("$" + parseFloat(element.monto).toLocaleString('en-US'));
                         actualmambupromecap += parseFloat(element.monto);
                         $('#cantidadactualmambupromecap').text(parseFloat(element.cantidadregistros)
-                            .toLocaleString());
+                            .toLocaleString('en-US'));
                         cantidadmambupromecap = element.cantidadregistros;
                         break;
                     case "BLAO":
-                        $('#valoractualmambublao').text("$" + parseFloat(element.monto).toLocaleString());
+                        $('#valoractualmambublao').text("$" + parseFloat(element.monto).toLocaleString('en-US'));
                         actualmambublao += parseFloat(element.monto);
-                        $('#cantidadactualmambublao').text(parseFloat(element.cantidadregistros).toLocaleString());
+                        $('#cantidadactualmambublao').text(parseFloat(element.cantidadregistros).toLocaleString('en-US'));
                         cantidadmambublao = element.cantidadregistros;
                         break;
                     case "MINTOS":
-                        $('#valoractualmambumintos').text("$" + parseFloat(element.monto).toLocaleString());
+                        $('#valoractualmambumintos').text("$" + parseFloat(element.monto).toLocaleString('en-US'));
                         actualmambumintos += parseFloat(element.monto);
                         $('#cantidadactualmambumintos').text(parseFloat(element.cantidadregistros)
-                            .toLocaleString());
+                            .toLocaleString('en-US'));
                         cantidadmambumintos = element.cantidadregistros;
-                        $('#sumacantidadactualmintos').text(parseFloat(element.cantidadregistros).toLocaleString());
+                        $('#sumacantidadactualmintos').text(parseFloat(element.cantidadregistros).toLocaleString('en-US'));
 
                         break;
                 }
@@ -1671,18 +1762,32 @@
 
 
 
-            $('#valoractualsumapromecap').text("$" + parseFloat(sumavalorpromecap).toLocaleString());
-            $('#valoractualsumablao').text("$" + parseFloat(sumavalorblao).toLocaleString());
-            $('#valoractualsumamintos').text("$" + parseFloat(actualmambumintos).toLocaleString());
+            $('#valoractualsumapromecap').text("$" + parseFloat(sumavalorpromecap).toLocaleString('en-US'));
 
-            $('#sumacantidadactualpromecap').text(parseFloat(sumacantidadpromecap).toLocaleString());
-            $('#sumacantidadactualblao').text(parseFloat(sumacantidadblao).toLocaleString());
+
+
+            $('#valoractualsumablao').text("$" + parseFloat(sumavalorblao).toLocaleString('en-US'));
+            $('#valoractualsumamintos').text("$" + parseFloat(actualmambumintos).toLocaleString('en-US'));
+
+            $('#sumacantidadactualpromecap').text(parseFloat(sumacantidadpromecap).toLocaleString('en-US'));
+            $('#sumacantidadactualblao').text(parseFloat(sumacantidadblao).toLocaleString('en-US'));
 
 
             vdb = 153173700.00 - sumavalorblao;
-            vdp = 376805000.05 - sumavalorpromecap;
-            $('#valordiferenciapromecap').text("$" + parseFloat(vdp).toLocaleString());
-            $('#valordiferenciablao').text("$" + parseFloat(vdb).toLocaleString());
+
+            var valorOriginal = $('#aforocalpromecap').text();
+
+            // Eliminar el signo de dólar y las comas
+            var valorLimpio = valorOriginal.replace(/\$|,/g, '');
+
+            // Convertir la cadena en un número de punto flotante
+            aforopromecap = parseFloat(valorLimpio);
+
+
+
+            vdp = aforopromecap - sumavalorpromecap;
+            $('#valordiferenciapromecap').text("$" + parseFloat(vdp).toLocaleString('en-US'));
+            $('#valordiferenciablao').text("$" + parseFloat(vdb).toLocaleString('en-US'));
 
 
         }
@@ -2060,9 +2165,10 @@
                 success: function(aforocalcpromecap) {
 
                     console.log(aforocalcpromecap);
-                    $('#aforocalpromecap').text("$" + parseFloat(aforocalcpromecap).toLocaleString());
-                    $('#anexohaforo').text("$" + parseFloat(aforocalcpromecap).toLocaleString());
-                    $('#anexomaforo').text("$" + parseFloat(aforocalcpromecap).toLocaleString());
+                    $('#aforocalpromecap').text("$" + parseFloat(aforocalcpromecap).toLocaleString('en-US'));
+                    aforopromecap = aforocalcpromecap;
+                    $('#anexohaforo').text("$" + parseFloat(aforocalcpromecap).toLocaleString('en-US'));
+                    $('#anexomaforo').text("$" + parseFloat(aforocalcpromecap).toLocaleString('en-US'));
                     $.unblockUI();
                 }
             });
@@ -2078,6 +2184,11 @@
                 },
                 success: function(aforocalcpromecap) {
 
+                    aforocalcpromecap.forEach(element => {
+                        console.log(element);
+                        element.fecha = element.fecha.split(' ')[0];
+                        element.aforo = parseFloat(element.aforo).toLocaleString('en-US');
+                    });
                     $('#tablahistoricopromecap').DataTable({
                         destroy: true,
                         scrollCollapse: true,
@@ -2116,6 +2227,26 @@
                     });
                 }
             });
+        }
+
+        function getdateformatted() {
+
+            var fechaActual = new Date();
+            var dia = fechaActual.getDate();
+            var mes = fechaActual.getMonth() + 1; // Los meses van de 0 a 11, por lo que se suma 1
+            var año = fechaActual.getFullYear();
+            var horas = fechaActual.getHours();
+            var minutos = fechaActual.getMinutes();
+
+            // Asegurar que los valores tengan siempre dos dígitos
+            dia = (dia < 10) ? '0' + dia : dia;
+            mes = (mes < 10) ? '0' + mes : mes;
+            horas = (horas < 10) ? '0' + horas : horas;
+            minutos = (minutos < 10) ? '0' + minutos : minutos;
+
+            var fechaFormateada = dia + '-' + mes + '-' + año + ' ' + horas + ':' + minutos;
+            return fechaFormateada;
+
         }
     </script>
 @stop
