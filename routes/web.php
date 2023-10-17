@@ -118,6 +118,7 @@ Route::post('guardar-usuario', [usersController::class, 'guardar']);
 Route::post('actualizar-usuario', [usersController::class, 'actualizar']);
 Route::post('actualizarext', [usersController::class, 'actualizarext']);
 Route::post('eliminar', [usersController::class, 'eliminar']);
+Route::get('obtener-tipo', [usersController::class, 'obtenerTipo']);
 
 
 Auth::routes();
