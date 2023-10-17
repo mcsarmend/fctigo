@@ -13,7 +13,9 @@ class usersController extends Controller
     public function usuarios()
     {
 
-        $usuarios = User::select('id', 'name')->get();
+        $usuarios = User::select('id', 'name')
+        ->orderBy('name', 'asc')
+        ->get();
         return view('usuarios.usuarios', ['usuarios' => $usuarios]);
     }
 
@@ -55,6 +57,7 @@ class usersController extends Controller
             $usuarioEncriptado = $request->id;
             $usuarioIdDesencriptado = Crypt::decrypt($usuarioEncriptado);
             $usuario = User::findOrFail($usuarioIdDesencriptado);
+
             // Actualiza los datos del usuario
             $usuario->password = Hash::make($request->contrasena);
             $usuario->type = $request->tipo;
@@ -99,7 +102,7 @@ class usersController extends Controller
             User::findOrFail($usuarioIdDesencriptado)->delete();
             // Eliminar usuario
 
-            $mess = 'Usuario actualizado correctamente';
+            $mess = 'Usuario eliminado correctamente';
 
             return response()->json(['message' => $mess], 200);
         } catch (Exception $e) {
@@ -107,6 +110,13 @@ class usersController extends Controller
             return response()->json(['message' => 'Error al actualizar el usuario'], 500);
         }
 
+    }
+
+    public function obtenerTipo(Request $request) {
+        $usuarioEncriptado = $request->id;
+        $usuarioIdDesencriptado = Crypt::decrypt($usuarioEncriptado);
+        $usuario = User::find($usuarioIdDesencriptado);
+        return response()->json(['tipo' => $usuario->type]);
     }
 
 }

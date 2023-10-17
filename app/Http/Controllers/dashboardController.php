@@ -420,8 +420,23 @@ class dashboardController extends Controller
                 }
             }
         }
-
-        $unido = array_merge($sucursalesjucavi, $sucursalesmambu);
+        $creditos= array();
+        foreach ($sucursalesmambu as $element) {
+            $newData["Credito"]= $element["credito"];
+            $newData["Sistema"]= $element["sistema"];
+            $newData["NOMBRE GRUPO"]= $element["nombre grupo"];
+            $newData["Sucursal"]= $element["sucursal"];
+            $newData["DIAS MORA"]= $element["dias mora"];
+            $newData["MONTO OTORGADO"]= $element["fecha desembolso"];
+            $newData["FECHA DESEMBOLSO"]= $element["fecha desembolso"];
+            $newData["FECHA VENCIMIENTO"]= $element["fecha vencimiento"];
+            $newData["CUOTAS RESTANTES"]= $element["cuotas restantes"];
+            $newData["SALDO CAPITAL"]= $element["saldo capital"];
+            $newData["SALDO INTERES"]= $element["saldo interes"];
+            $newData["estado"]= $element["estado"];
+            $creditos[] = $newData;
+        }
+        $unido = array_merge($sucursalesjucavi, $creditos);
 
 //                 return (["Jucavi"=>$sucursalesjucavi,"Mambu"=>$sucursalesmambu, "Unificado"=> $unido, "Cantidad"=>count($unido)]);
         return $unido;
