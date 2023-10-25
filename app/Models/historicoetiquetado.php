@@ -18,6 +18,9 @@ class historicoetiquetados extends Model
 		'id',
         'fecha',
         'creditos',
-        'usuario'
+        'idusuario',
+        'fondeadoranterior',
+        'fondeadornuevo',
+        'sistema'
 	];
 }
