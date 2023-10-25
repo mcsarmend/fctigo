@@ -110,7 +110,8 @@ Route::get('calculofondeadorpromecap', [dashboardController::class, 'calculofond
 Route::get('historicoaforopromecap', [dashboardController::class, 'historicoaforopromecap']);
 Route::get('get_creditos_promecap_aforo', [dashboardController::class, 'get_creditos_promecap_aforo']);
 Route::get('preetiquetadopreviopromecapconjunto', [dashboardController::class, 'preetiquetadopreviopromecapconjunto']);
-
+Route::get('get_creditos_promecap_anexo_a', [dashboardController::class, 'get_creditos_promecap_anexo_a']);
+Route::get('obtenerFechaCorte', [dashboardController::class, 'obtenerFechaCorte']);
 
 
 Route::get('profile/username', [usersController::class, 'usuarios']);

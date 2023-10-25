@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\historicoetiquetados;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use PDO;
@@ -104,7 +105,7 @@ class labelledController extends Controller
             }
 
         } catch (\Throwable $th) {
-            echo $th;
+            return response()->json(['error' =>  $th->getMessage()], 401);
         }
 
     }
@@ -145,7 +146,7 @@ class labelledController extends Controller
             return response()->json(['success' => "Baja realizada correctamente"], 200);
 
         } catch (\Throwable $th) {
-            return response()->json(['error' => $th], 400);
+            return response()->json(['error' => $th->getMessage()], 400);
 
         }
 
@@ -197,12 +198,29 @@ class labelledController extends Controller
 
             $response = curl_exec($curl);
 
+            // ************************* GUARDAR EN TABLA ****************
+
+            $cadena = json_encode($mambu);
+            $array = "'" . $cadena . "'";
+            $fechaActual = $this->fechaActual;
+            $user = Auth::user();
+            $registro = new historicoetiquetados;
+            $registro->fecha = $fechaActual;
+            $registro->creditos = $array;
+            $registro->idusuario = $user->id;
+            $registro->fondeadoranterior = '1';
+            $registro->fondeadornuevo = '10';
+            $registro->sistema = 'MAMBU';
+            $registro->save();
+
+            // ************************* GUARDAR EN TABLA ****************
+
             // ------------------------------TERMINA ETIQUETADO MAMBU----------------------------------
 
             return response()->json(['success' => "Etiquetado realizado correctamente"], 200);
 
         } catch (\Throwable $th) {
-            return response()->json(['error' => $th], 401);
+            return response()->json(['error' => $th->getMessage()], 401);
         }
     }
 
@@ -259,11 +277,25 @@ class labelledController extends Controller
             $response = curl_exec($curl);
 
             $creditos = count($jucavi);
-            if ($strResult == "ETIQUETADO OK") {
-                return response()->json(['success' => "Cantidad de creditos etiquetados:  " . $creditos], 200);
-            } else {
-                return response()->json(['error' => 'Se produjo un error inesperado' . $th->getMessage()], 401);
-            }
+
+            // ************************* GUARDAR EN TABLA ****************
+
+            $cadena = json_encode($jucavi);
+            $array = "'" . $cadena . "'";
+            $fechaActual = $this->fechaActual;
+            $user = Auth::user();
+            $registro = new historicoetiquetados;
+            $registro->fecha = $fechaActual;
+            $registro->creditos = $array;
+            $registro->idusuario = $user->id;
+            $registro->fondeadoranterior = '1';
+            $registro->fondeadornuevo = '10';
+            $registro->sistema = 'JUCAVI';
+            $registro->save();
+
+            // ************************* GUARDAR EN TABLA ****************
+           return response()->json(['success' => "Cantidad de creditos etiquetados:  " . $creditos], 200);
+
 
             curl_close($curl);
             // ------------------------------TERMINA ETIQUETADO JUCAVI----------------------------------
@@ -275,7 +307,6 @@ class labelledController extends Controller
 
     public function blao_preetiequetado_mambu()
     {
-        // PHP code
         try {
 
             $dayOfWeek = date('N');
@@ -310,7 +341,7 @@ class labelledController extends Controller
             }
 
         } catch (\Throwable $th) {
-            return response()->json(['error' => $th], 401);
+            return response()->json(['error' => $th->getMessage()], 401);
         }
 
     }
@@ -392,7 +423,7 @@ class labelledController extends Controller
             }
 
         } catch (\Throwable $th) {
-            return response()->json(['error' => $th], 401);
+            return response()->json(['error' => $th->getMessage()], 401);
 
         }
 
@@ -441,11 +472,29 @@ class labelledController extends Controller
 
             $response = curl_exec($curl);
 
+            // ************************* GUARDAR EN TABLA ****************
+
+            $cadena = json_encode($mambu);
+            $array = "'" . $cadena . "'";
+            $fechaActual = $this->fechaActual;
+            $user = Auth::user();
+            $registro = new historicoetiquetados;
+            $registro->fecha = $fechaActual;
+            $registro->creditos = $array;
+            $registro->idusuario = $user->id;
+            $registro->fondeadoranterior = '1';
+            $registro->fondeadornuevo = '17';
+            $registro->sistema = 'MAMBU';
+            $registro->save();
+
+            // ************************* GUARDAR EN TABLA ****************
+
+
             // ------------------------------TERMINA ETIQUETADO MAMBU----------------------------------
             return response()->json(['success' => "Etiquetado realizado correctamente" . $response . $sqlStatement], 200);
 
         } catch (\Throwable $th) {
-            return response()->json(['error' => $th], 401);
+            return response()->json(['error' => $th->getMessage()], 401);
         }
     }
 
@@ -539,7 +588,7 @@ class labelledController extends Controller
                 return response()->json(['success' => "Preetiquetado realizado correctamente"], 200);
             }
         } catch (\Throwable $th) {
-            return response()->json(['error' => $th], 401);
+            return response()->json(['error' => $th->getMessage()], 401);
         }
     }
 
@@ -620,7 +669,7 @@ class labelledController extends Controller
             }
 
         } catch (\Throwable $th) {
-            return response()->json(['error' => $th], 401);
+            return response()->json(['error' =>  $th->getMessage()], 401);
         }
 
     }
@@ -663,7 +712,7 @@ class labelledController extends Controller
             }
 
         } catch (\Throwable $th) {
-            return response()->json(['error' => $th], 401);
+            return response()->json(['error' =>  $th->getMessage()], 401);
         }
 
     }
@@ -877,6 +926,10 @@ class labelledController extends Controller
 
             // VALOR DE AFORO CALCULADO $aforo_calculado;
 
+
+            //  SIN REGLAS************************************************************************************************
+
+
             //VALORES JUCAVI
             $montoPromecapJucavi = 0;
             $montoPromecapMambu = 0;
@@ -907,8 +960,6 @@ class labelledController extends Controller
             }
 
             $saldo_buscado = $aforo_calculado - (floatval($montoPromecapJucavi) + floatval($montoPromecapMambu));
-
-
 
             $verdaderassucursales = '[{"sucursal_jucavi":"Acambaro","sucursal_real":"Acambaro Multiproducto"},{"sucursal_jucavi":"Acapulco","sucursal_real":"Acapulco Multiproducto"},{"sucursal_jucavi":"Acapulco Centro","sucursal_real":"Acapulco Centro Multiproducto"},{"sucursal_jucavi":"Acapulco Renacimieto","sucursal_real":"Acapulco Renacimiento Multiproducto"},{"sucursal_jucavi":"Aguascalientes","sucursal_real":"Aguascalientes Multiproducto"},{"sucursal_jucavi":"Apatzingan","sucursal_real":"Apatzingan Multiproducto"},{"sucursal_jucavi":"Apatzingan Madero","sucursal_real":"Apatzingan Madero Multiproducto"},{"sucursal_jucavi":"Apizaco","sucursal_real":"Apizaco Multiproducto"},{"sucursal_jucavi":"Atlacomulco","sucursal_real":"Atlacomulco Multiproducto"},{"sucursal_jucavi":"Autlan","sucursal_real":"Autlan Multiproducto"},{"sucursal_jucavi":"Boca del Rio","sucursal_real":"Boca del Rio Multiproducto"},{"sucursal_jucavi":"Bucerias","sucursal_real":"Bucerias Multiproducto"},{"sucursal_jucavi":"Celaya Centro","sucursal_real":"Celaya Centro Multiproducto"},{"sucursal_jucavi":"Chilapa","sucursal_real":"Chilapa Multiproducto"},{"sucursal_jucavi":"Chilpancingo Norte","sucursal_real":"Chilpancingo Norte Multiproducto"},{"sucursal_jucavi":"Coatzacoalcos","sucursal_real":"Coatzacoalcos Multiproducto"},{"sucursal_jucavi":"Colima","sucursal_real":"Colima Multiproducto"},{"sucursal_jucavi":"Comitan","sucursal_real":"Comitan Multiproducto"},{"sucursal_jucavi":"Cosamaloapan","sucursal_real":"Cosamaloapan Multiproducto"},{"sucursal_jucavi":"Culiacan","sucursal_real":"Culiacan Multiproducto"},{"sucursal_jucavi":"Dolores Hidalgo","sucursal_real":"Dolores Hidalgo Multiproducto"},{"sucursal_jucavi":"Durango","sucursal_real":"Durango Multiproducto"},{"sucursal_jucavi":"Guadalajara Centro","sucursal_real":"Guadalajara Centro Multiproducto"},{"sucursal_jucavi":"Guadalupe","sucursal_real":"Guadalupe Multiproducto"},{"sucursal_jucavi":"Guanajuato","sucursal_real":"Guanajuato Multiproducto"},{"sucursal_jucavi":"Hermosillo","sucursal_real":"Hermosillo Multiproducto"},{"sucursal_jucavi":"Heroica Cardenas","sucursal_real":"Heroica Cardenas Multiproducto"},{"sucursal_jucavi":"Huajuapan de Leon","sucursal_real":"Huajuapan de Leon Multiproducto"},{"sucursal_jucavi":"Iguala","sucursal_real":"Iguala Multiproducto"},{"sucursal_jucavi":"Ixtlahuaca","sucursal_real":"Ixtlahuaca Multiproducto"},{"sucursal_jucavi":"Lagos de Moreno","sucursal_real":"Lagos de Moreno Multiproducto"},{"sucursal_jucavi":"Lazaro Cardenas","sucursal_real":"Lazaro Cardenas Multiproducto"},{"sucursal_jucavi":"Leon Centro","sucursal_real":"Leon centro Multiproducto"},{"sucursal_jucavi":"Lerdo","sucursal_real":"Lerdo Multiproducto"},{"sucursal_jucavi":"Los Reyes","sucursal_real":"Los Reyes Multiproducto"},{"sucursal_jucavi":"Manzanillo","sucursal_real":"Manzanillo Multiproducto"},{"sucursal_jucavi":"Martinez de la Torre","sucursal_real":"Martinez de la Torre Multiproducto"},{"sucursal_jucavi":"Matehuala","sucursal_real":"Matehuala Multiproducto"},{"sucursal_jucavi":"Mazatlan","sucursal_real":"Mazatlan Multiproducto"},{"sucursal_jucavi":"Monterrey","sucursal_real":"Monterrey Multiproducto"},{"sucursal_jucavi":"Monterrey Centro","sucursal_real":"Monterrey Centro Multiproducto"},{"sucursal_jucavi":"Morelia Camelinas","sucursal_real":"Morelia Camelinas Multiproducto"},{"sucursal_jucavi":"Morelia Madero","sucursal_real":"Morelia Madero Multiproducto"},{"sucursal_jucavi":"Navojoa","sucursal_real":"Navojoa Multiproducto"},{"sucursal_jucavi":"Oaxaca","sucursal_real":"Oaxaca Multiproducto"},{"sucursal_jucavi":"Ocotlan de Morelos","sucursal_real":"Ocotlan de Morelos Multiproducto"},{"sucursal_jucavi":"Orizaba","sucursal_real":"Orizaba Multiproducto"},{"sucursal_jucavi":"Papantla","sucursal_real":"Papantla Multiproducto"},{"sucursal_jucavi":"Patzcuaro","sucursal_real":"Patzcuaro Multiproducto"},{"sucursal_jucavi":"Puebla","sucursal_real":"Puebla Multiproducto"},{"sucursal_jucavi":"Queretaro","sucursal_real":"Queretaro Multiproducto"},{"sucursal_jucavi":"Rio Verde","sucursal_real":"Rio Verde Multiproducto"},{"sucursal_jucavi":"Sahuayo","sucursal_real":"Sahuayo Multiproducto"},{"sucursal_jucavi":"Salamanca","sucursal_real":"Salamanca Multiproducto"},{"sucursal_jucavi":"Saltillo","sucursal_real":"Saltillo Multiproducto"},{"sucursal_jucavi":"San Andres","sucursal_real":"San Andres Multiproducto"},{"sucursal_jucavi":"San Juan del Rio","sucursal_real":"San Juan Del Rio Multiproducto"},{"sucursal_jucavi":"San Luis","sucursal_real":"San Luis Multiproducto"},{"sucursal_jucavi":"San Luis Centro","sucursal_real":"San Luis Centro Multiproducto"},{"sucursal_jucavi":"San Luis Zona Industrial","sucursal_real":"San Luis Zona Industrial Multiproducto"},{"sucursal_jucavi":"Santa Catarina","sucursal_real":"Santa Catarina Multiproducto"},{"sucursal_jucavi":"Tacambaro","sucursal_real":"Tacambaro Multiproducto"},{"sucursal_jucavi":"Tala","sucursal_real":"Tala Multiproducto"},{"sucursal_jucavi":"Tapachula","sucursal_real":"Tapachula Multiproducto"},{"sucursal_jucavi":"Tecpan de Galeana","sucursal_real":"Tecpan de Galeana Multiproducto"},{"sucursal_jucavi":"Tepic","sucursal_real":"Tepic Multiproducto"},{"sucursal_jucavi":"Tlajomulco","sucursal_real":"Tlajomulco Multiproducto"},{"sucursal_jucavi":"Tlaxiaco","sucursal_real":"Tlaxiaco Multiproducto"},{"sucursal_jucavi":"Tonala Centro","sucursal_real":"Tonala Centro Multiproducto"},{"sucursal_jucavi":"Tonala Chiapas","sucursal_real":"Tonala Chiapas Multiproducto"},{"sucursal_jucavi":"Torreon","sucursal_real":"Torreon Multiproducto"},{"sucursal_jucavi":"Tuxtepec","sucursal_real":"Tuxtepec Multiproducto"},{"sucursal_jucavi":"Tuxtla","sucursal_real":"Tuxtla Multiproducto"},{"sucursal_jucavi":"Uruapan Centro","sucursal_real":"Uruapan Centro Multiproducto"},{"sucursal_jucavi":"Veracruz","sucursal_real":"Veracruz Multiproducto"},{"sucursal_jucavi":"Villa Flores","sucursal_real":"Villaflores Multiproducto"},{"sucursal_jucavi":"Villa Victoria","sucursal_real":"Villa Victoria Multiproducto"},{"sucursal_jucavi":"Villahermosa Olmeca","sucursal_real":"Villahermosa Olmeca Multiproducto"},{"sucursal_jucavi":"Zacapu","sucursal_real":"Zacapu Multiproducto"},{"sucursal_jucavi":"Zamora","sucursal_real":"Zamora Multiproducto"},{"sucursal_jucavi":"Zihuatanejo","sucursal_real":"Zihuatanejo Multiproducto"},{"sucursal_jucavi":"Zitacuaro","sucursal_real":"Zitacuaro Multiproducto"}]';
             $truesucursales = json_decode($verdaderassucursales, true);
@@ -957,6 +1008,7 @@ class labelledController extends Controller
             foreach ($sucursales as $sucursal) {
                 foreach ($listaOrdenadaJucavi as $creditoCandidato) {
                     $percent = floatval($sucursal["porcentaje"]);
+                    ///
                     if ($percent <= 5.0 && $creditoCandidato["Sucursal"] == $sucursal["sucursal"] && $monto_meta <= $saldo_buscado) {
                         $nuevosaldo = 0;
                         $nuevosaldo = floatval($sucursal["saldo_capital"]) + floatval($creditoCandidato["SaldoInsoluto"]);
@@ -970,8 +1022,8 @@ class labelledController extends Controller
                 }
 
             }
-            $tmpmambu=[];
-            $preetiquetado2=[];
+            $tmpmambu = [];
+            $preetiquetado2 = [];
             if ($monto_meta <= $saldo_buscado) {
                 // SE COMPLETA CON MAMBU
                 $tmpmambu = $this->GetLitaAltaPromecapM();
@@ -994,9 +1046,23 @@ class labelledController extends Controller
                 }
 
             }
-            // return $preetiquetado;
-            return $listaOrdenadaJucavi;
-            //return (["Sucursal:" => $sucursales, "CreditosCandidatos" => $listaOrdenadaJucavi, "Sucursales_equivalentes" => $truesucursales, "preetiquetado:" => $preetiquetado, "Montometa" => $monto_meta, "MontoBuscado" => $saldo_buscado, "AFORO_CALCULADO" => $aforo_calculado, "AforoFaltanteJucavi" => $results, "AforoFaltanteMambu" => $result, "montoPromecapJucavi" => $montoPromecapJucavi, "montoPromecapMambu" => $montoPromecapMambu, "ListaCandidatosMambu" => $tmpmambu,"jucavi"=>$preetiquetado,"mambu"=>$preetiquetado2]);
+            return $preetiquetado;
+            // return $listaOrdenadaJucavi;
+            // return ([
+            //     "Sucursal:" => $sucursales,
+            //     "CreditosCandidatos" => $listaOrdenadaJucavi,
+            //     "Sucursales_equivalentes" => $truesucursales,
+            //     "preetiquetado:" => $preetiquetado,
+            //     "Montometa" => $monto_meta,
+            //     "MontoBuscado" => $saldo_buscado,
+            //     "AFORO_CALCULADO" => $aforo_calculado,
+            //     "AforoFaltanteJucavi" => $results,
+            //     "AforoFaltanteMambu" => $result,
+            //     "montoPromecapJucavi" => $montoPromecapJucavi,
+            //     "montoPromecapMambu" => $montoPromecapMambu,
+            //     "ListaCandidatosMambu" => $tmpmambu,
+            //     "jucavi"=>$preetiquetado,"mambu"=>$preetiquetado2
+            // ]);
 
         } catch (\Throwable $th) {
             return response()->json(['error' => $th->getmessage()], 401);
@@ -1176,7 +1242,7 @@ class labelledController extends Controller
             }
 
         } catch (\Throwable $th) {
-            return response()->json(['error' => $th], 401);
+            return response()->json(['error' =>  $th->getMessage()], 401);
         }
 
     }
