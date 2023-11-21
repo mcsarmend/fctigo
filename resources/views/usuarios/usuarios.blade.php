@@ -158,7 +158,13 @@
 @stop
 
 @section('css')
-
+<style>
+    .content-wrapper {
+        background-image: url('/assets/images/fondo.png');
+        background-size: contain;
+        background-position: left;
+    }
+</style>
 @stop
 
 @section('js')
@@ -320,6 +326,30 @@
                     }
                 });
             });
+
+
+            // Poner sin seleccionar a ACTUALIZAR
+            select = document.getElementById("id_actualizar");
+            nuevaOpcion = document.createElement("option");
+            nuevaOpcion.value = "0";
+            nuevaOpcion.text = "Sin seleccionar";
+            select.insertBefore(nuevaOpcion, select.firstChild);
+            select.value=0;
+
+            select2 = document.getElementById("tipo_actualizar");
+            nuevaOpcion2 = document.createElement("option");
+            nuevaOpcion2.value = "0";
+            nuevaOpcion2.text = "Sin seleccionar";
+            select2.insertBefore(nuevaOpcion2, select2.firstChild);
+            select2.value=0;
+
+            // Poner sin seleccionar en eliminar
+            select3 = document.getElementById("id");
+            nuevaOpcion3 = document.createElement("option");
+            nuevaOpcion3.value = "0";
+            nuevaOpcion3.text = "Sin seleccionar";
+            select3.insertBefore(nuevaOpcion3, select.firstChild);
+            select3.value=0;
 
         });
 

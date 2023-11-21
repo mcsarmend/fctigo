@@ -3,19 +3,27 @@
 @section('title', 'Etiqueado MAMBU BLAO')
 
 @section('content_header')
-    <h1>Etiquetado MAMBU BLAO</h1>
+
 @stop
 
 @section('content')
+    <br>
     <div class="card">
         <div class="card-header">
+            <h1>Etiquetado MAMBU BLAO</h1>
             <h1 class="card-title">Proceso que da de alta o baja créditos que serán asignados a BLAO.</h1>
         </div>
         <div class="card-body">
             <div class="container py-4">
                 <div class="row section">
                     <div class="col-md-8 col-sm-6 mb-3">
-                        <button class="btn btn-outline-primary w-100" id="preetiquetadoBlaomambu">Preetiquetado BLAO</button>
+                        <button class="btn btn-outline-primary w-100" id="pruebaetiquetado">Preetiquetado Candidatos</button>
+                    </div>
+                </div>
+                <div class="row section">
+                    <div class="col-md-8 col-sm-6 mb-3">
+                        <button class="btn btn-outline-primary w-100" id="preetiquetadoBlaomambu">Preetiquetado
+                            BLAO</button>
                     </div>
                 </div>
                 <div class="row section">
@@ -52,6 +60,7 @@
                         </div> --}}
                     </div>
                 </div>
+
             </div>
         </div>
     @stop
@@ -80,11 +89,23 @@
                 justify-content: center;
                 height: 100%;
             }
+
+            .content-wrapper {
+                background-image: url('/assets/images/fondo.png');
+                background-size: contain;
+                background-position: left;
+            }
         </style>
 
     @stop
 
     @section('js')
+        <script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/blob-polyfill/7.0.20220408/Blob.min.js"
+            integrity="sha512-uPm9nh4/QF6a7Mz4Srk0lXfN7T+PhKls/NhWUKpXUbu3xeG4bXhtbw2NCye0BRXopnD0x+SBDMOWXOlHAwqgLw=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.blockUI/2.70/jquery.blockUI.min.js"></script>
         <!-- Agrega esto en el encabezado o antes de cerrar el cuerpo -->
         <script src="https://cdn.jsdelivr.net/npm/xlsx@0.17.0/dist/xlsx.full.min.js"></script>
@@ -94,7 +115,7 @@
                 var type = @json($type);
                 if (type == '3') {
                     $('a:contains("Cuentas")').hide();
-                    console.log('Se oculta');
+                    $('small:contains("Administrador")').text('Ejecutivo');
                 }
 
             });
@@ -141,6 +162,78 @@
                 });
                 // Desbloquea la pantalla después de que se complete la petición
                 $.unblockUI();
+            });
+
+            $('#pruebaetiquetado').click(function() {
+                // Bloquea la pantalla
+                $.blockUI({
+                    message: 'Cargando...',
+                    css: {
+                        border: 'none',
+                        padding: '15px',
+                        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                        color: '#fff',
+                        'border-radius': '5px',
+                        fontSize: '18px',
+                        fontWeight: 'bold',
+                    }
+                });
+
+                // PRUEBA PREETIQUETADO BLAO MAMBU
+                $.ajax({
+                    url: "pruebaetiquetadoblaomambu",
+                    method: "get",
+                    dataType: "JSON",
+                    success: function(data) {
+
+                        if (data != '[]') {
+                            // Crear un nuevo libro de Excel
+                            var workbook = XLSX.utils.book_new();
+
+                            // Convertir JSON1 a una hoja de cálculo
+                            var worksheet1 = XLSX.utils.json_to_sheet(data);
+                            XLSX.utils.book_append_sheet(workbook, worksheet1,
+                                'Prueba Preetiquetado Blao Mambu');
+
+                            // Generar el archivo Excel
+                            var excelBuffer = XLSX.write(workbook, {
+                                bookType: 'xlsx',
+                                type: 'array'
+                            });
+                            var blob = new Blob([excelBuffer], {
+                                type: 'application/octet-stream'
+                            });
+                            saveAs(blob, 'Prueba Preetiquetado Blao Mambu.xlsx');
+                            Swal.fire(
+                                '¡Gracias por esperar!',
+                                data["success"],
+                                'success'
+                            )
+                            // Desbloquea la pantalla después de que se complete la petición
+                            $.unblockUI();
+
+                        } else {
+                            Swal.fire({
+                                title: '¡Sin información!',
+                                text: "No se encontraron registros en la fecha indicada",
+                                icon: 'warning',
+                                confirmButtonText: 'OK'
+                            });
+                            // Desbloquea la pantalla después de que se complete la petición
+                            $.unblockUI();
+                        }
+
+
+                    },
+                    error: function(data) {
+                        $.unblockUI();
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Encontramos un error...',
+                            text: data["responseJSON"]["error"],
+                        });
+                    }
+                });
             });
 
             /* BAJA*/
@@ -269,8 +362,7 @@
                                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                                     },
                                     data: {
-                                        "mambu": mambuColumn,
-                                        "jucavi": jucaviColumn
+                                        "mambu": mambuColumn
                                     },
                                     success: function(data) {
                                         $.unblockUI();

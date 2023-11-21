@@ -9,6 +9,7 @@ use App\Http\Controllers\statusController;
 use App\Http\Controllers\dashboardController;
 use App\Http\Controllers\usersController;
 use App\Http\Controllers\tokenController;
+use App\Http\Controllers\anexosController;
 
 /*
 /*
@@ -26,20 +27,20 @@ Route::get('/', function () {
     if (Auth::check()) {
         return redirect('/home');
     } else {
-        return redirect('/login');
+        return view('/welcome');
     }
-})->middleware('auth');
-
+});
 
 Route::get('/dashboard', function () {
     if (Auth::check()) {
-        return view('/home');
+        return redirect('/home');
     } else {
-        return redirect('/login');
+        return view('/welcome');
     }
-})->middleware(['auth']);
+});
 
-// Configuraciones
+
+
 Route::get('admin/settings',[adminsettingsController::class, 'index'])->middleware(['auth']);
 Route::get('recuperarcontrasena',[dashboardController::class, 'recuperarcontrasena']);
 
@@ -57,6 +58,21 @@ Route::get('etiquetado/mambu/mintos', [labelledController::class, 'mambumintos']
 Route::get('estatus/importantes', [statusController::class, 'importantes'])->middleware('auth');
 Route::get('estatus/avisos', [statusController::class, 'avisos'])->middleware('auth');
 Route::get('estatus/informacion', [statusController::class, 'informacion'])->middleware('auth');
+
+
+
+Route::get('anexos', [anexosController::class, 'anexos'])->middleware('auth');
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -80,6 +96,7 @@ Route::post('etiquetado/mambu/etiquetadopromecapmambu', [labelledController::cla
 Route::get('etiquetado/mambu/blao_preetiequetado_mambu', [labelledController::class, 'blao_preetiequetado_mambu'])->middleware('auth');
 Route::post('etiquetado/mambu/bajablaomambu', [labelledController::class, 'bajablaomambu'])->name('bajablaomambu');
 Route::post('etiquetado/mambu/etiquetadoblaomambu', [labelledController::class, 'etiquetadoblaomambu'])->name('etiquetadoblaomambu');
+Route::get('etiquetado/mambu/pruebaetiquetadoblaomambu', [labelledController::class, 'pruebaetiquetadoblaomambu'])->name('pruebaetiquetadoblaomambu');
 
 
 // etiquetado MINTOS MAMBU
@@ -92,7 +109,9 @@ Route::post('etiquetado/jucavi/bajapromecapjucavi', [labelledController::class, 
 Route::post('etiquetado/jucavi/etiquetadopromecapjucavi', [labelledController::class, 'etiquetadopromecapjucavi'])->name('etiquetadopromecapjucavi');
 
 
+
 //Reportes
+Route::get('reportes/', [reportController::class, 'reportes'])->middleware('auth');
 Route::get('reportes/recuperacioncartera', [reportController::class, 'recuperacioncartera'])->middleware('auth');
 Route::get('reportes/sesioncartera', [reportController::class, 'sesioncartera'])->middleware('auth');
 Route::get('reportes/fondeadores', [reportController::class, 'fondeadores'])->middleware('auth');

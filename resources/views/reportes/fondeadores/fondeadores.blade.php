@@ -4,11 +4,13 @@
 
 @section('content_header')
 
-    <h1>Reporte de Pre etiquetado Fondeadores</h1>
+
 @stop
 @section('content')
+    <br>
     <div class="card">
         <div class="card-header">
+            <h1>Reporte de Pre etiquetado Fondeadores</h1>
             <h1 class="card-title">Proceso que genera reporte de Pre etiquetado.</h1>
         </div>
         <div class="card-body">
@@ -46,6 +48,13 @@
         .card {
             width: 112%;
         }
+
+        .content-wrapper {
+            background-image: url('/assets/images/fondo.png');
+            background-size: contain;
+            background-position: left;
+        }
+
     </style>
 @stop
 
@@ -63,7 +72,7 @@
             var type = @json($type);
             if (type == '3') {
                 $('a:contains("Cuentas")').hide();
-                console.log('Se oculta');
+                $('small:contains("Administrador")').text('Ejecutivo');
             }
 
         });

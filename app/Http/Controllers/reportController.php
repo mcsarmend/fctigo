@@ -15,6 +15,16 @@ class reportController extends Controller
         $type = $this->getusertype();
         return view('reportes.reporterecuperacioncartera', compact('type'));
     }
+
+    public function reportes()
+    {
+        $type = $this->getusertype();
+        return view('reportes.reportes', compact('type'));
+    }
+
+
+
+
     public function sesioncartera()
     {
         try {
@@ -277,7 +287,7 @@ class reportController extends Controller
     {
 
         $startDate = $request->startDate . ' 00:00:00';
-        $endDate = $request->endDate . ' 00:00:00';
+        $endDate = $request->endDate . ' 23:59:59';
 
         try {
             $host = 'fcontigo-rs-cluster-01.cdxtyqbdsp7d.us-east-1.redshift.amazonaws.com';

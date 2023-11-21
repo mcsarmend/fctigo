@@ -8,7 +8,7 @@ return [
     |--------------------------------------------------------------------------
     |
     | Here you can change the default title of your admin panel.
-    |
+|
     | For detailed instructions you can look the title section here:
     | https://github.com/jeroennoten/Laravel-AdminLTE/wiki/Basic-Configuration
     |
@@ -16,7 +16,7 @@ return [
 
     'title' => '',
     'title_prefix' => '',
-    'title_postfix' => '| Web Contigo',
+    'title_postfix' => '| Helix Net',
 
     /*
     |--------------------------------------------------------------------------
@@ -63,7 +63,7 @@ return [
     |
     */
 
-    'logo' => '<b>Web</b>CONTIGO',
+    'logo' => '<b>HELIX</b>Net',
     'logo_img' => 'assets/images/logo.png',
     'logo_img_class' => 'brand-image img-circle elevation-3',
     'logo_img_xl' => null,
@@ -353,6 +353,7 @@ return [
         [
             'text' => 'Reportes',
             'icon' => 'fas fa-fw fa-file',
+            'url' => 'reportes',
             'submenu' =>[
                 [
                     'text' => 'Reporte recuperacion de cartera',
@@ -369,27 +370,12 @@ return [
 
             ]
         ],
-        // ['header' => 'Estatus de creditos'],
-        // [
-        //     'text' => 'Importantes',
-        //     'icon_color' => 'red',
-        //     'url' => 'estatus/importantes',
-        // ],
-        // [
-        //     'text' => 'Avisos',
-        //     'icon_color' => 'yellow',
-        //     'url' => 'estatus/avisos',
-        // ],
-        // [
-        //     'text' => 'Informacion',
-        //     'icon_color' => 'cyan',
-        //     'url' => 'estatus/informacion',
-        // ],
-        // [
-        //     'text' => 'Cliente:',
-        //     'url' => '#',
-        //     'topnav' => true,
-        // ]
+        [
+            'text' => 'Anexos',
+            'icon' => 'fas fa-fw fa-file',
+            'url' => 'anexos'
+        ],
+
     ],
 
     /*

@@ -105,7 +105,7 @@ class labelledController extends Controller
             }
 
         } catch (\Throwable $th) {
-            return response()->json(['error' =>  $th->getMessage()], 401);
+            return response()->json(['error' => $th->getMessage()], 401);
         }
 
     }
@@ -132,17 +132,50 @@ class labelledController extends Controller
             // echo 'Conexión exitosa a PostgreSQL';
 
             // Ejemplo de consulta
-            $query = "INSERT INTO bursa.lista_baja_promecap (id, fondeador, fondeador_anterior, fecha_baja) VALUES ";
 
-            foreach ($lstCreditos as $id) {
-                $query .= '("' . $id . '", "CREDITO REAL", "PROMECAP", "' . $fechaActual . '"),';
-            }
-
-            $query = rtrim($query, ',');
-            $query .= ';';
-
+            $query = "DELETE FROM mambu_prod.mambu_prod.creditosbaja_excel_promecap; ";
             $statement = $pdo->query($query);
             $result = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+            foreach ($lstCreditos as $id) {
+                $query = "INSERT INTO mambu_prod.mambu_prod.creditosbaja_excel_promecap (id_acuerdocredito) VALUES (" . $id . ")";
+                $statement = $pdo->query($query);
+                $result = $statement->fetchAll(PDO::FETCH_ASSOC);
+            }
+
+            //**************************************************API PARA LA BAJA */
+            $curl = curl_init();
+            $url = 'https://fcetiquetado.azurewebsites.net/ProcesoBursa/api/EtiquetadoPromecapM/BajaPromecapMambu/770';
+            curl_setopt_array($curl, array(
+                CURLOPT_URL => $url,
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_ENCODING => '',
+                CURLOPT_MAXREDIRS => 10,
+                CURLOPT_TIMEOUT => 0,
+                CURLOPT_FOLLOWLOCATION => true,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST => 'GET',
+            ));
+
+            $response = curl_exec($curl);
+
+            // ************************* GUARDAR EN TABLA ****************
+
+            $cadena = json_encode($lstCreditos);
+            $array = "'" . $cadena . "'";
+            $fechaActual = $this->fechaActual;
+            $user = Auth::user();
+            $registro = new historicoetiquetados;
+            $registro->fecha = $fechaActual;
+            $registro->creditos = $array;
+            $registro->idusuario = $user->id;
+            $registro->fondeadoranterior = '10';
+            $registro->fondeadornuevo = '1';
+            $registro->sistema = 'MAMBU';
+            $registro->save();
+
+            // ************************* GUARDAR EN TABLA ****************
+
             return response()->json(['success' => "Baja realizada correctamente"], 200);
 
         } catch (\Throwable $th) {
@@ -294,8 +327,7 @@ class labelledController extends Controller
             $registro->save();
 
             // ************************* GUARDAR EN TABLA ****************
-           return response()->json(['success' => "Cantidad de creditos etiquetados:  " . $creditos], 200);
-
+            return response()->json(['success' => "Cantidad de creditos etiquetados:  " . $creditos], 200);
 
             curl_close($curl);
             // ------------------------------TERMINA ETIQUETADO JUCAVI----------------------------------
@@ -457,7 +489,7 @@ class labelledController extends Controller
             }
 
             curl_setopt_array($curl, array(
-                CURLOPT_URL => 'https://fcetiquetado.azurewebsites.net/ProcesoBursa/api/EtiquetadoBlaoM/AltaBlaoMambu/843',
+                CURLOPT_URL => 'https://fcetiquetado.azurewebsites.net/ProcesoBursa/api/EtiquetadoBlaoM/AltaBlaoMambu/770',
                 CURLOPT_RETURNTRANSFER => true,
                 CURLOPT_ENCODING => '',
                 CURLOPT_MAXREDIRS => 10,
@@ -488,7 +520,6 @@ class labelledController extends Controller
             $registro->save();
 
             // ************************* GUARDAR EN TABLA ****************
-
 
             // ------------------------------TERMINA ETIQUETADO MAMBU----------------------------------
             return response()->json(['success' => "Etiquetado realizado correctamente" . $response . $sqlStatement], 200);
@@ -628,17 +659,11 @@ class labelledController extends Controller
                 $strValidaCierre = $this->verificaEtiquetado($fechaActual, 17);
                 if ($strValidaCierre == "Continua.") {
 
-                    $sqlStatementJucaviBlao = "use cartera_ods; INSERT INTO d_etiquetado_previoblao (ep_num_credito, ep_fecha_etiquetado,ep_fechamov) VALUES  \n";
-
                     foreach ($lstcreditos as $id) {
-                        $sqlStatementJucaviBlao .= '("' . $id . '", "' . $fechaMenosUnDia . '", "' . $fechaActual . '"),';
+                        $sqlStatementJucaviBlao = "USE cartera_ods; INSERT INTO d_etiquetado_previoblao (ep_num_credito, ep_fecha_etiquetado, ep_fechamov) VALUES ('$id', '$fechaMenosUnDia', '$fechaActual');";
+                        $statement = $pdo->query($sqlStatementJucaviBlao);
+                        $result = $statement->fetchAll(PDO::FETCH_ASSOC);
                     }
-
-                    $sqlStatementJucaviBlao = rtrim($sqlStatementJucaviBlao, ',');
-                    $sqlStatementJucaviBlao .= ';';
-
-                    $statement = $pdo->query($sqlStatementJucaviBlao);
-                    $result = $statement->fetchAll(PDO::FETCH_ASSOC);
 
                     $curl = curl_init();
                     curl_setopt_array($curl, array(
@@ -669,7 +694,7 @@ class labelledController extends Controller
             }
 
         } catch (\Throwable $th) {
-            return response()->json(['error' =>  $th->getMessage()], 401);
+            return response()->json(['error' => $th->getMessage()], 401);
         }
 
     }
@@ -712,7 +737,7 @@ class labelledController extends Controller
             }
 
         } catch (\Throwable $th) {
-            return response()->json(['error' =>  $th->getMessage()], 401);
+            return response()->json(['error' => $th->getMessage()], 401);
         }
 
     }
@@ -926,9 +951,7 @@ class labelledController extends Controller
 
             // VALOR DE AFORO CALCULADO $aforo_calculado;
 
-
             //  SIN REGLAS************************************************************************************************
-
 
             //VALORES JUCAVI
             $montoPromecapJucavi = 0;
@@ -1046,23 +1069,23 @@ class labelledController extends Controller
                 }
 
             }
-            return $preetiquetado;
+            //return $preetiquetado;
             // return $listaOrdenadaJucavi;
-            // return ([
-            //     "Sucursal:" => $sucursales,
-            //     "CreditosCandidatos" => $listaOrdenadaJucavi,
-            //     "Sucursales_equivalentes" => $truesucursales,
-            //     "preetiquetado:" => $preetiquetado,
-            //     "Montometa" => $monto_meta,
-            //     "MontoBuscado" => $saldo_buscado,
-            //     "AFORO_CALCULADO" => $aforo_calculado,
-            //     "AforoFaltanteJucavi" => $results,
-            //     "AforoFaltanteMambu" => $result,
-            //     "montoPromecapJucavi" => $montoPromecapJucavi,
-            //     "montoPromecapMambu" => $montoPromecapMambu,
-            //     "ListaCandidatosMambu" => $tmpmambu,
-            //     "jucavi"=>$preetiquetado,"mambu"=>$preetiquetado2
-            // ]);
+            return ([
+                "Sucursal:" => $sucursales,
+                "CreditosCandidatos" => $listaOrdenadaJucavi,
+                "Sucursales_equivalentes" => $truesucursales,
+                "preetiquetado:" => $preetiquetado,
+                "Montometa" => $monto_meta,
+                "MontoBuscado" => $saldo_buscado,
+                "AFORO_CALCULADO" => $aforo_calculado,
+                "AforoFaltanteJucavi" => $results,
+                "AforoFaltanteMambu" => $result,
+                "montoPromecapJucavi" => $montoPromecapJucavi,
+                "montoPromecapMambu" => $montoPromecapMambu,
+                "ListaCandidatosMambu" => $tmpmambu,
+                "jucavi" => $preetiquetado, "mambu" => $preetiquetado2,
+            ]);
 
         } catch (\Throwable $th) {
             return response()->json(['error' => $th->getmessage()], 401);
@@ -1242,7 +1265,7 @@ class labelledController extends Controller
             }
 
         } catch (\Throwable $th) {
-            return response()->json(['error' =>  $th->getMessage()], 401);
+            return response()->json(['error' => $th->getMessage()], 401);
         }
 
     }
@@ -1352,5 +1375,298 @@ class labelledController extends Controller
         } else {
             return "Usuario no autenticado.";
         }
+    }
+
+    public function pruebaetiquetadoblaomambu()
+    {
+
+        $host = 'fcontigo-rs-cluster-01.cdxtyqbdsp7d.us-east-1.redshift.amazonaws.com';
+        $port = '5439';
+        $database = 'mambu_prod';
+        $user = 'marcadodev';
+        $password = 'marcadoDev00';
+
+        $dsn = "pgsql:host=$host;port=$port;dbname=$database";
+        $pdo = new PDO($dsn, $user, $password);
+        // Configurar opciones adicionales si es necesario
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        // echo 'Conexión exitosa a PostgreSQL';
+
+
+        $query = "DROP TABLE IF EXISTS conteopagospaso; ";
+        $statement = $pdo->query($query);
+        $result = $statement->fetchAll(PDO::FETCH_ASSOC);
+        $query = "DROP TABLE IF EXISTS camposPersonalizados; ";
+        $statement = $pdo->query($query);
+        $result = $statement->fetchAll(PDO::FETCH_ASSOC);
+        $query = "DROP TABLE IF EXISTS DiasAtraso; ";
+        $statement = $pdo->query($query);
+        $result = $statement->fetchAll(PDO::FETCH_ASSOC);
+        $query = "DROP TABLE IF EXISTS Seguro; ";
+        $statement = $pdo->query($query);
+        $result = $statement->fetchAll(PDO::FETCH_ASSOC);
+        $query = "DROP TABLE IF EXISTS GeneroEdad; ";
+        $statement = $pdo->query($query);
+        $result = $statement->fetchAll(PDO::FETCH_ASSOC);
+        $query = "DROP TABLE IF EXISTS MontoCliente; ";
+        $statement = $pdo->query($query);
+        $result = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+
+
+        $conteopagospaso = " create temporary table conteopagospaso as " .
+            " SELECT DISTINCT LINEOFCREDITKEY " .
+            " ,R.duedate " .
+            " FROM mambu_prod.loanaccount LA " .
+            " INNER JOIN mambu_prod.repayment R " .
+            " ON LA.ENCODEDKEY = R.PARENTACCOUNTKEY " .
+            " inner join  mambu_prod.loanproduct LP " .
+            " on LP.encodedkey = LA.producttypekey " .
+            " WHERE state = 'PAID' " .
+            " AND ACCOUNTSTATE = 'ACTIVE' " .
+            " and productname  in ('Crédito Grupal Tradicional (Saldos Insolutos)') " .
+            " GROUP BY R.duedate,LINEOFCREDITKEY; ";
+
+        $statement = $pdo->query($conteopagospaso);
+        $result = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+        $camposPersonalizados = " create temporary table camposPersonalizados as " .
+            " SELECT cfv.PARENTKEY " .
+            " ,MAX(CASE WHEN Name = 'Centro de Costo' THEN VALUE ELSE NULL END) AS CentroDeCosto " .
+            " ,'EntidadFederativaSucursal' " .
+            " ,MAX(CASE WHEN Name = 'Región' THEN VALUE ELSE NULL END) AS Region " .
+            " ,MAX(CASE WHEN Name = 'Fondeador' THEN VALUE ELSE NULL END) AS Fondeador " .
+            " ,MAX(CASE WHEN Name = 'Fecha Etiquetado' THEN VALUE ELSE NULL END) AS FechaEtiquetado " .
+            " ,MAX(CASE WHEN Name = 'Fecha baja etiquetado' THEN VALUE ELSE NULL END) AS FechaBaja " .
+            " ,MAX(CASE WHEN Name = 'Producto' THEN VALUE ELSE NULL END) AS Producto " .
+            " ,MAX(CASE WHEN Name = 'Ciclo Grupo' THEN VALUE ELSE NULL END) AS CicloGrupo " .
+            " FROM mambu_prod.customfieldvalue cfv " .
+            " INNER JOIN mambu_prod.customfield cf " .
+            " ON cf.ENCODEDKEY = cfv.CUSTOMFIELDKEY and cf.type IN ('BRANCH_INFO','LINE_OF_CREDIT') " .
+            " WHERE ID IN ('Centro_de_Costo_Sucursales','EF_Suc','Region','_IdFondeador','_Fecha_baja_etiquetado','_Producto','_Fecha_Etiquetado','Ciclo_Grupo_Credit_Arrangements') " .
+            " GROUP BY cfv.PARENTKEY; ";
+        $statement = $pdo->query($camposPersonalizados);
+        $result = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+        $DiasAtraso = " create temporary table DiasAtraso as  " .
+            " SELECT lastsettoarrearsdate " .
+            " ,isnull((CURRENT_DATE - lastsettoarrearsdate::DATE),0) AS DAY " .
+            " ,CASE WHEN UPPER(LOANNAME) LIKE '%SALDOS INSOLUTOS%' THEN interestrate*12 ELSE (1.6904*interestrate+0.00465)*12 END  interestrate " .
+            " ,L.LINEOFCREDITKEY " .
+            " ,ACCOUNTSTATE " .
+            " ,LOANNAME " .
+            " FROM mambu_prod.loanaccount L " .
+            " GROUP BY L.lineofcreditkey,L.interestrate,lastsettoarrearsdate,l.loanname,l.accountstate; ";
+
+        $statement = $pdo->query($DiasAtraso);
+        $result = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+        $Seguro = " create temporary table Seguro as " .
+            " SELECT  LA.LINEOFCREDITKEY " .
+            " ,COUNT(CASE WHEN VALUE = 'FALSE' THEN VALUE ELSE NULL END) AS SEGURO_FALSE " .
+            " ,COUNT(CASE WHEN VALUE = 'TRUE' THEN VALUE ELSE NULL END) AS SEGURO_TRUE " .
+            " FROM mambu_prod.customfieldvalue CF " .
+            " INNER JOIN mambu_prod.loanaccount LA " .
+            " ON LA.ENCODEDKEY = CF.PARENTKEY " .
+            " WHERE CUSTOMFIELDKEY = (SELECT ENCODEDKEY FROM mambu_prod.customfield " .
+            " WHERE ID = 'Tiene_Seguro') " .
+            " GROUP BY LINEOFCREDITKEY; ";
+        $statement = $pdo->query($Seguro);
+        $result = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+        $MontoCliente = " create temporary table MontoCliente as " .
+            " SELECT  LA.LINEOFCREDITKEY " .
+            " ,count(CASE WHEN loanamount >= 83000 THEN 1 END) AS mayor80 " .
+            " ,COUNT(CASE WHEN loanamount < 83000 THEN 1 END) AS menor80 " .
+            " ,count(*) TotClientes " .
+            " FROM  mambu_prod.loanaccount LA " .
+            " GROUP BY LINEOFCREDITKEY; ";
+        $statement = $pdo->query($MontoCliente);
+        $result = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+
+
+        $generoedad1 = " create temporary table GeneroEdad as " .
+        " select cv.parentkey " .
+        " ,COUNT(CASE WHEN coalesce(idgenero,2) = 2 THEN 1 END) AS esMujer " .
+        " ,COUNT(CASE WHEN idgenero = 1 THEN 1 END) AS esHombre " .
+        " ,count(case when (date_part ('year', CURRENT_DATE) * 12 + date_part ('month', CURRENT_DATE)) - (date_part ('year', fechanacimiento) * 12 + date_part ('month', fechanacimiento)) > 959 then 1 end) AS mas80 " .
+        " ,count(case when (date_part ('year', CURRENT_DATE) * 12 + date_part ('month', CURRENT_DATE)) - (date_part ('year', fechanacimiento) * 12 + date_part ('month', fechanacimiento)) < 216 then 1 end) AS menos18 " .
+        " from mambu_prod.mambu_prod.customfieldvalue cv " .
+        " inner join (select CG.idgrupo,c.id,c.fechanacimiento,c.idgenero from clienteunicofinanciera.clienteunicofinanciera.cliente c " .
+        " inner join clienteunicofinanciera.clienteunicofinanciera.clientegrupo CG " .
+        " on CG.idcliente = c.id and CG.activo = 1) SX " .
+        " on  cv.value = SX.idgrupo " .
+        " where customfieldkey = (SELECT  encodedkey " .
+        " FROM  mambu_prod.mambu_prod.customfield c " .
+        " where id = 'IdGrupo_Clients') " .
+        " group by cv.parentkey; " ;
+        $statement = $pdo->query($generoedad1);
+        $result = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+
+        $query = " DROP TABLE IF EXISTS Principal; ";
+        $statement = $pdo->query($query);
+        $result = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+        $principal = " create temporary table Principal as " .
+            " select DISTINCT * FROM( " .
+            " SELECT C.FIRSTNAME AS strNombre " .
+            " ,C.LASTNAME AS strApellido " .
+            " ,B.NAME AS strSucursal " .
+            " ,SUC.CentroDeCosto AS strCentroDeCostos " .
+            " ,LC.AMOUNT AS decMontoLC " .
+            " ,LC.ID AS strIdLC " .
+            " ,FOND.Fondeador AS intFondeador " .
+            " ,FOND.FechaEtiquetado AS strFechaEtiquetado " .
+            " ,FOND.FechaBaja AS strFechaBaja " .
+            " ,DAYS.interestrate AS decTasaIns " .
+            " ,DAYS.LOANNAME AS strProducto " .
+            " ,DAYS.DAY " .
+            " ,PAG.Pago AS intNumPago " .
+            " ,LC.ENCODEDKEY " .
+            " ,SEGURO_FALSE " .
+            " ,SEGURO_TRUE " .
+            " ,mayor80 " .
+            " ,menor80 " .
+            " ,TotClientes " .
+            " ,esMujer " .
+            " ,esHombre " .
+            " ,mas80 " .
+            " ,menos18 " .
+            ", FOND.ciclogrupo " .
+            " FROM mambu_prod.client C " .
+            " INNER JOIN mambu_prod.branch B " .
+            " ON B.ENCODEDKEY = C.ASSIGNEDBRANCHKEY " .
+            " inner join camposPersonalizados SUC " .
+            " ON SUC.PARENTKEY = B.ENCODEDKEY " .
+            " INNER JOIN mambu_prod.lineofcredit LC " .
+            " ON LC.CLIENTKEY = C.ENCODEDKEY " .
+            " inner join camposPersonalizados FOND " .
+            " ON FOND.PARENTKEY = LC.ENCODEDKEY " .
+            " INNER JOIN DiasAtraso DAYS " .
+            " ON DAYS.LINEOFCREDITKEY = LC.ENCODEDKEY " .
+            " INNER JOIN (SELECT COUNT(*) AS Pago,LINEOFCREDITKEY from conteopagospaso " .
+            " GROUP BY LINEOFCREDITKEY) PAG " .
+            " ON PAG.LINEOFCREDITKEY = LC.ENCODEDKEY " .
+            " INNER JOIN Seguro SEG " .
+            " ON SEG.LINEOFCREDITKEY = LC.ENCODEDKEY " .
+            " inner join MontoCliente MC " .
+            " on MC.LINEOFCREDITKEY = LC.ENCODEDKEY " .
+            " inner join GeneroEdad GE " .
+            " on GE.parentkey = LC.clientkey " .
+            " ORDER BY 3 " .
+            " ) TBL " .
+            " WHERE " .
+            " day <=21 " .
+            " and decmontolc <= 2900000 " .
+            " and Mayor80 = 0 " .
+            " and COALESCE(intNumPago,0) BETWEEN 1 AND 12 " .
+            " AND decTasaIns::double precision >=  20 " .
+            " and TotClientes >= 5 " .
+            " and mas80 = 0 " .
+            " and menos18 = 0 " .
+            " AND COALESCE(intFondeador,'CREDITO REAL') = 'CREDITO REAL' " .
+            " and (esMujer = (case when (esMujer >= 5 and esMujer <= 9 and esHombre = 0) then esMujer end) " .
+            " or esMujer = (case when (esMujer >= 10 and esMujer <= 11 and esHombre <= 2) then esMujer end) " .
+            " or esMujer = (case when (esMujer >= 12 and esMujer <= 15 and esHombre <= 3) then esMujer end) " .
+            " or esMujer = (case when (esMujer >= 16 and esMujer <= 19 and esHombre <= 4) then esMujer end) " .
+            " or esMujer = (case when (esMujer >= 20 and esMujer <= 23 and esHombre <= 5) then esMujer end) " .
+            " or esMujer = (case when (esMujer >= 24 and esMujer <= 27 and esHombre <= 6) then esMujer end) " .
+            " or esMujer = (case when (esMujer >= 28 and esMujer <= 31 and esHombre <= 7) then esMujer end) " .
+            " or esMujer = (case when (esMujer >= 32 and esMujer <= 35 and esHombre <= 8) then esMujer end) " .
+            " or esMujer = (case when (esMujer >= 36 and esHombre <= 9) then esMujer end)) and ciclogrupo > 1 " .
+            "union " .
+            " select DISTINCT *FROM( " .
+            "SELECT C.FIRSTNAME AS strNombre " .
+            ", C.LASTNAME AS strApellido " .
+            ", B.NAME AS strSucursal " .
+            ", SUC.CentroDeCosto AS strCentroDeCostos " .
+            ", LC.AMOUNT AS decMontoLC " .
+            ", LC.ID AS strIdLC " .
+            ", FOND.Fondeador AS intFondeador " .
+            ", FOND.FechaEtiquetado AS strFechaEtiquetado " .
+            ", FOND.FechaBaja AS strFechaBaja " .
+            ", DAYS.interestrate AS decTasaIns " .
+            ", DAYS.LOANNAME AS strProducto " .
+            ", DAYS.DAY " .
+            ", PAG.Pago AS intNumPago " .
+            ", LC.ENCODEDKEY " .
+            ", SEGURO_FALSE " .
+            ", SEGURO_TRUE " .
+            ", mayor80 " .
+            ", menor80 " .
+            ", TotClientes " .
+            ", esMujer " .
+            ", esHombre " .
+            ", mas80 " .
+            ", menos18 " .
+            ", FOND.ciclogrupo " .
+            "FROM mambu_prod.client C  " .
+            "INNER JOIN mambu_prod.branch B  ON B.ENCODEDKEY = C.ASSIGNEDBRANCHKEY " .
+            "inner join camposPersonalizados SUC  ON SUC.PARENTKEY = B.ENCODEDKEY " .
+            "INNER JOIN mambu_prod.lineofcredit LC  ON LC.CLIENTKEY = C.ENCODEDKEY " .
+            "inner join camposPersonalizados FOND  ON FOND.PARENTKEY = LC.ENCODEDKEY " .
+            "INNER JOIN DiasAtraso DAYS  ON DAYS.LINEOFCREDITKEY = LC.ENCODEDKEY " .
+            "INNER JOIN(SELECT COUNT(*) AS Pago, LINEOFCREDITKEY from conteopagospaso GROUP BY LINEOFCREDITKEY) PAG  ON PAG.LINEOFCREDITKEY = LC.ENCODEDKEY " .
+            "INNER JOIN Seguro SEG  ON SEG.LINEOFCREDITKEY = LC.ENCODEDKEY " .
+            "inner join MontoCliente MC on MC.LINEOFCREDITKEY = LC.ENCODEDKEY " .
+            "inner join GeneroEdad GE on GE.parentkey = LC.clientkey " .
+            "ORDER BY 3 " .
+            ") TBL " .
+            "WHERE " .
+            "day <= 21 " .
+            "and decmontolc <= 2900000 " .
+            "and Mayor80 = 0 " .
+            "and COALESCE(intNumPago,0) BETWEEN 1 AND 12 " .
+            "AND decTasaIns::double precision >= 20 " .
+            "and TotClientes >= 5  " .
+            "and mas80 = 0 " .
+            "and menos18 = 0 " .
+            "AND COALESCE(intFondeador,'CREDITO REAL') = 'CREDITO REAL'  " .
+            "and(esMujer = (case when(esMujer >= 5 and esMujer <= 9 and esHombre = 0) then esMujer end) " .
+            "or esMujer = (case when(esMujer >= 10 and esMujer <= 11 and esHombre <= 2) then esMujer end) " .
+            "or esMujer = (case when(esMujer >= 12 and esMujer <= 15 and esHombre <= 3) then esMujer end) " .
+            "or esMujer = (case when(esMujer >= 16 and esMujer <= 19 and esHombre <= 4) then esMujer end) " .
+            "or esMujer = (case when(esMujer >= 20 and esMujer <= 23 and esHombre <= 5) then esMujer end) " .
+            "or esMujer = (case when(esMujer >= 24 and esMujer <= 27 and esHombre <= 6) then esMujer end) " .
+            "or esMujer = (case when(esMujer >= 28 and esMujer <= 31 and esHombre <= 7) then esMujer end) " .
+            "or esMujer = (case when(esMujer >= 32 and esMujer <= 35 and esHombre <= 8) then esMujer end) " .
+            "or esMujer = (case when(esMujer >= 36 and esHombre <= 9) then esMujer end)) " .
+            "and ciclogrupo = 1  " .
+            "and intNumPago > 1  " .
+            "; " ;
+            $statement = $pdo->query($principal);
+            $result = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+
+            $query = "drop table conteopagospaso; ";
+            $statement = $pdo->query($query);
+            $result = $statement->fetchAll(PDO::FETCH_ASSOC);
+            $query = "drop table camposPersonalizados; ";
+            $statement = $pdo->query($query);
+            $result = $statement->fetchAll(PDO::FETCH_ASSOC);
+            $query = "drop table DiasAtraso; ";
+            $statement = $pdo->query($query);
+            $result = $statement->fetchAll(PDO::FETCH_ASSOC);
+            $query = "drop table Seguro; ";
+            $statement = $pdo->query($query);
+            $result = $statement->fetchAll(PDO::FETCH_ASSOC);
+            $query = "drop table GeneroEdad; ";
+            $statement = $pdo->query($query);
+            $result = $statement->fetchAll(PDO::FETCH_ASSOC);
+            $query = "drop table MontoCliente; ";
+            $statement = $pdo->query($query);
+            $result = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+
+
+        $query = "select * from Principal; ";
+        $statement = $pdo->query($query);
+        $result = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+
+        return $result
+        ;
     }
 }
