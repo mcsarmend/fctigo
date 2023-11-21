@@ -1,132 +1,461 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+<html>
 
-        <title>Laravel</title>
+<head>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <script src="https://unpkg.com/boxicons@2.1.4/dist/boxicons.js"></script>
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <title>Bienvenido a Helix</title>
+    <link rel="icon" href="assets/images/logo.png" type="image/x-icon">
+    <style>
+        .bg-image-1 {
+            position: relative;
+            background-image: url('assets/images/paralaxbus.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
 
-        <!-- Fonts -->
-        <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+        .bg-image {
+            position: relative;
+            background-image: url('assets/images/paralaxservicios.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
 
-        <!-- Styles -->
-        <style>
-            /*! normalize.css v8.0.1 | MIT License | github.com/necolas/normalize.css */html{line-height:1.15;-webkit-text-size-adjust:100%}body{margin:0}a{background-color:transparent}[hidden]{display:none}html{font-family:system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,Noto Sans,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji;line-height:1.5}*,:after,:before{box-sizing:border-box;border:0 solid #e2e8f0}a{color:inherit;text-decoration:inherit}svg,video{display:block;vertical-align:middle}video{max-width:100%;height:auto}.bg-white{--bg-opacity:1;background-color:#fff;background-color:rgba(255,255,255,var(--bg-opacity))}.bg-gray-100{--bg-opacity:1;background-color:#f7fafc;background-color:rgba(247,250,252,var(--bg-opacity))}.border-gray-200{--border-opacity:1;border-color:#edf2f7;border-color:rgba(237,242,247,var(--border-opacity))}.border-t{border-top-width:1px}.flex{display:flex}.grid{display:grid}.hidden{display:none}.items-center{align-items:center}.justify-center{justify-content:center}.font-semibold{font-weight:600}.h-5{height:1.25rem}.h-8{height:2rem}.h-16{height:4rem}.text-sm{font-size:.875rem}.text-lg{font-size:1.125rem}.leading-7{line-height:1.75rem}.mx-auto{margin-left:auto;margin-right:auto}.ml-1{margin-left:.25rem}.mt-2{margin-top:.5rem}.mr-2{margin-right:.5rem}.ml-2{margin-left:.5rem}.mt-4{margin-top:1rem}.ml-4{margin-left:1rem}.mt-8{margin-top:2rem}.ml-12{margin-left:3rem}.-mt-px{margin-top:-1px}.max-w-6xl{max-width:72rem}.min-h-screen{min-height:100vh}.overflow-hidden{overflow:hidden}.p-6{padding:1.5rem}.py-4{padding-top:1rem;padding-bottom:1rem}.px-6{padding-left:1.5rem;padding-right:1.5rem}.pt-8{padding-top:2rem}.fixed{position:fixed}.relative{position:relative}.top-0{top:0}.right-0{right:0}.shadow{box-shadow:0 1px 3px 0 rgba(0,0,0,.1),0 1px 2px 0 rgba(0,0,0,.06)}.text-center{text-align:center}.text-gray-200{--text-opacity:1;color:#edf2f7;color:rgba(237,242,247,var(--text-opacity))}.text-gray-300{--text-opacity:1;color:#e2e8f0;color:rgba(226,232,240,var(--text-opacity))}.text-gray-400{--text-opacity:1;color:#cbd5e0;color:rgba(203,213,224,var(--text-opacity))}.text-gray-500{--text-opacity:1;color:#a0aec0;color:rgba(160,174,192,var(--text-opacity))}.text-gray-600{--text-opacity:1;color:#718096;color:rgba(113,128,150,var(--text-opacity))}.text-gray-700{--text-opacity:1;color:#4a5568;color:rgba(74,85,104,var(--text-opacity))}.text-gray-900{--text-opacity:1;color:#1a202c;color:rgba(26,32,44,var(--text-opacity))}.underline{text-decoration:underline}.antialiased{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}.w-5{width:1.25rem}.w-8{width:2rem}.w-auto{width:auto}.grid-cols-1{grid-template-columns:repeat(1,minmax(0,1fr))}@media (min-width:640px){.sm\:rounded-lg{border-radius:.5rem}.sm\:block{display:block}.sm\:items-center{align-items:center}.sm\:justify-start{justify-content:flex-start}.sm\:justify-between{justify-content:space-between}.sm\:h-20{height:5rem}.sm\:ml-0{margin-left:0}.sm\:px-6{padding-left:1.5rem;padding-right:1.5rem}.sm\:pt-0{padding-top:0}.sm\:text-left{text-align:left}.sm\:text-right{text-align:right}}@media (min-width:768px){.md\:border-t-0{border-top-width:0}.md\:border-l{border-left-width:1px}.md\:grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}}@media (min-width:1024px){.lg\:px-8{padding-left:2rem;padding-right:2rem}}@media (prefers-color-scheme:dark){.dark\:bg-gray-800{--bg-opacity:1;background-color:#2d3748;background-color:rgba(45,55,72,var(--bg-opacity))}.dark\:bg-gray-900{--bg-opacity:1;background-color:#1a202c;background-color:rgba(26,32,44,var(--bg-opacity))}.dark\:border-gray-700{--border-opacity:1;border-color:#4a5568;border-color:rgba(74,85,104,var(--border-opacity))}.dark\:text-white{--text-opacity:1;color:#fff;color:rgba(255,255,255,var(--text-opacity))}.dark\:text-gray-400{--text-opacity:1;color:#cbd5e0;color:rgba(203,213,224,var(--text-opacity))}.dark\:text-gray-500{--tw-text-opacity:1;color:#6b7280;color:rgba(107,114,128,var(--tw-text-opacity))}}
-        </style>
+        .bg-image-1::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            background-color: rgba(0, 0, 0, 0.4);
+            /* Ajusta el valor alpha (0.4) para cambiar la opacidad */
+        }
 
-        <style>
-            body {
-                font-family: 'Nunito', sans-serif;
-            }
-        </style>
-    </head>
-    <body class="antialiased">
-        <div class="relative flex items-top justify-center min-h-screen bg-gray-100 dark:bg-gray-900 sm:items-center py-4 sm:pt-0">
-            @if (Route::has('login'))
-                <div class="hidden fixed top-0 right-0 px-6 py-4 sm:block">
-                    @auth
-                        <a href="{{ url('/dashboard') }}" class="text-sm text-gray-700 dark:text-gray-500 underline">Dashboard</a>
-                    @else
-                        <a href="{{ route('login') }}" class="text-sm text-gray-700 dark:text-gray-500 underline">Log in</a>
+        .bg-image::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            background-color: rgba(0, 0, 0, 0.4);
+            /* Ajusta el valor alpha (0.4) para cambiar la opacidad */
+        }
 
-                        @if (Route::has('register'))
-                            <a href="{{ route('register') }}" class="ml-4 text-sm text-gray-700 dark:text-gray-500 underline">Register</a>
-                        @endif
-                    @endauth
+        .content {
+            position: relative;
+            padding: 20px;
+            color: #fff;
+            z-index: 1;
+            /* Asegura que el contenido esté por encima de la superposición */
+        }
+
+        .overlay {
+            font-size: 8px;
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 10px;
+            text-align: center;
+        }
+
+        .custom-img {
+            padding: 3px;
+            width: 200px;
+            border-radius: 25px;
+
+        }
+
+        .step-item {
+            position: relative;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .step-item .icon {
+            position: relative;
+            display: block;
+            width: 40px;
+            height: 40px;
+            margin: 0 auto;
+        }
+
+        .step-item .line {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 2px;
+            height: 100%;
+            background: #000;
+            transform: translateX(-50%);
+        }
+
+        .step-item h3 {
+            margin-top: 10px;
+        }
+
+        .step-item:first-child .line {
+            display: none;
+        }
+
+        .step-item:last-child .line {
+            display: none;
+        }
+
+        .navbar-highlight {
+            background-color: transparent;
+            color: #2764AE;
+            text-decoration: underline;
+        }
+
+        .carousel-item {
+            position: relative;
+        }
+
+        .carousel-caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: rgba(132, 162, 202, 0.5);
+            padding: 20px;
+            color: ##fff;
+        }
+
+        .carousel-caption h1 {
+            font-size: 3rem;
+        }
+
+        .carousel-caption h5 {
+            font-size: 1.5rem;
+        }
+
+        .container slide-in.slide-in {
+            opacity: 0;
+            transform: translateX(-100px);
+            transition: opacity 0.5s, transform 0.5s;
+        }
+
+        .container slide-in.slide-in.show {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .btn-primary {
+            background: #2764AE;
+            color: #fff;
+            border: 2px solid #2764AE;
+        }
+    </style>
+</head>
+
+<body>
+    <div style="width:99%">
+
+        {{-- NAVBAR --}}
+        <nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top">
+            <div class="container slide-in">
+                <a class="navbar-brand" href="#">
+                    <img width="410" height="150"
+                        src="https://fcontigo.com/wp-content/uploads/2022/12/logo-fcontigo-1.png"
+                        class="attachment-full size-full wp-image-335" alt=""
+                        srcset="https://fcontigo.com/wp-content/uploads/2022/12/logo-fcontigo-1.png 410w, https://fcontigo.com/wp-content/uploads/2022/12/logo-fcontigo-1-300x110.png 300w"
+                        sizes="(max-width: 410px) 100vw, 410px">
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ml-auto">
+                        {{-- <li class="nav-item">
+                            <a class="nav-link" href="{{ route('servicios') }}">Servicios</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('bi') }}">Business Intelligence</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('contacto') }}">Contacto</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('formulario') }}">Formulario</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="https://begb.com.mx/" target="_blank"
+                                rel="noopener noreferrer">Nom 035</a>
+                        </li> --}}
+                    </ul>
                 </div>
-            @endif
+                @guest
+                    <a class="nav-link" href="{{ route('login') }}">Iniciar Sesión</a>
+                @endguest
+            </div>
+        </nav>
 
-            <div class="max-w-6xl mx-auto sm:px-6 lg:px-8">
-                <div class="flex justify-center pt-8 sm:justify-start sm:pt-0">
-                    <svg viewBox="0 0 651 192" fill="none" xmlns="http://www.w3.org/2000/svg" class="h-16 w-auto text-gray-700 sm:h-20">
-                        <g clip-path="url(#clip0)" fill="#EF3B2D">
-                            <path d="M248.032 44.676h-16.466v100.23h47.394v-14.748h-30.928V44.676zM337.091 87.202c-2.101-3.341-5.083-5.965-8.949-7.875-3.865-1.909-7.756-2.864-11.669-2.864-5.062 0-9.69.931-13.89 2.792-4.201 1.861-7.804 4.417-10.811 7.661-3.007 3.246-5.347 6.993-7.016 11.239-1.672 4.249-2.506 8.713-2.506 13.389 0 4.774.834 9.26 2.506 13.459 1.669 4.202 4.009 7.925 7.016 11.169 3.007 3.246 6.609 5.799 10.811 7.66 4.199 1.861 8.828 2.792 13.89 2.792 3.913 0 7.804-.955 11.669-2.863 3.866-1.908 6.849-4.533 8.949-7.875v9.021h15.607V78.182h-15.607v9.02zm-1.431 32.503c-.955 2.578-2.291 4.821-4.009 6.73-1.719 1.91-3.795 3.437-6.229 4.582-2.435 1.146-5.133 1.718-8.091 1.718-2.96 0-5.633-.572-8.019-1.718-2.387-1.146-4.438-2.672-6.156-4.582-1.719-1.909-3.032-4.152-3.938-6.73-.909-2.577-1.36-5.298-1.36-8.161 0-2.864.451-5.585 1.36-8.162.905-2.577 2.219-4.819 3.938-6.729 1.718-1.908 3.77-3.437 6.156-4.582 2.386-1.146 5.059-1.718 8.019-1.718 2.958 0 5.656.572 8.091 1.718 2.434 1.146 4.51 2.674 6.229 4.582 1.718 1.91 3.054 4.152 4.009 6.729.953 2.577 1.432 5.298 1.432 8.162-.001 2.863-.479 5.584-1.432 8.161zM463.954 87.202c-2.101-3.341-5.083-5.965-8.949-7.875-3.865-1.909-7.756-2.864-11.669-2.864-5.062 0-9.69.931-13.89 2.792-4.201 1.861-7.804 4.417-10.811 7.661-3.007 3.246-5.347 6.993-7.016 11.239-1.672 4.249-2.506 8.713-2.506 13.389 0 4.774.834 9.26 2.506 13.459 1.669 4.202 4.009 7.925 7.016 11.169 3.007 3.246 6.609 5.799 10.811 7.66 4.199 1.861 8.828 2.792 13.89 2.792 3.913 0 7.804-.955 11.669-2.863 3.866-1.908 6.849-4.533 8.949-7.875v9.021h15.607V78.182h-15.607v9.02zm-1.432 32.503c-.955 2.578-2.291 4.821-4.009 6.73-1.719 1.91-3.795 3.437-6.229 4.582-2.435 1.146-5.133 1.718-8.091 1.718-2.96 0-5.633-.572-8.019-1.718-2.387-1.146-4.438-2.672-6.156-4.582-1.719-1.909-3.032-4.152-3.938-6.73-.909-2.577-1.36-5.298-1.36-8.161 0-2.864.451-5.585 1.36-8.162.905-2.577 2.219-4.819 3.938-6.729 1.718-1.908 3.77-3.437 6.156-4.582 2.386-1.146 5.059-1.718 8.019-1.718 2.958 0 5.656.572 8.091 1.718 2.434 1.146 4.51 2.674 6.229 4.582 1.718 1.91 3.054 4.152 4.009 6.729.953 2.577 1.432 5.298 1.432 8.162 0 2.863-.479 5.584-1.432 8.161zM650.772 44.676h-15.606v100.23h15.606V44.676zM365.013 144.906h15.607V93.538h26.776V78.182h-42.383v66.724zM542.133 78.182l-19.616 51.096-19.616-51.096h-15.808l25.617 66.724h19.614l25.617-66.724h-15.808zM591.98 76.466c-19.112 0-34.239 15.706-34.239 35.079 0 21.416 14.641 35.079 36.239 35.079 12.088 0 19.806-4.622 29.234-14.688l-10.544-8.158c-.006.008-7.958 10.449-19.832 10.449-13.802 0-19.612-11.127-19.612-16.884h51.777c2.72-22.043-11.772-40.877-33.023-40.877zm-18.713 29.28c.12-1.284 1.917-16.884 18.589-16.884 16.671 0 18.697 15.598 18.813 16.884h-37.402zM184.068 43.892c-.024-.088-.073-.165-.104-.25-.058-.157-.108-.316-.191-.46-.056-.097-.137-.176-.203-.265-.087-.117-.161-.242-.265-.345-.085-.086-.194-.148-.29-.223-.109-.085-.206-.182-.327-.252l-.002-.001-.002-.002-35.648-20.524a2.971 2.971 0 00-2.964 0l-35.647 20.522-.002.002-.002.001c-.121.07-.219.167-.327.252-.096.075-.205.138-.29.223-.103.103-.178.228-.265.345-.066.089-.147.169-.203.265-.083.144-.133.304-.191.46-.031.085-.08.162-.104.25-.067.249-.103.51-.103.776v38.979l-29.706 17.103V24.493a3 3 0 00-.103-.776c-.024-.088-.073-.165-.104-.25-.058-.157-.108-.316-.191-.46-.056-.097-.137-.176-.203-.265-.087-.117-.161-.242-.265-.345-.085-.086-.194-.148-.29-.223-.109-.085-.206-.182-.327-.252l-.002-.001-.002-.002L40.098 1.396a2.971 2.971 0 00-2.964 0L1.487 21.919l-.002.002-.002.001c-.121.07-.219.167-.327.252-.096.075-.205.138-.29.223-.103.103-.178.228-.265.345-.066.089-.147.169-.203.265-.083.144-.133.304-.191.46-.031.085-.08.162-.104.25-.067.249-.103.51-.103.776v122.09c0 1.063.568 2.044 1.489 2.575l71.293 41.045c.156.089.324.143.49.202.078.028.15.074.23.095a2.98 2.98 0 001.524 0c.069-.018.132-.059.2-.083.176-.061.354-.119.519-.214l71.293-41.045a2.971 2.971 0 001.489-2.575v-38.979l34.158-19.666a2.971 2.971 0 001.489-2.575V44.666a3.075 3.075 0 00-.106-.774zM74.255 143.167l-29.648-16.779 31.136-17.926.001-.001 34.164-19.669 29.674 17.084-21.772 12.428-43.555 24.863zm68.329-76.259v33.841l-12.475-7.182-17.231-9.92V49.806l12.475 7.182 17.231 9.92zm2.97-39.335l29.693 17.095-29.693 17.095-29.693-17.095 29.693-17.095zM54.06 114.089l-12.475 7.182V46.733l17.231-9.92 12.475-7.182v74.537l-17.231 9.921zM38.614 7.398l29.693 17.095-29.693 17.095L8.921 24.493 38.614 7.398zM5.938 29.632l12.475 7.182 17.231 9.92v79.676l.001.005-.001.006c0 .114.032.221.045.333.017.146.021.294.059.434l.002.007c.032.117.094.222.14.334.051.124.088.255.156.371a.036.036 0 00.004.009c.061.105.149.191.222.288.081.105.149.22.244.314l.008.01c.084.083.19.142.284.215.106.083.202.178.32.247l.013.005.011.008 34.139 19.321v34.175L5.939 144.867V29.632h-.001zm136.646 115.235l-65.352 37.625V148.31l48.399-27.628 16.953-9.677v33.862zm35.646-61.22l-29.706 17.102V66.908l17.231-9.92 12.475-7.182v33.841z"/>
-                        </g>
-                    </svg>
+        <br><br>
+        {{-- BANNER --}}
+        <div id="carouselExampleIndicators" class="carousel slide w-80 p-10 m-5 " data-bs-ride="carousel"
+            style="padding: 3px">
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <img src="assets/images/banner_1.png" class="d-block w-100" alt="Banner 1">
+                </div>
+                <div class="carousel-item">
+                    <img src="assets/images/banner_2.jpg" class="d-block w-100" alt="Banner 1">
+                </div>
+                <div class="carousel-item">
+                    <img src="assets/images/banner_3.jpg" class="d-block w-100" alt="Banner 1">
+                </div>
+                <div class="carousel-item">
+                    <img src="assets/images/banner_4.jpg" class="d-block w-100" alt="Banner 1">
+                </div>
+                <div class="carousel-item">
+                    <img src="assets/images/banner_5.jpg" class="d-block w-100" alt="Banner 1">
+                </div>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators"
+                data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Anterior</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators"
+                data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Siguiente</span>
+            </button>
+        </div>
+        <br><br><br>
+
+        <div class="colorlib-narrow-content">
+            <h1>¿Por qué el crédito Contigo es tu mejor opción?</h1>
+            <p>Apoyamos a los hombres y mujeres mexicanos que requieren del respaldo y la confianza para iniciar,
+                desarrollar y hacer realidad sus sueños.</p>
+            <p>
+                En Contigo, no sólo otorgamos un crédito, también te acompañamos de manera cálida y cercana para que
+                logres tus objetivos mejorando así tu calidad de vida, la de tu familia y tu comunidad a través del
+                fortalecimiento de tu negocio.
+            </p>
+            <h4>Cuentas con nosotros para guiarte en todo momento.</h4>
+        </div>
+
+        <br><br>
+
+        <div class="colorlib-narrow-content">
+            <h1>¿Cómo obtener un crédito en Contigo?</h1>
+            <p>
+                En Contigo tenemos un crédito de acuerdo a tus necesidades, sigue los pasos que a continuación te
+                presentamos para que elijas correctamente uno de nuestros productos y servicios.
+            </p>
+        </div>
+        <br><br>
+
+        <div class="container-1">
+            <div class="row feature-section">
+                <!-- Primera columna -->
+                <div class="col-md-4 feature">
+                    <i class="fas fa-icono-1 fa-3x"></i>
+                    <h3>Identifica</h3>
+                    <p>El tipo de crédito que requieres.</p>
                 </div>
 
-                <div class="mt-8 bg-white dark:bg-gray-800 overflow-hidden shadow sm:rounded-lg">
-                    <div class="grid grid-cols-1 md:grid-cols-2">
-                        <div class="p-6">
-                            <div class="flex items-center">
-                                <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" class="w-8 h-8 text-gray-500"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
-                                <div class="ml-4 text-lg leading-7 font-semibold"><a href="https://laravel.com/docs" class="underline text-gray-900 dark:text-white">Documentation</a></div>
-                            </div>
-
-                            <div class="ml-12">
-                                <div class="mt-2 text-gray-600 dark:text-gray-400 text-sm">
-                                    Laravel has wonderful, thorough documentation covering every aspect of the framework. Whether you are new to the framework or have previous experience with Laravel, we recommend reading all of the documentation from beginning to end.
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="p-6 border-t border-gray-200 dark:border-gray-700 md:border-t-0 md:border-l">
-                            <div class="flex items-center">
-                                <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" class="w-8 h-8 text-gray-500"><path d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path><path d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                                <div class="ml-4 text-lg leading-7 font-semibold"><a href="https://laracasts.com" class="underline text-gray-900 dark:text-white">Laracasts</a></div>
-                            </div>
-
-                            <div class="ml-12">
-                                <div class="mt-2 text-gray-600 dark:text-gray-400 text-sm">
-                                    Laracasts offers thousands of video tutorials on Laravel, PHP, and JavaScript development. Check them out, see for yourself, and massively level up your development skills in the process.
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="p-6 border-t border-gray-200 dark:border-gray-700">
-                            <div class="flex items-center">
-                                <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" class="w-8 h-8 text-gray-500"><path d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"></path></svg>
-                                <div class="ml-4 text-lg leading-7 font-semibold"><a href="https://laravel-news.com/" class="underline text-gray-900 dark:text-white">Laravel News</a></div>
-                            </div>
-
-                            <div class="ml-12">
-                                <div class="mt-2 text-gray-600 dark:text-gray-400 text-sm">
-                                    Laravel News is a community driven portal and newsletter aggregating all of the latest and most important news in the Laravel ecosystem, including new package releases and tutorials.
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="p-6 border-t border-gray-200 dark:border-gray-700 md:border-l">
-                            <div class="flex items-center">
-                                <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" class="w-8 h-8 text-gray-500"><path d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                                <div class="ml-4 text-lg leading-7 font-semibold text-gray-900 dark:text-white">Vibrant Ecosystem</div>
-                            </div>
-
-                            <div class="ml-12">
-                                <div class="mt-2 text-gray-600 dark:text-gray-400 text-sm">
-                                    Laravel's robust library of first-party tools and libraries, such as <a href="https://forge.laravel.com" class="underline">Forge</a>, <a href="https://vapor.laravel.com" class="underline">Vapor</a>, <a href="https://nova.laravel.com" class="underline">Nova</a>, and <a href="https://envoyer.io" class="underline">Envoyer</a> help you take your projects to the next level. Pair them with powerful open source libraries like <a href="https://laravel.com/docs/billing" class="underline">Cashier</a>, <a href="https://laravel.com/docs/dusk" class="underline">Dusk</a>, <a href="https://laravel.com/docs/broadcasting" class="underline">Echo</a>, <a href="https://laravel.com/docs/horizon" class="underline">Horizon</a>, <a href="https://laravel.com/docs/sanctum" class="underline">Sanctum</a>, <a href="https://laravel.com/docs/telescope" class="underline">Telescope</a>, and more.
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                <!-- Segunda columna -->
+                <div class="col-md-4 feature">
+                    <i class="fas fa-icono-2 fa-3x"></i>
+                    <h3>Solicitalo en tu sucursal</h3>
+                    <p>Ubica tu sucursal mas cercana.</p>
                 </div>
 
-                <div class="flex justify-center mt-4 sm:items-center sm:justify-between">
-                    <div class="text-center text-sm text-gray-500 sm:text-left">
-                        <div class="flex items-center">
-                            <svg fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor" class="-mt-px w-5 h-5 text-gray-400">
-                                <path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
-                            </svg>
-
-                            <a href="https://laravel.bigcartel.com" class="ml-1 underline">
-                                Shop
-                            </a>
-
-                            <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" class="ml-4 -mt-px w-5 h-5 text-gray-400">
-                                <path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
-                            </svg>
-
-                            <a href="https://github.com/sponsors/taylorotwell" class="ml-1 underline">
-                                Sponsor
-                            </a>
-                        </div>
-                    </div>
-
-                    <div class="ml-4 text-center text-sm text-gray-500 sm:text-right sm:ml-0">
-                        Laravel v{{ Illuminate\Foundation\Application::VERSION }} (PHP v{{ PHP_VERSION }})
-                    </div>
+                <!-- Tercera columna -->
+                <div class="col-md-4 feature">
+                    <i class="fas fa-icono-3 fa-3x"></i>
+                    <h3>Cambia su vida</h3>
+                    <p>Tu trabajo y esfuerzo diario, en conjunto con nuestros créditos mejorarán la calidad de vida para
+                        ti y tu familia..</p>
                 </div>
             </div>
         </div>
-    </body>
+        <br><br>
+
+        <footer class="elementor elementor-25 elementor-location-footer">
+            <br><br>
+            <div class="container">
+                <div class="row footer-row">
+                    <!-- Primera fila -->
+                    <div class="col-md-3 footer-col">
+                        <img width="300" height="101"
+                            src="https://fcontigo.com/wp-content/uploads/2022/12/logo-contigo-300x101.png"
+                            class="attachment-medium size-medium wp-image-33" alt="" loading="lazy"
+                            srcset="https://fcontigo.com/wp-content/uploads/2022/12/logo-contigo-300x101.png 300w, https://fcontigo.com/wp-content/uploads/2022/12/logo-contigo.png 665w"
+                            sizes="(max-width: 300px) 100vw, 300px">
+                        <p>Carretera México Toluca No. 2430,
+                            Colonia Lomas de Bezares,
+                            C.P. 11910, Alcaldía Miguel Hidalgo,
+                            Ciudad de México.</p>
+                    </div>
+                    <div class="col-md-3 footer-col">
+                        <h4>Nosotros</h4>
+                        <p>¿Quienes somos?</p>
+                        <p>Consulta el suplemento CTIGOCB20</p>
+                        <p>Suplemento CTIGOCB17</p>
+                    </div>
+                    <div class="col-md-3 footer-col">
+                        <h4>Servicios y Productos</h4>
+                        <p>Solicita tu credito</p>
+                        <p>Simulador de crédito</p>
+                    </div>
+                    <div class="col-md-3 footer-col">
+                        <h4>Canales de pago</h4>
+                        <p>Canales de pago.</p>
+                        <p>Canales de cobro.</p>
+                    </div>
+
+                    <!-- Segunda fila con imágenes -->
+                    <div class="col-md-3 footer-col">
+                        <img width="280" height="200"
+                            src="https://fcontigo.com/wp-content/uploads/2022/12/inst-great_2021.png"
+                            class="attachment-medium size-medium wp-image-52 footer-img" alt=""
+                            loading="lazy">
+                    </div>
+                    <div class="col-md-3 footer-col">
+                        <img width="280" height="200"
+                            src="https://fcontigo.com/wp-content/uploads/2022/12/inst-esr.png"
+                            class="attachment-medium size-medium wp-image-52 footer-img"alt="" loading="lazy">
+                    </div>
+                    <div class="col-md-3 footer-col">
+                        <img width="280" height="200"
+                            src="https://fcontigo.com/wp-content/uploads/2022/12/inst-cnbv.png" c
+                            class="attachment-medium size-medium wp-image-52 footer-img"alt="" loading="lazy">
+                    </div>
+                    <div class="col-md-3 footer-col">
+                        <img width="280" height="200"
+                            src="https://fcontigo.com/wp-content/uploads/2022/12/inst-condusef.png"
+                            class="attachment-medium size-medium wp-image-52 footer-img" alt=""
+                            loading="lazy">
+                    </div>
+                    <br>
+                    <!-- Tercera fila -->
+                    <div class="col-md-12 footer-col">
+                        <p>En cumplimiento del artículo 87-J de la Ley General de Organizaciones y Actividades
+                            Auxiliares de Crédito, CEGE CAPITAL S.A.P.I. de C.V., SOFOM E.N.R manifiesta que para su
+                            constitución y operación con carácter de sociedad financiera de objeto múltiple, entidad no
+                            regulada no requiere de autorización de la Secretaría de Hacienda y Crédito Público, y está
+                            sujeta a la supervisión de la Comisión Nacional Bancaria y de Valores únicamente en materia
+                            de prevención y detección de operaciones con recursos de procedencia ilícita y
+                            financiamiento al terrorismo.</p>
+                    </div>
+                    <br>
+                    <!-- Cuarta fila -->
+                    <div class="col-md-12 footer-col">
+                        <p>©2023 Contigo. Todos los derechos reservados.</p>
+                    </div>
+                </div>
+            </div>
+        </footer>
+
+
+
+    </div>
+
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous">
+    </script>
+    <style>
+        body {
+            background-color: #f8f9fa;
+            /* Color de fondo para dar contraste */
+        }
+
+        footer {
+            background-color: #22363C;
+            background-image: url("https://fcontigo.com/wp-content/uploads/2022/12/liston.png");
+            /* Imagen PNG como fondo */
+            color: #fff;
+            padding: 20px 0;
+        }
+
+        .container-footer {
+            background-color: rgba(34,54,60);
+            /* Color de fondo para el contenido del pie de página */
+            padding: 20px;
+            border-radius: 10px;
+            /* Bordes redondeados para el contenido del pie de página */
+        }
+
+
+        .feature-section {
+            padding: 50px 0;
+            /* Espaciado interno para la sección */
+            text-align: center;
+            /* Centrar el texto */
+        }
+
+        .feature {
+            margin-bottom: 30px;
+            /* Espaciado inferior entre las características */
+        }
+
+        .container-1 {
+            background: linear-gradient(to bottom, #0183CE, #0056b3);
+            /* Fondo con gradiente azul */
+            color: #fff;
+            /* Color del texto en blanco para contrastar con el fondo */
+        }
+
+        .elementor-10 .elementor-element.elementor-element-f6b2e6e {
+            transition: background 0.3s, border 0.3s, border-radius 0.3s, box-shadow 89.3s;
+            margin-top: 0px;
+            margin-bottom: 0px;
+            padding: 0% 5% 0% 5%;
+        }
+
+        .elementor-element {
+            --widgets-spacing: 38px 20px;
+        }
+
+        .colorlib-narrow-content,
+        .colorlib-narrow-content div {
+            max-width: 800px;
+            /* Ancho máximo del contenido */
+            margin: 0 auto;
+            /* Centrar el contenido horizontalmente */
+            text-align: center;
+            /* Centrar el texto */
+        }
+
+        h1,
+        h2 {
+            color: #0183CE;
+            /* Color azul para los títulos */
+        }
+    </style>
+    <script>
+        $(document).ready(function() {
+            $(window).scroll(function() {
+                var windowBottom = $(this).scrollTop() + $(this).innerHeight();
+                $(".container slide-in").each(function() {
+                    var objectBottom = $(this).offset().top + $(this).outerHeight();
+
+                    if (objectBottom < windowBottom) {
+                        if (!$(this).hasClass("show")) {
+                            $(this).addClass("show");
+                        }
+                    } else {
+                        if ($(this).hasClass("show")) {
+                            $(this).removeClass("show");
+                        }
+                    }
+                });
+            }).scroll();
+        });
+    </script>
+
+
+
+</body>
+
 </html>

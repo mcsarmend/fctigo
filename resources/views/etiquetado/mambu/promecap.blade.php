@@ -3,12 +3,14 @@
 @section('title', 'Etiquetado PROMECAP')
 
 @section('content_header')
-    <h1>Etiquetado PROMECAP</h1>
+
 @stop
 
 @section('content')
+    <br>
     <div class="card">
         <div class="card-header">
+            <h1>Etiquetado PROMECAP</h1>
             <h1 class="card-title">Proceso que da de alta o baja créditos que serán asignados a Promecap.</h1>
         </div>
         <div class="card-body">
@@ -69,6 +71,12 @@
 
     @section('css')
         <style>
+            .content-wrapper {
+                background-image: url('/assets/images/fondo.png');
+                background-size: contain;
+                background-position: left;
+            }
+
             .custom-file input {
                 width: 20%;
             }
@@ -105,7 +113,7 @@
                 var type = @json($type);
                 if (type == '3') {
                     $('a:contains("Cuentas")').hide();
-                    console.log('Se oculta');
+                    $('small:contains("Administrador")').text('Ejecutivo');
                 }
 
             });

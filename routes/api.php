@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\interfacescxcController;
 use App\Http\Controllers\respuestapreetiquetadoController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\apisetiquetadosController;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,3 +27,8 @@ Route::post('/loginToken', [AuthenticatedSessionController::class, 'loginToken']
 Route::group(['middleware' => ['authToken:sanctum']], function (){
     Route::post('/preetiquetado', [respuestapreetiquetadoController::class,'RecibePreEtiquetado']);
 });
+
+
+Route::get('/BajaPromecapMambu', [apisetiquetadosController::class, 'BajaPromecapMambu']);
+Route::get('/AltaPromecapJV', [apisetiquetadosController::class, 'AltaPromecapJV']);
+

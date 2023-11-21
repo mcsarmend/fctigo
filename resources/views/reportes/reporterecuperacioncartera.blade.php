@@ -3,12 +3,14 @@
 @section('title', 'Configuraciones')
 
 @section('content_header')
-    <h1>Reporte de Recuperacion de cartera</h1>
+
 @stop
 
 @section('content')
+<br>
     <div class="card">
         <div class="card-header">
+            <h1>Reporte de Recuperacion de cartera</h1>
             <h1 class="card-title">Proceso que generar reporte de recuperacion de cartera de mambu.</h1>
         </div>
         <div class="card-body">
@@ -111,7 +113,13 @@
 @stop
 
 @section('css')
-
+<style>
+    .content-wrapper {
+        background-image: url('/assets/images/fondo.png');
+        background-size: contain;
+        background-position: left;
+    }
+</style>
 @stop
 
 @section('js')
@@ -135,7 +143,7 @@
             var type = @json($type);
             if (type == '3') {
                 $('a:contains("Cuentas")').hide();
-                console.log('Se oculta');
+                $('small:contains("Administrador")').text('Ejecutivo');
             }
 
         });

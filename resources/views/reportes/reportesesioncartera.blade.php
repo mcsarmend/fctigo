@@ -3,13 +3,15 @@
 @section('title', 'Configuraciones')
 
 @section('content_header')
-    <h1>Reporte de Sesion de cartera</h1>
+
 @stop
 
 @section('content')
+    <br>
     <div class="card">
         <div class="card-header">
-            <h1 class="card-title">Proceso que generar reporte de Sesion de cartera.</h1>
+            <h1>Reporte de Sesion de cartera</h1>
+            <h2 class="card-title">Proceso que generar reporte de Sesion de cartera.</h2>
         </div>
         <div class="card-body">
             <div class="row">
@@ -61,6 +63,13 @@
 @stop
 
 @section('css')
+<style>
+    .content-wrapper {
+        background-image: url('/assets/images/fondo.png');
+        background-size: contain;
+        background-position: left;
+    }
+</style>
 
 @stop
 
@@ -83,6 +92,7 @@
             $('#max-date').text(fechamax[0].max.substr(0, 10))
             if (type == '3') {
                 $('a:contains("Cuentas")').hide();
+                $('small:contains("Administrador")').text('Ejecutivo');
             }
             // establecerFechaMaxima();
 

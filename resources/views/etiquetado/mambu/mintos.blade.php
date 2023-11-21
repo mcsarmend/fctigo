@@ -85,7 +85,7 @@
             var type = @json($type);
             if (type == '3') {
                 $('a:contains("Cuentas")').hide();
-                console.log('Se oculta');
+                $('small:contains("Administrador")').text('Ejecutivo');
             }
 
 
