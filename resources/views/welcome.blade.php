@@ -190,7 +190,12 @@
                     </ul>
                 </div>
                 @guest
-                    <a class="nav-link" href="{{ route('login') }}">Iniciar Sesión</a>
+                    <div class="row">
+
+                        <a >Bienvenido a Helix</a>
+                        <a class="nav-link" href="{{ route('login') }}">Iniciar Sesión</a>
+                    </div>
+
                 @endguest
             </div>
         </nav>

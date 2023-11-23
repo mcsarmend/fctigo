@@ -366,6 +366,18 @@ return [
                 [
                     'text' => 'Fondeadores',
                     'url' => 'reportes/fondeadores',
+                ],
+                [
+                    'text' => 'Demografia',
+                    'url' => 'reportes/demografia',
+                ],
+                [
+                    'text' => 'Cartera',
+                    'url' => 'reportes/cartera',
+                ],
+                [
+                    'text' => 'Pagos',
+                    'url' => 'reportes/pagos',
                 ]
 
             ]
