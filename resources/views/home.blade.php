@@ -611,8 +611,28 @@
                 });
             });
 
+
+            showUsersSections();
         });
 
+        function showUsersSections() {
+            var type = @json($type);
+            switch (type) {
+                case '3':
+                    $('a:contains("Cuentas")').hide();
+                    $('small:contains("Administrador")').text('Ejecutivo');
+                    $('a:contains("Etiquetado")').hide();
+                    $('a:contains("Anexos")').hide();
+                    break;
+                case '2':
+                    $('a:contains("Cuentas")').hide();
+
+                    break;
+
+                default:
+                    break;
+            }
+        }
         function calculosohjucavi() {
             $.ajax({
                 url: "testsohrep",

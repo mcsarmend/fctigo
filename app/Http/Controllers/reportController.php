@@ -22,7 +22,34 @@ class reportController extends Controller
         return view('reportes.reportes', compact('type'));
     }
 
+    public function demografia()
+    {
+        $type = $this->getusertype();
+        return view('reportes.demografia', compact('type'));
+    }
 
+    public function cartera()
+    {
+        $type = $this->getusertype();
+        return view('reportes.cartera', compact('type'));
+    }
+
+    public function pagos()
+    {
+        $type = $this->getusertype();
+        return view('reportes.pagos', compact('type'));
+    }
+
+
+    public function reportedemografia(){
+        return "Prueba reporte Demografia";
+    }
+    public function reportecartera(){
+        return "Prueba reporte Cartera";
+    }
+    public function reportepagos(){
+        return "Prueba reporte Pagos";
+    }
 
 
     public function sesioncartera()

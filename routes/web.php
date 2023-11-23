@@ -118,6 +118,12 @@ Route::get('reportes/fondeadores', [reportController::class, 'fondeadores'])->mi
 Route::get('reportes/fondeadoresreport', [reportController::class, 'fondeadoresreport']);
 Route::get('reportes/reportesesioncartera', [reportController::class, 'reportesesioncartera']);
 Route::get('reportes/reporterecuperacioncartera', [reportController::class, 'reporterecuperacioncartera']);
+Route::get('reportes/demografia', [reportController::class, 'demografia']);
+Route::get('reportes/reportedemografia', [reportController::class, 'reportedemografia']);
+Route::get('reportes/cartera', [reportController::class, 'cartera']);
+Route::get('reportes/reportecartera', [reportController::class, 'reportecartera']);
+Route::get('reportes/pagos', [reportController::class, 'pagos']);
+Route::get('reportes/reportepagos', [reportController::class, 'reportepagos']);
 
 
 

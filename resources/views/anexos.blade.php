@@ -2046,6 +2046,7 @@
                 $('a:contains("Cuentas")').hide();
                 $('small:contains("Administrador")').text('Ejecutivo');
             }
+            calculofondeadorpromecap();
 
             const meses = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre",
                 "octubre", "noviembre", "diciembre"
