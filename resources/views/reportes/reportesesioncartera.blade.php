@@ -11,7 +11,7 @@
     <div class="card">
         <div class="card-header">
             <h1>Reporte de Sesion de cartera</h1>
-            <h2 class="card-title">Proceso que generar reporte de Sesion de cartera.</h2>
+            <h2 class="card-title">Proceso que genera Reporte de Sesión de Cartera.</h2>
         </div>
         <div class="card-body">
             <div class="row">
@@ -60,15 +60,12 @@
         </div>
 
     </div>
+    @include('fondo')
 @stop
 
 @section('css')
 <style>
-    .content-wrapper {
-        background-image: url('/assets/images/fondo.png');
-        background-size: contain;
-        background-position: left;
-    }
+
 </style>
 
 @stop
@@ -83,18 +80,15 @@
     <script src="https://cdn.datatables.net/plug-ins/1.10.25/dataRender/datetime.js"></script>
     <script>
         $(document).ready(function() {
-            var type = @json($type);
+
             fechamin = @json($fechamin);
             fechamax = @json($fechamax);
-            text = type + fechamin + fechamax;
 
             $('#min-date').text(fechamin[0].min.substr(0, 10))
             $('#max-date').text(fechamax[0].max.substr(0, 10))
-            if (type == '3') {
-                $('a:contains("Cuentas")').hide();
-                $('small:contains("Administrador")').text('Ejecutivo');
-            }
-            // establecerFechaMaxima();
+
+            drawTriangles();
+            showUsersSections();
 
         });
 
@@ -269,6 +263,26 @@
 
         });
 
+        function showUsersSections() {
+            var type = @json($type);
+            switch (type) {
+                case '3':
+                    $('a:contains("Cuentas")').hide();
+                    $('small:contains("Administrador")').text('Ejecutivo');
+                    $('a:contains("Etiquetado")').hide();
+                    $('a:contains("Administración de Cartera")').hide();
+                    $('a:contains("Administración de Fideicomisos")').hide();
+                    $('a:contains("Anexos")').hide();
+                    break;
+                case '2':
+                    $('a:contains("Cuentas")').hide();
+
+                    break;
+
+                default:
+                    break;
+            }
+        }
         function establecerFechaMaxima() {
             var fechaActual = new Date();
             var fechaMinima = new Date();

@@ -339,10 +339,10 @@ return [
                             'text' => 'Blao',
                             'url' => 'etiquetado/mambu/blao',
                         ],
-                        [
-                            'text' => 'Mintos',
-                            'url' => 'etiquetado/mambu/mintos',
-                        ],
+                        // [
+                        //     'text' => 'Mintos',
+                        //     'url' => 'etiquetado/mambu/mintos',
+                        // ],
 
                     ]
                 ],
@@ -387,7 +387,44 @@ return [
             'icon' => 'fas fa-fw fa-file',
             'url' => 'anexos'
         ],
+        [
+            'text' => 'Administración de Cartera',
+            'icon' => 'fas fa-fw fa-file',
+            'submenu' =>[
+                [
+                    'text' => 'Preetiquetado',
+                    'url' => 'admincartera/preetiquetado',
+                ],
+                [
+                    'text' => 'Etiquetado',
+                    'url' => 'admincartera/etiquetado',
+                ],
+                [
+                    'text' => 'Baja',
+                    'url' => 'admincartera/baja',
+                ]
 
+            ]
+        ],
+        [
+            'text' => 'Administración de Fideicomisos',
+            'icon' => 'fas fa-fw fa-file',
+            'submenu' =>[
+                [
+                    'text' => 'Alta',
+                    'url' => 'adminfideicomisos/alta',
+                ],
+                [
+                    'text' => 'Edicion',
+                    'url' => 'adminfideicomisos/edicion',
+                ],
+                [
+                    'text' => 'Baja',
+                    'url' => 'adminfideicomisos/baja',
+                ],
+
+            ]
+        ]
     ],
 
     /*

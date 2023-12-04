@@ -40,6 +40,7 @@
         </div>
 
     </div>
+    @include('fondo')
 @stop
 
 @section('css')
@@ -49,11 +50,6 @@
             width: 112%;
         }
 
-        .content-wrapper {
-            background-image: url('/assets/images/fondo.png');
-            background-size: contain;
-            background-position: left;
-        }
 
     </style>
 @stop
@@ -69,13 +65,10 @@
 
     <script>
         $(document).ready(function() {
-            var type = @json($type);
-            if (type == '3') {
-                $('a:contains("Cuentas")').hide();
-                $('small:contains("Administrador")').text('Ejecutivo');
-            }
-
+            drawTriangles();
+            showUsersSections();
         });
+
 
 
         $('#reporteFondeadores').click(function() {

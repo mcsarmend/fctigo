@@ -82,7 +82,7 @@
         </div>
 
     </div>
-
+    @include('fondo')
     {{-- MODAL HISTORICO --}}
     <div class="modal fade" id="aforohistoricomodal">
         <div class="modal-dialog modal-lg">
@@ -1940,11 +1940,7 @@
 @stop
 @section('css')
     <style>
-        .content-wrapper {
-            background-image: url('/assets/images/fondo.png');
-            background-size: contain;
-            background-position: left;
-        }
+
 
         /* Estilos para el modal */
         .modal {
@@ -2041,11 +2037,8 @@
 
     <script>
         $(document).ready(function() {
-            var type = @json($type);
-            if (type == '3') {
-                $('a:contains("Cuentas")').hide();
-                $('small:contains("Administrador")').text('Ejecutivo');
-            }
+            drawTriangles();
+            showUsersSections();
             calculofondeadorpromecap();
 
             const meses = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre",

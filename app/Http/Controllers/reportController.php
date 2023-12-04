@@ -41,19 +41,54 @@ class reportController extends Controller
     }
 
 
-    public function reportedemografia(){
+    public function reportedemografia(Request $request){
         return "Prueba reporte Demografia";
     }
-    public function reportecartera(){
-        return "Prueba reporte Cartera";
+    public function reportecartera(Request $request){
+        $date = $request->startDate;
+        $resultado = [];
+        try {
+            $host = 'fcontigo-rs-cluster-01.cdxtyqbdsp7d.us-east-1.redshift.amazonaws.com';
+            $port = '5439';
+            $database = 'mambu_prod';
+            $user = 'marcadodev';
+            $password = 'marcadoDev00';
+
+            $database2 = 'movimientos';
+
+            try {
+                $dsn = "pgsql:host=$host;port=$port;dbname=$database";
+                $pdo = new PDO($dsn, $user, $password);
+                // Configurar opciones adicionales si es necesario
+                $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                // echo 'Conexión exitosa a PostgreSQL';
+
+                // Ejemplo de consulta
+                $query1 = "select * from semantica.creditos where fechacorte = '".$date."';";
+
+                $statement = $pdo->query($query1);
+                $resultado = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+
+                if ($resultado == '') {
+                    return [];
+                } else {
+                    return $resultado;
+                }
+
+            } catch (PDOException $e) {
+                echo 'Error en consulta: ' . $e->getMessage();
+            }
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
     }
-    public function reportepagos(){
+    public function reportepagos(Request $request){
         return "Prueba reporte Pagos";
     }
 
 
-    public function sesioncartera()
-    {
+    public function sesioncartera()    {
         try {
             $host = 'fcontigo-rs-cluster-01.cdxtyqbdsp7d.us-east-1.redshift.amazonaws.com';
             $port = '5439';
@@ -82,8 +117,8 @@ class reportController extends Controller
                 'fechamin' => $fechamin,
                 'fechamax' => $fechamax,
             ];
-
-            return view('reportes.reportesesioncartera', $data);
+            $type = $this->getusertype();
+            return view('reportes.reportesesioncartera', ["fechamin"=>$fechamin,"fechamax"=>$fechamax,"type"=>$type]);
         } catch (\Throwable $th) {
             $type = $this->getusertype();
 
@@ -97,13 +132,11 @@ class reportController extends Controller
         }
     }
 
-    public function fondeadores()
-    {
+    public function fondeadores()    {
         $type = $this->getusertype();
         return view('reportes.fondeadores.fondeadores', compact('type'));
     }
-    public function fondeadoresreport()
-    {
+    public function fondeadoresreport()    {
 
         $infoReport = [];
         $clientInfo = [];
@@ -238,8 +271,7 @@ class reportController extends Controller
 
     }
 
-    public function reportesesioncartera(Request $request)
-    {
+    public function reportesesioncartera(Request $request)    {
 
         $date = $request->date;
         $resultado = [];
@@ -310,8 +342,7 @@ class reportController extends Controller
         }
     }
 
-    public function reporterecuperacioncartera(Request $request)
-    {
+    public function reporterecuperacioncartera(Request $request)    {
 
         $startDate = $request->startDate . ' 00:00:00';
         $endDate = $request->endDate . ' 23:59:59';

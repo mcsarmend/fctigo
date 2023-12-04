@@ -66,16 +66,11 @@
                 </div>
             </div>
         </div>
+        @include('fondo')
     @stop
 
     @section('css')
         <style>
-            .content-wrapper {
-                background-image: url('/assets/images/fondo.png');
-                background-size: contain;
-                background-position: left;
-            }
-
             .custom-file input {
                 width: 20%;
             }
@@ -107,11 +102,8 @@
         <script src="https://cdn.jsdelivr.net/npm/xlsx@0.17.0/dist/xlsx.full.min.js"></script>
         <script>
             $(document).ready(function() {
-                var type = @json($type);
-                if (type == '3') {
-                    $('a:contains("Cuentas")').hide();
-                    $('small:contains("Administrador")').text('Ejecutivo');
-                }
+                drawTriangles();
+            showUsersSections();
 
             });
 

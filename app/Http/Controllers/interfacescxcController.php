@@ -6,7 +6,7 @@ use DateTimeZone;
 use GuzzleHttp\Client;
 use Illuminate\Http\Client\RequestException;
 use Illuminate\Http\Request;
-use App\Models\User;
+use App\Models\logenviosinterfaces;
 use Illuminate\Support\Facades\Hash;
 use Carbon\Carbon;
 
@@ -21,23 +21,26 @@ use TheSeer\Tokenizer\Exception;
 class interfacescxcController extends Controller
 {
 
-    public function generaInterfaces (Request $request)
+    public function generaInterfaces()
     {
+        $date = new DateTime('-1 day');
+        $duedate = $date->format('Y-m-d');
 
-        //$resSincro = $this->generarSincronizacion($request->duedate);
-        //$envioSincro = $this->enviarinformacion($resSincro, $api = 'datos-generales');
-
-        $resClientes = $this->generarClientes($request->duedate);
-        $envioClientes = $this->enviarinformacion($resClientes, $api = 'clientes');
-
-        //$resTransacciones = $this->GeneraTransaccionesAsync($request->duedate);
+        $resSincro = $this->generarSincronizacion($duedate);
+        $envioSincro = $this->enviarinformacion($resSincro, $api = 'datos-generales');
+        //$resClientes = $this->generarClientes($request->duedate);
+        //$envioClientes = $this->enviarinformacion($resClientes, $api = 'clientes');
+        //$resTransacciones = $this->GeneraTransaccionesAsync($duedate);
         //$envioTransacciones = $this->enviarinformacion($resTransacciones, $api = 'transacciones');
         //$resTransaccionesCuentas = $this->GeneraTransaccionesCuentas($request->duedate);
         //$envioTransaccionesCuentas = $this->enviarinformacion($resTransaccionesCuentas, $api = 'transacciones-cuentas');
         //$resAmortizacion = $this->amortizacion($request->duedate);
         //$envioAmortizacion = $this->enviarinformacion($resAmortizacion, $api = 'amortizacion');
 
-        return $envioClientes;
+        //$resClaves = $this->generarClientes($request->duedate);
+        //$envioClaves = $this->enviarinformacion($resClaves, $api = 'clientes');
+
+        return $envioSincro;
     }
     //OBTIENE INFORMACION PARA ENVIAR LAS APIS
     public function generarSincronizacion($duedate)
@@ -695,6 +698,97 @@ class interfacescxcController extends Controller
 
         }
     }
+    public function generaRAP($duedate)
+{
+    $r = null;
+    $DataFinal = [];
+    $DatosGenerales = [];
+    $Transacciones = [];
+    $Amortizacion = [];
+    $Grupos = [];
+    $Acuerdos = null;
+    $ResLoan = [];
+    $data = null;
+    $data2 = [];
+
+    $Datos = "";
+    $Error = "";
+
+    $DateIn = Carbon::parse($duedate);
+    $DateFn = Carbon::parse($duedate);
+
+    // FECHA DIARIO
+    $DateIn->setTime(0, 0, 0);
+    $DateFn->setTime(23, 59, 59);
+
+    $FechaInicio = $DateIn->format('Y-m-d') . "T00:00:00-06:00";
+    $FechaFin = $DateFn->addDay()->format('Y-m-d') . "T05:59:59-06:00";
+
+    try {
+        //Busca Clientes Desembolsados Anteriores
+        $Anteriores = $this->DesembolsosAnteriores();
+        $recorre = json_decode($Anteriores);
+        //Busca Clientes Cancelados
+        $Cancelados = $this->DesembolsosCancelados();
+        $recorreCan = json_decode($Cancelados);
+        //Busca Desembolsos Diarios
+        $Diario = $this->DesembolsosDiario();
+        $recorreDiario = json_decode($Diario);
+
+        $PrimerMerge = array_merge($recorre,$recorreCan);
+        $SegundoMerge = array_merge($PrimerMerge,$recorreDiario);
+
+        // ...
+
+        foreach ($SegundoMerge as $countGrupo) {
+            do {
+                $Acuerdos = $this->consultaCreditArr($countGrupo['creditArrangementKey']);
+            } while ($Acuerdos->id == "" || $Acuerdos->id == " " || $Acuerdos->id == null);
+
+            do {
+                $Grupos = $this->consultarGrupo($countGrupo['accountHolderKey'], "");
+            } while ($Grupos[0]->firstName == "" || $Grupos[0]->firstName == " " || $Grupos[0]->firstName == null);
+
+            $Numgrupo = $Grupos->_IdGrupo_Clients;
+            $Ciclo = $Acuerdos->_Datos_Extra_Credit_Arrangements->Ciclo_Grupo_Credit_Arrangements;
+
+            $connection = new mysqli(config('database.connections.mysql.host'), config('database.connections.mysql.username'), config('database.connections.mysql.password'), config('database.connections.mysql.database'));
+
+            if ($connection->connect_error) {
+                die("Connection failed: " . $connection->connect_error);
+            }
+
+            $sql = "select distinct id_grupo,id_credito_acuerdo, rap, date(fecha_registro) as fecha_registro " .
+                   "from ciclo_rap cr where id_grupo = '$Numgrupo' and ciclo = '$Ciclo';";
+
+            $result = $connection->query($sql);
+
+            if ($result->num_rows > 0) {
+                while ($row = $result->fetch_assoc()) {
+                    $Data = [
+                        '_grupo' => $row["id_grupo"],
+                        '_acuerdo_nuevo' => $Acuerdos->id,
+                        '_acuerdo_viejo' => $row["id_credito_acuerdo"],
+                        '_ClaveRAP' => $row["rap"],
+                        '_fecharegistro' => $row["fecha_registro"]
+                    ];
+
+                    $DataFinal[] = $Data;
+                    $Datos .= $row["id_grupo"] . "|" . $Acuerdos->id . "|" . $row["id_credito_acuerdo"] . "|" . $row["rap"] . "|" . $row["fecha_registro"] . "\n";
+                }
+            }
+
+            $connection->close();
+        }
+
+        // Método para Crear Archivo .txt
+        $this->crearArchivo("Claves_" . str_replace("-", "", $duedate), $Datos);
+    } catch (Exception $ex) {
+        $Error = $ex->getMessage();
+    }
+
+    return $DataFinal;
+}
 
     public function CrearArchivo($filename, $content)
     {
@@ -988,6 +1082,18 @@ class interfacescxcController extends Controller
             echo "catch" . $th;
             throw $th;
         }
+
+        // ************************* GUARDAR EN TABLA ****************
+
+        $cadena = json_encode($response);
+        $array = "'" . $cadena . "'";
+        $fechaActual = date("Y-m-d H:i:s");
+        $registro = new logenviosinterfaces;
+        $registro->fecha = $fechaActual;
+        $registro->resenvio = $array;
+        $registro->save();
+
+        // ************************* GUARDAR EN TABLA ****************
         return json_decode($response);
     }
     public function token()
