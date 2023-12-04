@@ -119,6 +119,7 @@ Route::post('etiquetado/jucavi/etiquetadopromecapjucavi', [labelledController::c
 
 
 
+
 //Reportes
 Route::get('reportes/', [reportController::class, 'reportes'])->middleware('auth');
 Route::get('reportes/recuperacioncartera', [reportController::class, 'recuperacioncartera'])->middleware('auth');
