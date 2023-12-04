@@ -6,7 +6,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Hash;
-
+use Illuminate\Support\Facades\Auth;
 class usersController extends Controller
 {
 
@@ -16,7 +16,10 @@ class usersController extends Controller
         $usuarios = User::select('id', 'name')
         ->orderBy('name', 'asc')
         ->get();
-        return view('usuarios.usuarios', ['usuarios' => $usuarios]);
+        if (Auth::check()) {
+            $type = Auth::user()->type;
+        }
+        return view('usuarios.usuarios', ['usuarios' => $usuarios, 'type'=>$type]);
     }
 
     public function guardar(Request $request)

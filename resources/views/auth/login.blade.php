@@ -1,5 +1,5 @@
 @extends('adminlte::auth.login')
-<a href="http://www.freepik.com">Background designed by Freepik</a>
+
 
 @section('css')
     <style>

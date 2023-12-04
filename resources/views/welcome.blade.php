@@ -190,11 +190,23 @@
                     </ul>
                 </div>
                 @guest
-                    <div class="row">
+                    {{-- <div class="row">
 
-                        <a >Bienvenido a Helix</a>
+                        <a>Bienvenido a Helix</a>
                         <a class="nav-link" href="{{ route('login') }}">Iniciar Sesión</a>
-                    </div>
+                    </div> --}}
+                    <div class="container custom-div">
+                        <div class="row">
+                          <div class="col">
+                            <h2>Bienvenido a Helix</h2>
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col">
+                            <a href="{{ route('login') }}" class="btn btn-primary">Iniciar sesión</a>
+                          </div>
+                        </div>
+                      </div>
 
                 @endguest
             </div>
@@ -370,6 +382,10 @@
         integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous">
     </script>
     <style>
+        .custom-div {
+            text-align: center;
+        }
+
         body {
             background-color: #f8f9fa;
             /* Color de fondo para dar contraste */
@@ -384,7 +400,7 @@
         }
 
         .container-footer {
-            background-color: rgba(34,54,60);
+            background-color: rgba(34, 54, 60);
             /* Color de fondo para el contenido del pie de página */
             padding: 20px;
             border-radius: 10px;

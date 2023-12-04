@@ -3,13 +3,15 @@
 @section('title', 'Usuarios')
 
 @section('content_header')
-    <h1>Administración de cuentas</h1>
+
 @stop
 
 @section('content')
     {{--  CREAR USUARIO --}}
     <div class="card">
         <div class="card-header">
+            <h1>Administración de cuentas</h1>
+            <br><br>
             <h4 class="card-title" style ="font-size: 2rem">Crear usuario</h4>
         </div>
         <div class="card-body">
@@ -155,15 +157,12 @@
         </div>
     </div>
 
+    @include('fondo')
 @stop
 
 @section('css')
 <style>
-    .content-wrapper {
-        background-image: url('/assets/images/fondo.png');
-        background-size: contain;
-        background-position: left;
-    }
+
 </style>
 @stop
 
@@ -171,7 +170,7 @@
     <script>
         $(document).ready(function() {
             generarContrasena();
-
+            drawTriangles();
 
             $('#formulario').submit(function(e) {
                 e.preventDefault(); // Evitar la recarga de la página

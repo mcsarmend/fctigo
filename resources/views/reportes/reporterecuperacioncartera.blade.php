@@ -7,11 +7,11 @@
 @stop
 
 @section('content')
-<br>
+    <br>
     <div class="card">
         <div class="card-header">
             <h1>Reporte de Recuperacion de cartera</h1>
-            <h1 class="card-title">Proceso que generar reporte de recuperacion de cartera de mambu.</h1>
+            <h1 class="card-title">Proceso que genera Reporte de Recuperación de Cartera de Mambu.</h1>
         </div>
         <div class="card-body">
             <div class="row">
@@ -110,16 +110,14 @@
         </div>
 
     </div>
+
+    @include('fondo')
 @stop
 
 @section('css')
-<style>
-    .content-wrapper {
-        background-image: url('/assets/images/fondo.png');
-        background-size: contain;
-        background-position: left;
-    }
-</style>
+    <style>
+
+    </style>
 @stop
 
 @section('js')
@@ -140,14 +138,11 @@
 
     <script>
         $(document).ready(function() {
-            var type = @json($type);
-            if (type == '3') {
-                $('a:contains("Cuentas")').hide();
-                $('small:contains("Administrador")').text('Ejecutivo');
-            }
+            establecerFechaMaxima();
+            drawTriangles();
+            showUsersSections();
 
         });
-
         $('#descargarrecuperacioncartera').click(function() {
             startDate = $('#start-date').val();
             endDate = $('#end-date').val();
@@ -586,10 +581,9 @@
 
         });
 
-        $(document).ready(function() {
-            establecerFechaMaxima();
 
-        });
+
+
 
         function establecerFechaMaxima() {
             var fechaActual = new Date();

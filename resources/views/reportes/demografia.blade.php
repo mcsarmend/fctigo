@@ -9,13 +9,15 @@
 @section('content')
     <br>
     <div class="card">
-
         <div class="card-body">
-            <h2>Reporte Demografia</h2>
+            <h2>Reporte Cartera</h2>
             <div class="card-header">
                 <h1 class="card-title">Proceso que genera documentos.</h1>
             </div>
+
+
             <br><br>
+
             <div class="row">
                 <div class="col">
                     <label for="start-date" class="">Fecha inicial:</label>
@@ -25,12 +27,11 @@
                 </div>
             </div>
 
+            <br><br>
 
-            <br>
-            <br>
-            <div class="row">
-                <div class="col">
-                    <button class="btn btn-primary" id="descargardemografia"> Descargar Reporte</button>
+            <div class="row justify-content-center">
+                <div class="col-4">
+                    <button class="btn btn-primary btn-block" id="descargardemografia"> Descargar Reporte</button>
                 </div>
             </div>
 
@@ -38,14 +39,11 @@
         </div>
     </div>
 
+    @include('fondo')
 @stop
 @section('css')
     <style>
-        .content-wrapper {
-            background-image: url('/assets/images/fondo.png');
-            background-size: contain;
-            background-position: left;
-        }
+
     </style>
 @stop
 
@@ -54,6 +52,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.blockUI/2.70/jquery.blockUI.min.js"></script>
     <script>
         $(document).ready(function() {
+            drawTriangles();
             showUsersSections();
         });
 
@@ -148,25 +147,6 @@
 
         });
 
-
-        function showUsersSections() {
-            var type = @json($type);
-            switch (type) {
-                case '3':
-                    $('a:contains("Cuentas")').hide();
-                    $('small:contains("Administrador")').text('Ejecutivo');
-                    $('a:contains("Etiquetado")').hide();
-                    $('a:contains("Anexos")').hide();
-                    break;
-                case '2':
-                    $('a:contains("Cuentas")').hide();
-
-                    break;
-
-                default:
-                    break;
-            }
-        }
     </script>
 
 @stop

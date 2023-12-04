@@ -10,6 +10,8 @@ use App\Http\Controllers\dashboardController;
 use App\Http\Controllers\usersController;
 use App\Http\Controllers\tokenController;
 use App\Http\Controllers\anexosController;
+use App\Http\Controllers\adminfideicomisosController;
+use App\Http\Controllers\admincarteraController;
 
 /*
 /*
@@ -63,12 +65,19 @@ Route::get('estatus/informacion', [statusController::class, 'informacion'])->mid
 
 Route::get('anexos', [anexosController::class, 'anexos'])->middleware('auth');
 
+// ADMIN DE FIDEICOMISOS
+Route::get('adminfideicomisos/alta', [adminfideicomisosController::class, 'alta'])->middleware('auth');
+Route::post('adminfideicomisos/accionalta', [adminfideicomisosController::class, 'accionalta'])->middleware('auth');
+Route::get('adminfideicomisos/edicion', [adminfideicomisosController::class, 'edicion'])->middleware('auth');
+Route::post('adminfideicomisos/accionedicion', [adminfideicomisosController::class, 'accionedicion'])->middleware('auth');
+Route::get('adminfideicomisos/baja', [adminfideicomisosController::class, 'baja'])->middleware('auth');
+Route::post('adminfideicomisos/accionbaja', [adminfideicomisosController::class, 'accionbaja'])->middleware('auth');
 
 
-
-
-
-
+// ADMIN DE CARTERA
+Route::get('admincartera/preetiquetado', [admincarteraController::class, 'preetiquetado'])->middleware('auth');
+Route::get('admincartera/etiquetado', [admincarteraController::class, 'etiquetado'])->middleware('auth');
+Route::get('admincartera/baja', [admincarteraController::class, 'baja'])->middleware('auth');
 
 
 

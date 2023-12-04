@@ -106,16 +106,11 @@
 
 
 
-
+    @include('fondo')
 @stop
 
 @section('css')
     <style>
-        .content-wrapper {
-            background-image: url('/assets/images/fondo.png');
-            background-size: contain;
-            background-position: left;
-        }
 
         .section {
             border-bottom: 1px solid #034383;
@@ -612,27 +607,11 @@
             });
 
 
+            drawTriangles();
             showUsersSections();
         });
 
-        function showUsersSections() {
-            var type = @json($type);
-            switch (type) {
-                case '3':
-                    $('a:contains("Cuentas")').hide();
-                    $('small:contains("Administrador")').text('Ejecutivo');
-                    $('a:contains("Etiquetado")').hide();
-                    $('a:contains("Anexos")').hide();
-                    break;
-                case '2':
-                    $('a:contains("Cuentas")').hide();
 
-                    break;
-
-                default:
-                    break;
-            }
-        }
         function calculosohjucavi() {
             $.ajax({
                 url: "testsohrep",

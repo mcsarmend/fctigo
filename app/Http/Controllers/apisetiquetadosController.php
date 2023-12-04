@@ -1,155 +1,352 @@
 <?php
 
 namespace App\Http\Controllers;
-
-use Illuminate\Http\Request;
+use GuzzleHttp\Client;
 use PDO;
 
 class apisetiquetadosController extends Controller
 {
-
-    private $fechaActual;
-    private $fechaMenosUnDia;
-
-    public function __construct()
+    public function AltaPromecapJV()
     {
-        // Obtiene la fecha y hora actual
-        $fechaActual = date("Y-m-d H:i:s");
+        return "ALTA PROMECAP JUCAVI";
 
-        // Resta 6 horas a la fecha actual
-        $fechaMenos6Horas = date("Y-m-d H:i:s", strtotime($fechaActual . " -6 hours"));
+        $strFechaCierre = "";
+        $strJucavi = "";
+        $strSP = "";
+        $decSaldo = 0.0;
+        $intDiasMora = 0;
 
-        // Resta 1 día y 6 horas a la fecha actual
-        $fechaMenosUnDia6Horas = date("Y-m-d H:i:s", strtotime($fechaActual . " -1 day -6 hours"));
-
-        $fechaMenos6HorasFormateada = substr($fechaMenos6Horas, 0, 10);
-        $fechaMenosUnDia6HorasFormateada = substr($fechaMenosUnDia6Horas, 0, 10);
-
-        // Calcular la fecha y hora actual
-        $this->fechaActual = $fechaMenos6HorasFormateada;
-
-        // Calcular la fecha actual menos 1 día y 6 horas
-        $this->fechaMenosUnDia = $fechaMenosUnDia6HorasFormateada;
     }
 
     public function BajaPromecapMambu()
     {
-        return "BAJA PROMECAP MAMBU";
-    }
-    public function AltaPromecapJV(Request $request)
-    {
 
-        $host = 'jucavi.trafficmanager.net';
-        $database = 'JUCAVI_Grupal';
-        $username = 'app_grupal';
-        $password = 'fc@4pp.gr0up4@1x4y4';
 
-        try {
-            $pdo = new PDO("sqlsrv:Server=$host;Database=$database", $username, $password);
-
-            $sqlStatementJucavi = "SELECT TOP 1 * FROM Cartera.CreditoClienteFondeo WHERE IdCredito = 300989";
-
-            $statement = $pdo->query($sqlStatementJucavi);
-
-            $results = $statement->fetch(PDO::FETCH_ASSOC);
-
-            if (!$results) {
-                $results = "No se encontraron resultados.";
-            }
-        } catch (PDOException $e) {
-            $results = "Error: " . $e->getMessage();
-        }
-
-        return $results;
-
-        $datFechaCorte = $this->fechaMenosUnDia;
+        $strPacth = "";
+        $decSaldo = 0;
+        $decTasa = 0;
         $intDiasMora = 0;
-        $strUser = 770;
+        $intNumPagosMin = 0;
+        $intNumPagosMax = 0;
+        $strUser = 69;
 
-        $resp = $this->listaAltasPromecapJV($datFechaCorte, $intDiasMora, $strUser);
-        return $response->strResult;
-        // if ($resp.strResult == "OK")
-        // {
-        //     strJucavi = await etiquetaBursa.getEtiquetado(Convert.ToDateTime(strFechaCierre), 10, 1);
-        //     if (strJucavi == "OK")
-        //     {
-        //         strSP = await etiquetaBursa.Proceso(strUser);
-        //         return new string[] { strSP };//+ response.strJson.Rows.Count.ToString() + " créditos." };
-        //     }
-        //     else
-        //         return new string[] { strJucavi };
-        // }
+        //List<CreditoMambu> lstCredito = new List<CreditoMambu>();
+        //ResponseLista response = new ResponseLista();
 
-    }
-    public function listaAltasPromecapJV($datFechaCorte, $intDiasMora, $strUser)
-    {
-        try {
-            $curl = curl_init();
-            $hostODS = 'fcods.trafficmanager.net';
-            $dbNameODS = 'clientes_ods';
-            $userODS = 'hmonroy';
-            $passwordODS = 'Monroy2011@';
-            $portODS = 3306;
-            // Conexión a la base de datos
-            $pdoODS = new PDO("mysql:host=$hostODS;port=$portODS;dbname=$dbNameODS", $userODS, $passwordODS);
+        try
+        {
+            //EtiquetadoBusiness etiquetaBursa = new EtiquetadoBusiness(_appSettingsConnection);
+            //EtiquetadoMambuPromecap etiquetaPromecap = new EtiquetadoMambuPromecap(_appSettingsConnection);
 
-            $sqlStatementJucavi = "CALL SP_ListaAltaPromecapNuevo($datFechaCorte, $intDiasMora)";
-
-            $statementJucavi = $pdoODS->query($sqlStatementJucavi);
-            $results = $statementJucavi->fetchAll(PDO::FETCH_ASSOC);
-            if (!empty($results)) {
-                $response->strResult = 'OK';
-                $response->strJson = $results; // Assuming your SP returns a result set
+            //return "BAJA PROMECAP MAMBU";
+            $response = $this->getListaBajaPromecap($strUser);
+            //return $response;
+            //return $response["strResult"];
+            //return $response["strJson"];
+            //return $response=>strResult;
+            if ($response["strResult"] == "OK") {
+                $strPacth = $this->PatchBajaPromecapMambu($response["strJson"], date("Y-m-d"));
+                return $strPacth;
+                if ($strPacth == "OK") {
+                    return array("Proceso terminado correctamente.");
+                } else {
+                    return array($strPacth);
+                }
             } else {
-                $response->strResult = 'No existen créditos por etiquetar.';
+                return array($response->strResult);
             }
         } catch (\Exception $exc) {
             $response->strResult = 'ERROR: ' . $exc->getMessage();
-            // Log the error here if needed
         }
-
-        return response()->json($response);
     }
 
-    public function getEtiquetado($fondeador, $fondeadoranterior)
+    public function getListaBajaPromecap($strUser)
     {
         try {
-            $hostODS = 'fcods.trafficmanager.net';
-            $dbNameODS = 'clientes_ods';
-            $userODS = 'hmonroy';
-            $passwordODS = 'Monroy2011@';
-            $portODS = 3306;
-            // Conexión a la base de datos
-            $pdoODS = new PDO("mysql:host=$hostODS;port=$portODS;dbname=$dbNameODS", $userODS, $passwordODS);
-            $datFechaCorte = $this->fechaMenosUnDia;
-            $sqlStatementJucavi = "CALL SP_GetEtiquetar($datFechaCorte,$fondeador,$fondeadoranterior)";
 
-            $statementJucavi = $pdoODS->query($sqlStatementJucavi);
-            $results = $statementJucavi->fetchAll(PDO::FETCH_ASSOC);
+            // $stringMambu = '{"customInformation":[{"customFieldID":"_Fecha_baja_etiquetado","value":"2023-11-16"},{"customFieldID":"_IdFondeador","value":"CREDITO' . $nvar . 'REAL"}]}';
+            $respuesta = this->enviarSolicitudAPI('_IdFondeador','CREDITO REAL','8a443b7087b44a740187b57d5b272961');
+
+            $respuesta = this->enviarSolicitudAPI('_Fecha_baja_etiquetado','2023-11-16','8a443b7087b44a740187b57d5b272961');
+            return $respuesta;
         } catch (\Throwable $th) {
             //throw $th;
         }
 
-        try {
-            $host = 'jucavi.trafficmanager.net';
-            $database = 'JUCAVI_Grupal';
-            $username = 'app_grupal';
-            $password = 'fc@4pp.gr0up4@1x4y4';
 
-            try {
-                $pdo = new PDO("sqlsrv:Server=$host;Database=$database", $username, $password);
+        try
+        {
+            $response = new ResponseLista();
+            //Server=fcontigo-rs-cluster-01.cdxtyqbdsp7d.us-east-1.redshift.amazonaws.com;Port=5439;User Id=marcadodev;Password=marcadoDev00;Database=mambu_prod
+            $curl = curl_init();
+            $hostPSTG = 'fcontigo-rs-cluster-01.cdxtyqbdsp7d.us-east-1.redshift.amazonaws.com';
+            $dbNamePSTG = 'mambu_prod';
+            $userPSTG = 'marcadodev';
+            $passwordPSTG = 'marcadoDev00';
+            $portPSTG = 5439;
 
-                $sqlStatementJucavi = "EXEC Core.CreditosXEtiquetarBursa"; // Usar EXEC para llamar a un procedimiento almacenado
+            // Conexión a la base de datos
+            $pdoPSTG = new PDO("pgsql:host=$hostPSTG;port=$portPSTG;dbname=$dbNamePSTG", $userPSTG, $passwordPSTG);
 
-                $statement = $pdo->prepare($sqlStatementJucavi);
-                $results = $statement->fetchAll(PDO::FETCH_ASSOC);
+            $sqlStatementPostgres = "DROP TABLE IF EXISTS Principal;";
 
-            } catch (PDOException $e) {
-                echo "Error: " . $e->getMessage();
+            $statementPostgres = $pdoPSTG->query($sqlStatementPostgres);
+
+            $results = $statementPostgres->fetchAll(PDO::FETCH_ASSOC);
+
+            //return $results;
+
+            // Conexión a la base de datos
+            $pdoPSTG = new PDO("pgsql:host=$hostPSTG;port=$portPSTG;dbname=$dbNamePSTG", $userPSTG, $passwordPSTG);
+
+            $sqlStatementPostgres = " create table Principal as " .
+                " ( " .
+                "    SELECT distinct " .
+                "    LC.ENCODEDKEY " .
+                "    FROM mambu_prod.client C " .
+                "    INNER JOIN mambu_prod.branch B " .
+                "    ON B.ENCODEDKEY = C.ASSIGNEDBRANCHKEY " .
+                "    inner join camposPersonalizados SUC " .
+                "    ON SUC.PARENTKEY = B.ENCODEDKEY " .
+                "    INNER JOIN mambu_prod.lineofcredit LC " .
+                "    ON LC.CLIENTKEY = C.ENCODEDKEY " .
+                "    and LC.id in " .
+                "    ( " .
+                "       select id_acuerdocredito from mambu_prod.mambu_prod.creditosbaja_excel_promecap " .
+                "    ) " .
+                "    inner join camposPersonalizados FOND " .
+                "    ON FOND.PARENTKEY = LC.ENCODEDKEY " .
+                " ); ";
+
+            $statementPostgres = $pdoPSTG->query($sqlStatementPostgres);
+
+            $results = $statementPostgres->fetchAll(PDO::FETCH_ASSOC);
+
+            //return $results;
+
+            // Conexión a la base de datos
+            $pdoPSTG = new PDO("pgsql:host=$hostPSTG;port=$portPSTG;dbname=$dbNamePSTG", $userPSTG, $passwordPSTG);
+
+            $sqlStatementPostgres = "select * from Principal; ";
+
+            $statementPostgres = $pdoPSTG->query($sqlStatementPostgres);
+
+            $results = $statementPostgres->fetchAll(PDO::FETCH_ASSOC);
+
+            //return $results;
+
+            if (!empty($results)) {
+                //$response->strResult = "OK";
+                //$response->strJson = $results;
+                return (["strResult" => "OK", "strJson" => $results]);
+                //return response()->json(["strResult" => "OK", "strJson" => $results], 200);
+            } else {
+                //$response->strResult = "No existen créditos por etiquetar.";
+                //$response->strJson = "";
+                return (["strResult" => "No existen créditos por etiquetar.", "strJson" => $results]);
+                //return response()->json(["strResult" => "No existen créditos por etiquetar.", "strJson" => $results], 200);
             }
-        } catch (\Throwable $th) {
 
+            //return $response;
+
+        } catch (\Exception $exc) {
+            //$response->strResult = 'ERROR: ' . $exc->getMessage();
+            return $exc->getMessage();
+            // Log the error here if needed
         }
 
+        //return response()->json($response);
     }
+
+    public function PatchBajaPromecapMambu($dtParaEtiquetar, $strFechaCierreFondeador)
+    {
+
+
+        // URL de la API
+        $url = 'https://fcontigo.mambu.com/api/linesofcredit/8a443b7087b44a740187b57d5b272961/custominformation';
+
+        // Cabeceras de la solicitud
+        $headers = [
+            'Content-Type' => 'application/json',
+            'Authorization' => 'Basic Y29uRm9uZGVhZG9yZXM6TjYjS3V0SEkhcA==',
+        ];
+
+        // Cuerpo de la solicitud en formato JSON
+        $body = [
+            'customInformation' => [
+                [
+                    'customFieldID' => '_IdFondeador',
+                    'value' => 'CREDITO REAL',
+                ],
+            ],
+        ];
+
+        // Inicializar el cliente Guzzle
+        $client = new Client();
+
+        // Realizar la solicitud PATCH con Guzzle
+        $response = $client->patch($url, [
+            'headers' => $headers,
+            'json' => $body,
+        ]);
+
+        // Obtener el contenido de la respuesta
+        $contenidoRespuesta = $response->getBody()->getContents();
+
+        return $contenidoRespuesta;
+        //**********************************************************ALTERNATIVA NO FUNCIONAL */
+
+        $responceCustom = new ResponceCustomInformation();
+        $respuestaGral = new RespuestaGral();
+        $strResponse = "";
+        $strRutaMambu = "https://fcontigo.mambu.com/api/";
+        $strUserMambu = "conFondeadores";
+        $strPassMambu = "N6#KutHI!p";
+        $contadorCreditosExito = 0;
+        $contadorCreditosError = 0;
+
+        try {
+            $custom = new RequestCustomInformation();
+            $custom->customInformation = array();
+            $custom1 = new CustomInformation();
+            $custom1->customFieldID = "_Fecha_baja_etiquetado";
+            $custom1->Value = $strFechaCierreFondeador;
+            $custom2 = new CustomInformation();
+            $custom2->customFieldID = "_IdFondeador";
+            $custom2->Value = "CREDITO REAL";
+
+            $custom->customInformation[] = $custom1;
+            $custom->customInformation[] = $custom2;
+
+            foreach ($dtParaEtiquetar as $item) {
+                $sUrlRequest = $strRutaMambu . "linesofcredit/" . $item["encodedkey"] . "/custominformation";
+
+                //return $sUrlRequest;
+
+                $Request = curl_init($sUrlRequest);
+                curl_setopt($Request, CURLOPT_USERAGENT, "Client Cert Sample");
+                curl_setopt($Request, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+                curl_setopt($Request, CURLOPT_CUSTOMREQUEST, "PATCH");
+                $encoded = base64_encode($strUserMambu . ":" . $strPassMambu);
+                curl_setopt($Request, CURLOPT_HTTPHEADER, array('Authorization: Basic ' . $encoded));
+
+                //return $custom;
+
+                $json = json_encode($custom);
+                $json = str_replace("\"Value\"", "\"value\"", $json);
+                //$byteArray = utf8_encode($json);
+
+                $byteArray = $string;
+
+                return "exito2";
+
+                //return $string;
+                //return $json;
+
+                curl_setopt($Request, CURLOPT_POSTFIELDS, $byteArray);
+                curl_setopt($Request, CURLOPT_RETURNTRANSFER, true);
+
+                try
+                {
+                    return "exito";
+                    $Response = curl_exec($Request);
+
+                    if (curl_errno($Request)) {
+                        return 'Error al realizar la solicitud: ' . curl_error($Request);
+                    } else {
+                        // Procesa la respuesta
+                        $decodedResponse = json_decode($Response, true);
+
+                        // Haz algo con la respuesta
+                        return $decodedResponse;
+                        //return $decodedResponse["returnStatus"];
+                    }
+
+                    $responceCustom = json_decode($Response);
+
+                    return $responceCustom;
+
+                    if ($responceCustom->returnStatus == "SUCCESS") {
+                        return "proceso terminado con exito";
+                        $respuestaGral->Mensaje = "";
+                        $respuestaGral->Status = true;
+                        $contadorCreditosExito = $contadorCreditosExito + 1;
+                    } else {
+                        $contadorCreditosError = $contadorCreditosError + 1;
+                    }
+                } catch (\Exception $e) {
+                    $contadorCreditosError = $contadorCreditosError + 1;
+                }
+            }
+            return "Creditos por Etiquetar/Desetiquetar: " . count($dtParaEtiquetar->rows) . " Creditos Correctos: " . $contadorCreditosExito . " Creditos Erroneos:" . $contadorCreditosError;
+        } catch (\Exception $exc) {
+            return "Error al realizar patch";
+        }
+    }
+
+    public function enviarSolicitudAPI($customFieldID,$value,$encodedkey)
+    {
+        // URL de la API
+        $url = 'https://fcontigo.mambu.com/api/linesofcredit/'.$encodedkey.'/custominformation';
+
+        // Cabeceras de la solicitud
+        $headers = [
+            'Content-Type' => 'application/json',
+            'Authorization' => 'Basic Y29uRm9uZGVhZG9yZXM6TjYjS3V0SEkhcA==',
+        ];
+
+        // Cuerpo de la solicitud en formato JSON
+        $body = [
+            'customInformation' => [
+                [
+                    'customFieldID' => $customFieldID,
+                    'value' => $value,
+                ],
+            ],
+        ];
+
+        // Inicializar el cliente Guzzle
+        $client = new Client();
+
+        // Realizar la solicitud PATCH con Guzzle
+        $response = $client->patch($url, [
+            'headers' => $headers,
+            'json' => $body,
+        ]);
+
+        // Obtener el contenido de la respuesta
+        $contenidoRespuesta = $response->getBody()->getContents();
+
+        // Puedes imprimir o retornar la respuesta según tus necesidades
+        echo $contenidoRespuesta;
+    }
+}
+
+class ResponceCustomInformation
+{
+    public $returnCode;
+    public $returnStatus;
+    public $returnDate;
+    public $returnDescription;
+}
+
+class RespuestaGral
+{
+    public $Status;
+    public $Mensaje;
+    public $ProcesoTerminado;
+}
+class RequestCustomInformation
+{
+    public $customInformation;
+}
+class CustomInformation
+{
+    public $customFieldID;
+    public $Value;
+}
+class ResponseLista
+{
+    public $strResult = "";
+    public $strJson = array('encodedkey' => '');
 }
